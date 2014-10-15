@@ -14,11 +14,6 @@ import org.usfirst.frc4678.DriveBase.Robot;
  *
  */
 public class  robotDrive extends Command {
-    double minPower = 0.05;
-    double leftPower;
-    double rightPower;
-    double power;
-    
     public robotDrive() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -32,16 +27,6 @@ public class  robotDrive extends Command {
     }
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        leftPower = Robot.oi.gamepad1.getY() + Robot.oi.gamepad1.getX();
-        rightPower = Robot.oi.gamepad1.getY() - Robot.oi.gamepad1.getX();
-        if (Math.abs(leftPower) < minPower) {
-            leftPower = 0;
-        }
-        if (Math.abs(rightPower) < minPower) {
-            rightPower = 0;
-        }
-        Robot.drivetrain.setLeftMotor(leftPower);
-        Robot.drivetrain.setRightMotor(rightPower);
     }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {

@@ -31,12 +31,4 @@ public class drivetrain extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
-    
-    public void setLeftMotor(double power) {
-        leftMotor.set(-power);
-    }
-    
-    public void setRightMotor(double power) {
-        rightMotor.set(power);
-    }
 }
