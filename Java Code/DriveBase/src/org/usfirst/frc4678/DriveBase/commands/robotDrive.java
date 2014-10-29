@@ -44,6 +44,11 @@ public class  robotDrive extends Command {
             rightPower *= 0.7;
         }
         
+        if (Robot.invertDrive()) {
+            leftPower *= -1;
+            rightPower *= -1;
+        }
+        
         Robot.drivetrain.setLeftMotor(leftPower);
         Robot.drivetrain.setRightMotor(rightPower);
     }
