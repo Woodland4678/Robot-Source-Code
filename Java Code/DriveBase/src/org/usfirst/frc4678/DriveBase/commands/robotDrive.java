@@ -14,10 +14,11 @@ import org.usfirst.frc4678.DriveBase.Robot;
  *
  */
 public class  robotDrive extends Command {
-    double minPower = 0.05;
+    double joystickX;
+    double joystickY;
     double leftPower;
     double rightPower;
-    double power;
+    
     
     public robotDrive() {
         // Use requires() here to declare subsystem dependencies
@@ -32,15 +33,16 @@ public class  robotDrive extends Command {
         Robot.logger.info("robotDrive", "initialized");
     }
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-        leftPower = Robot.oi.gamepad1.getY() + Robot.oi.gamepad1.getX();
-        rightPower = Robot.oi.gamepad1.getY() - Robot.oi.gamepad1.getX();
-        if (Math.abs(leftPower) < minPower) {
-            leftPower = 0;
+    protected void execute() {        joystickX = Robot.oi.getgamepad1().getX();
+        joystickY = Robot.oi.getgamepad1().getY();
+        leftPower = (Math.abs(joystickY) * joystickY) - (joystickX * joystickX * joystickX);
+        rightPower = (Math.abs(joystickY) * joystickY) + (joystickX * joystickX * joystickX);
+        
+        if (Robot.oi.getButton1()) {
+            leftPower *= 0.7;
+            rightPower *= 0.7;
         }
-        if (Math.abs(rightPower) < minPower) {
-            rightPower = 0;
-        }
+        
         Robot.drivetrain.setLeftMotor(leftPower);
         Robot.drivetrain.setRightMotor(rightPower);
     }
