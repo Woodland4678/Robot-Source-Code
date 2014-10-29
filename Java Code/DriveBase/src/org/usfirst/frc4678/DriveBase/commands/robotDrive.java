@@ -33,7 +33,8 @@ public class  robotDrive extends Command {
         Robot.logger.info("robotDrive", "initialized");
     }
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {        joystickX = Robot.oi.getgamepad1().getX();
+    protected void execute() {
+        joystickX = Robot.oi.getgamepad1().getX();
         joystickY = Robot.oi.getgamepad1().getY();
         leftPower = (Math.abs(joystickY) * joystickY) - (joystickX * joystickX * joystickX);
         rightPower = (Math.abs(joystickY) * joystickY) + (joystickX * joystickX * joystickX);
