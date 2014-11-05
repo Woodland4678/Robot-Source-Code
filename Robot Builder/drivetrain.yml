@@ -75,7 +75,7 @@ Children:
 - Name: Commands
   Base: Commands
   Children:
-  - Name: Autonomous Command
+  - Name: autonomousCommand
     Base: Command
     Children: []
     Properties:
