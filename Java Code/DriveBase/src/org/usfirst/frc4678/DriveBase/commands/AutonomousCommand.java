@@ -18,7 +18,7 @@ import org.usfirst.frc4678.DriveBase.Robot;
  *
  */
 public class  autonomousCommand extends Command {
-//If you can read this, github works
+
     public autonomousCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
