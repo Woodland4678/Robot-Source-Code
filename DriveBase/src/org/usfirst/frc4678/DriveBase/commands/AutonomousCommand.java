@@ -17,9 +17,9 @@ import org.usfirst.frc4678.DriveBase.Robot;
 /**
  *
  */
-public class  autonomousCommand extends Command {
+public class  AutonomousCommand extends Command {
 
-    public autonomousCommand() {
+    public AutonomousCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 	
@@ -29,7 +29,6 @@ public class  autonomousCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        Robot.logger.info("autonomousCommand", "initialized");
     }
 
     // Called repeatedly when this Command is scheduled to run
