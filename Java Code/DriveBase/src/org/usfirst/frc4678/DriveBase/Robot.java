@@ -34,10 +34,10 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     
-    public static boolean invertDrive() {
+     public static String debugLevel() {
         Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("Invert Drive")) { prefs.putBoolean("Invert Drive", false); }
-        return prefs.getBoolean("Invert Drive", false);
+        if (!prefs.containsKey("Debug Level")) { prefs.putString("Debut Level", "D"); }
+        return prefs.getString("Debug Level", "D");
     }
     
     public void robotInit() {

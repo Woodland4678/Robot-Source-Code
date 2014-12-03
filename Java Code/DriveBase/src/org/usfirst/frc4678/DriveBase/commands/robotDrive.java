@@ -40,13 +40,9 @@ public class  robotDrive extends Command {
         rightPower = (Math.abs(joystickY) * joystickY) + (joystickX * joystickX * joystickX);
         
         if (Robot.oi.getButton1()) {
+            Robot.logger.debug("robotDrive", "power reduced");
             leftPower *= 0.7;
             rightPower *= 0.7;
-        }
-        
-        if (Robot.invertDrive()) {
-            leftPower *= -1;
-            rightPower *= -1;
         }
         
         Robot.drivetrain.setLeftMotor(leftPower);
