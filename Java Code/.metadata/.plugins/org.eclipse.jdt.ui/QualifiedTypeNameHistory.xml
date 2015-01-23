@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.usfirst.frc4678.MyNewRobot.Robot"/>
+<fullyQualifiedTypeName name="org.usfirst.frc4678.MyNewRobot.subsystems.Sensors"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.AnalogInput"/>
+<fullyQualifiedTypeName name="org.usfirst.frc4678.MyNewRobot.subsystems.DriveTrain"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.smartdashboard.SmartDashboard"/>
+<fullyQualifiedTypeName name="org.usfirst.frc4678.MyNewRobot.RobotMap"/>
+</qualifiedTypeNameHistroy>
