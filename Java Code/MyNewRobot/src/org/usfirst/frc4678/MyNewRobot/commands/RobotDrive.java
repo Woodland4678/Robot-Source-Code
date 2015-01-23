@@ -11,14 +11,22 @@
 
 package org.usfirst.frc4678.MyNewRobot.commands;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc4678.MyNewRobot.Robot;
+import org.usfirst.frc4678.MyNewRobot.RobotMap;
+import org.usfirst.frc4678.MyNewRobot.subsystems.DriveTrain;
 
 /**
  *
  */
 public class  RobotDrive extends Command {
-
+	double joystickX;
+    double joystickY;
+    double leftPower;
+    double rightPower;
     public RobotDrive() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -35,6 +43,17 @@ public class  RobotDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	joystickX = Robot.oi.getJoystick1().getX();
+        joystickY = Robot.oi.getJoystick1().getY();
+        leftPower = (Math.abs(joystickY) * joystickY) - (joystickX * joystickX * joystickX);
+        rightPower = (Math.abs(joystickY) * joystickY) + (joystickX * joystickX * joystickX);
+        Robot.driveTrain.setLeftMotor(leftPower);
+        Robot.driveTrain.setRightMotor(rightPower);
+        //System.out.println(Robot.driveTrain.getDistance());
+        SmartDashboard.putNumber("distance Sensor", Robot.driveTrain.getDistance() );
+        SmartDashboard.putNumber("Right Motor Power", rightPower );
+        SmartDashboard.putNumber("Left Motor Power", leftPower );
+        
     }
 
     // Make this return true when this Command no longer needs to run execute()
