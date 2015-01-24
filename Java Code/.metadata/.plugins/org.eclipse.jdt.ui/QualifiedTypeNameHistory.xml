@@ -6,4 +6,7 @@
 <fullyQualifiedTypeName name="org.usfirst.frc4678.MyNewRobot.subsystems.DriveTrain"/>
 <fullyQualifiedTypeName name="edu.wpi.first.wpilibj.smartdashboard.SmartDashboard"/>
 <fullyQualifiedTypeName name="org.usfirst.frc4678.MyNewRobot.RobotMap"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.Jaguar"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.Joystick"/>
+<fullyQualifiedTypeName name="edu.wpi.first.wpilibj.SpeedController"/>
 </qualifiedTypeNameHistroy>
