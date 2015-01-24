@@ -8223,3 +8223,8 @@ org.eclipse.recommenders.utils.Logs$LogTraceException
 
 !ENTRY WPILib_Java_Robot_Development 1 0 2015-01-24 11:21:47.484
 !MESSAGE Targets: deploy, Mode: run
+
+!ENTRY org.eclipse.core.resources 2 2 2015-01-24 11:25:48.617
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2015-01-24 11:25:48.617
+!MESSAGE The project description file (.project) for 'testing' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.
