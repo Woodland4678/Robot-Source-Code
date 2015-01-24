@@ -18,7 +18,7 @@ Children:
           default: '0'
           name: Output Channel (PWM)
           validators: &id003 [PWMOutput]
-          value: '5'
+          value: '4'
       Base: Speed Controller
       Name: LeftMotor
     - Children: []
@@ -34,9 +34,29 @@ Children:
           default: '0'
           name: Output Channel (PWM)
           validators: *id003
-          value: '4'
+          value: '5'
       Base: Speed Controller
       Name: RightMotor
+    - Children: []
+      Properties:
+        Input Channel (Analog): !!robotbuilder.data.properties.ChoicesProperty
+          choices: &id004 ['0', '1', '2', '3', '4', '5', '6', '7']
+          default: '0'
+          name: Input Channel (Analog)
+          validators: &id005 [AnalogInput]
+          value: '1'
+      Base: Analog Input
+      Name: LeftDistanceSensor
+    - Children: []
+      Properties:
+        Input Channel (Analog): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id004
+          default: '0'
+          name: Input Channel (Analog)
+          validators: *id005
+          value: '2'
+      Base: Analog Input
+      Name: RightDistanceSensor
     Properties:
       Default Command: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
         name: Default Command, type: Command, validators: null, value: RobotDrive}
@@ -58,8 +78,8 @@ Children:
         Joystick: !!robotbuilder.data.properties.ParentProperty {default: parent,
           name: Joystick, validators: null, value: Gamepad1}
         Button: !!robotbuilder.data.properties.ChoicesProperty
-          choices: &id004 ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
-            '12', '13', '14', '15', '16']
+          choices: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+            '13', '14', '15', '16']
           default: '1'
           name: Button
           validators: null
@@ -68,40 +88,16 @@ Children:
           default: None
           name: Command
           type: Command
-          validators: &id005 [TypeDropdownSelected]
+          validators: [TypeDropdownSelected]
           value: TestingCommand
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
-          choices: &id006 [whileHeld, whenPressed, whenReleased]
+          choices: [whileHeld, whenPressed, whenReleased]
           default: whileHeld
           name: When to Run
           validators: null
           value: whenPressed
       Base: Joystick Button
       Name: Button1
-    - Children: []
-      Properties:
-        Joystick: !!robotbuilder.data.properties.ParentProperty {default: parent,
-          name: Joystick, validators: null, value: Gamepad1}
-        Button: !!robotbuilder.data.properties.ChoicesProperty
-          choices: *id004
-          default: '1'
-          name: Button
-          validators: null
-          value: '2'
-        Command: !!robotbuilder.data.properties.TypeSelectionProperty
-          default: None
-          name: Command
-          type: Command
-          validators: *id005
-          value: TestingCommand
-        When to Run: !!robotbuilder.data.properties.ChoicesProperty
-          choices: *id006
-          default: whileHeld
-          name: When to Run
-          validators: null
-          value: whenPressed
-      Base: Joystick Button
-      Name: Joystick Button 1
     Properties:
       Number: !!robotbuilder.data.properties.ChoicesProperty
         choices: ['0', '1', '2', '3', '4', '5']
@@ -144,7 +140,7 @@ Children:
   Name: Commands
 Properties:
   Eclipse Workspace: !!robotbuilder.data.properties.FileProperty {default: 'C:\Users\Developer\workspace',
-    extension: null, folder: true, name: Eclipse Workspace, validators: null, value: 'C:\Users\Developer\Documents\GitHub\Robot-Source-Code\2015
+    extension: null, folder: true, name: Eclipse Workspace, validators: null, value: 'C:\Users\Developer\Documents\GitHub\4678-Robot-Java-Code\2015
       Robot Code'}
   Export Commands: !!robotbuilder.data.properties.BooleanProperty {default: true,
     name: Export Commands, validators: null, value: true}

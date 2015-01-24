@@ -11,7 +11,9 @@
 
 package org.usfirst.frc4678.walle.commands;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc4678.walle.Robot;
 
@@ -23,7 +25,8 @@ public class  RobotDrive extends Command {
 	double joystickY;
 	double leftPower;
 	double rightPower;
-	
+	double current0;
+	PowerDistributionPanel pdp = new PowerDistributionPanel();
     public RobotDrive() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -49,6 +52,9 @@ public class  RobotDrive extends Command {
         //Set the drivetrain motors
         Robot.drivetrain.setMotor("left", leftPower);
         Robot.drivetrain.setMotor("right", rightPower);
+        SmartDashboard.putNumber("Right Motor Power", rightPower );
+        SmartDashboard.putNumber("Left Motor Power", leftPower );
+        SmartDashboard.putNumber("Current through 0", current0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
