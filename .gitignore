@@ -44,9 +44,5 @@ Temporary Items
 .apdisk
 *~
 bin/
+build/
 .metadata/
-2015 Robot Code/walle/.classpath
-2015 Robot Code/walle/.project
-2015 Robot Code/walle/BSD_License_for_WPILib_code.txt
-2015 Robot Code/walle/build.properties
-2015 Robot Code/walle/build.xml
