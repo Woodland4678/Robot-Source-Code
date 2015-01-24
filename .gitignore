@@ -42,7 +42,8 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-/Java Code/DriveBase/nbproject/private/
+bin/
+.metadata/
 2015 Robot Code/walle/.classpath
 2015 Robot Code/walle/.project
 2015 Robot Code/walle/BSD_License_for_WPILib_code.txt
