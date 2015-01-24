@@ -52,8 +52,8 @@ public class  RobotDrive extends Command {
         //Set the drivetrain motors
         Robot.drivetrain.setMotor("left", leftPower);
         Robot.drivetrain.setMotor("right", rightPower);
-        SmartDashboard.putNumber("Right Motor Power", rightPower );
-        SmartDashboard.putNumber("Left Motor Power", leftPower );
+        SmartDashboard.putNumber("Right Motor Power", rightPower);
+        SmartDashboard.putNumber("Left Motor Power", leftPower);
         SmartDashboard.putNumber("Current through 0", current0);
     }
 

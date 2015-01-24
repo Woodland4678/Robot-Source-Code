@@ -15,6 +15,7 @@ import org.usfirst.frc4678.walle.Robot;
 import org.usfirst.frc4678.walle.RobotMap;
 import org.usfirst.frc4678.walle.commands.*;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -46,6 +47,7 @@ public class Drivetrain extends Subsystem {
     }
     
     public void setMotor(String motor, double power) {
+    	Robot.logger.debug("Drivetrain", "Setting " + motor + " to " + power);
     	if (motor.equals("left") || motor.equals("Left")) {
     		leftMotor.set(power);
     	} else if (motor.equals("right") || motor.equals("Right")) {
