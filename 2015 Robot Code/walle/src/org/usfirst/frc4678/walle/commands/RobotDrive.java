@@ -21,10 +21,13 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  RobotDrive extends Command {
+	double MAX_DECCELERATION_SPEED = 0.01;
 	double joystickX;
 	double joystickY;
 	double leftPower;
 	double rightPower;
+	double lastLeftPower = 0;
+	double lastRightPower = 0;
 	double current0;
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
     public RobotDrive() {
@@ -49,9 +52,31 @@ public class  RobotDrive extends Command {
         //Determine the powers based on the joystick values, cubic for side to side
         leftPower = (Math.abs(joystickY) * joystickY) - (joystickX * joystickX * joystickX);
         rightPower = (Math.abs(joystickY) * joystickY) + (joystickX * joystickX * joystickX);
+        
+        //Reduce the acceleration if the button is held down
+        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
+        	//Smooth left acceleration 
+        	if (leftPower - lastLeftPower > MAX_DECCELERATION_SPEED) {
+        		leftPower = lastLeftPower + MAX_DECCELERATION_SPEED;
+        	} else if (lastLeftPower - leftPower > MAX_DECCELERATION_SPEED) {
+        		leftPower = lastLeftPower - MAX_DECCELERATION_SPEED;
+        	}
+        	
+        	//Smooth right acceleration
+        	if (rightPower - lastRightPower > MAX_DECCELERATION_SPEED) {
+        		rightPower = lastRightPower + MAX_DECCELERATION_SPEED;
+        	} else if (lastRightPower - rightPower > MAX_DECCELERATION_SPEED) {
+        		rightPower = lastRightPower - MAX_DECCELERATION_SPEED;
+        	}
+        }
+        
         //Set the drivetrain motors
         Robot.drivetrain.setMotor("left", leftPower);
         Robot.drivetrain.setMotor("right", rightPower);
+        
+        lastLeftPower = leftPower;
+        lastRightPower = rightPower;
+        
         SmartDashboard.putNumber("Right Motor Power", rightPower);
         SmartDashboard.putNumber("Left Motor Power", leftPower);
         SmartDashboard.putNumber("Current through 0", current0);

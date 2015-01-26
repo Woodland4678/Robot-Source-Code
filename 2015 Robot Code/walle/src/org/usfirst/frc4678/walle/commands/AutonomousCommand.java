@@ -34,7 +34,19 @@ public class  AutonomousCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.logger.info("AutonomousCommand", "Left Distance Sensor At " + Robot.drivetrain.getLeftDistance());
+    	Robot.logger.info("AutonomousCommand", "Left Distance Sensor At " + Robot.drivetrain.getLeftLightSensor());
+    	
+    	//Drive straight for 750 milliseconds
+    	while (!Robot.drivetrain.timedDrive(0.4, 0.4, 750));
+    	
+    	//Drive until the left encoder is 500, and the right is 600
+    	while (!Robot.drivetrain.goToDistance(500, 600, 0.4));
+    	
+    	//Go to the box
+    	while(!Robot.drivetrain.goToBox(.4));
+    	
+    	//Turn 90 degrees
+    	while(!Robot.drivetrain.turn(90, .4));
     }
 
     // Make this return true when this Command no longer needs to run execute()
