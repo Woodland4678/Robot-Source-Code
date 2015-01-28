@@ -21,7 +21,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  RobotDrive extends Command {
-	double MAX_DECCELERATION_SPEED = 0.01;
+	double MAX_DECCELERATION_SPEED = 0.02;
 	double joystickX;
 	double joystickY;
 	double leftPower;
@@ -55,6 +55,8 @@ public class  RobotDrive extends Command {
         
         //Reduce the acceleration if the button is held down
         if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
+        	Robot.logger.info("RobotDrive", "Button 5 Held");
+        	
         	//Smooth left acceleration 
         	if (leftPower - lastLeftPower > MAX_DECCELERATION_SPEED) {
         		leftPower = lastLeftPower + MAX_DECCELERATION_SPEED;
@@ -68,6 +70,11 @@ public class  RobotDrive extends Command {
         	} else if (lastRightPower - rightPower > MAX_DECCELERATION_SPEED) {
         		rightPower = lastRightPower - MAX_DECCELERATION_SPEED;
         	}
+        } else if (Robot.oi.getButton(Robot.oi.getGamepad1(), 6)) {
+        	Robot.logger.info("RobotDrive", "Button 6 Held");
+        	
+        	leftPower *= 0.5;
+        	rightPower*= 0.5;
         }
         
         //Set the drivetrain motors

@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Drivetrain extends Subsystem {
-	int ENCODER_DIFFERENCE_PER_TURN;
+	int ENCODER_DIFFERENCE_PER_TURN = 500;
 	int LIGHT_SENSOR_MARGIN = 50;
 	double GO_TO_BOX_TURN_SPEED = .05;
 	int TARGET_LIGHT_SENSOR_VALUE;
@@ -67,7 +67,7 @@ public class Drivetrain extends Subsystem {
     	Robot.logger.debug("Drivetrain", "Setting " + motor + " to " + power);
     	if (motor.equals("left") || motor.equals("Left")) {
     		//This is negative because the left gearbox is facing in the opposite direction
-    		leftMotor.set(-power);
+    		leftMotor.set(power);
     	} else if (motor.equals("right") || motor.equals("Right")) {
     		rightMotor.set(power);
     	} else if (motor.equals("both") || motor.equals("Both")) {
