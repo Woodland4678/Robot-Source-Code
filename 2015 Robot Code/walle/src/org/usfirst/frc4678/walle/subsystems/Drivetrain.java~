@@ -25,14 +25,17 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Drivetrain extends Subsystem {
-	double LEFT_DEFAULT_GO_TO_DISTANCE_POWER;
-	double RIGHT_DEFAULT_GO_TO_DISTANCE_POWER;
-	int LIGHT_SENSOR_MARGIN = 10;
+	int ENCODER_DIFFERENCE_PER_TURN = 500;
+	int LIGHT_SENSOR_MARGIN = 50;
 	double GO_TO_BOX_TURN_SPEED = .05;
 	int TARGET_LIGHT_SENSOR_VALUE;
+	int AUTO_TURN_MARGIN = 10;
+	double AUTO_TURN_REDUCTION_SPEED = 2;
+	double AUTO_TURN_REDUCTION_DISTANCE = 0.7;//Starts reducing the speed when it is x percent of the way to the target distance
 	long goalTime;
 	int timedDriveState = 0;
 	int goToDistanceState = 0;
+	int turnState = 0;
 	int startingLeftDistance;
 	int startingRightDistance;
 	
@@ -63,6 +66,7 @@ public class Drivetrain extends Subsystem {
     public void setMotor(String motor, double power) {
     	Robot.logger.debug("Drivetrain", "Setting " + motor + " to " + power);
     	if (motor.equals("left") || motor.equals("Left")) {
+    		//This is negative because the left gearbox is facing in the opposite direction
     		leftMotor.set(power);
     	} else if (motor.equals("right") || motor.equals("Right")) {
     		rightMotor.set(power);
@@ -94,7 +98,7 @@ public class Drivetrain extends Subsystem {
     }
     
     //To use this method, you keep calling it until it returns true
-    public boolean goToDistance(double targetLeft, double targetRight) {
+    public boolean goToDistance(double targetLeft, double targetRight, double power) {
     	//If this method is being called for the first time since it last finished, you want to record the initial encoder values
     	if (goToDistanceState == 0) {
     		startingLeftDistance = getLeftEncoder();
@@ -111,8 +115,8 @@ public class Drivetrain extends Subsystem {
     	Robot.logger.debug("Drivetrain", "Percentages At " + rightPercentThere + ", " + leftPercentThere);
     	
     	//Initially set the powers to their default values
-        double leftPower = LEFT_DEFAULT_GO_TO_DISTANCE_POWER;
-        double rightPower = RIGHT_DEFAULT_GO_TO_DISTANCE_POWER;
+        double leftPower = power;
+        double rightPower = power;
         
         //Only start adjusting the powers once the motors have gone 2 percent of the target distance, to avoid calculation errors
         if ((currentRight >= (targetRight * 0.02)) && (currentLeft >= (targetLeft * 0.02))) {
@@ -135,10 +139,10 @@ public class Drivetrain extends Subsystem {
         
         //We use the absolute values for setting the powers, so we have to flip the powers based on what direction the robot is going
         if (targetRight > startingRightDistance) {
-            setMotor("left", -leftPower);
+            setMotor("left", leftPower);
             setMotor("right", rightPower);
         } else {
-        	setMotor("left", leftPower);
+        	setMotor("left", -leftPower);
             setMotor("right", -rightPower);
         }
         
@@ -153,21 +157,85 @@ public class Drivetrain extends Subsystem {
         return false;
     }
     
+    //This function has to be constantly called until it returns true
     public boolean goToBox(double power) {
     	double leftPower = power;
     	double rightPower = power;
     	
+    	//If the left is sensing and the right is not, turn left
     	if (getLeftLightSensor() > getRightLightSensor() + LIGHT_SENSOR_MARGIN) {
     		leftPower -= GO_TO_BOX_TURN_SPEED;
     		rightPower += GO_TO_BOX_TURN_SPEED;
+    		
+    	//If the right is sensing, and the left is not, turn right
     	} else if (getRightLightSensor() > getLeftLightSensor() + LIGHT_SENSOR_MARGIN) {
     		leftPower += GO_TO_BOX_TURN_SPEED;
     		rightPower -= GO_TO_BOX_TURN_SPEED;
     	}
     	
+    	//Return true if the sensors are close enough to the target
     	if (getRightLightSensor() > TARGET_LIGHT_SENSOR_VALUE || getLeftLightSensor() > TARGET_LIGHT_SENSOR_VALUE) {
     		setMotor("both", 0);
     		return true;
+    	}
+    	
+    	setMotor("left", leftPower);
+    	setMotor("right", rightPower);
+    	
+    	return false;
+    }
+    
+    //This function has to be constantly called until it returns true
+    public boolean turn(int degrees, double power) {
+    	double leftPower = power;
+    	double rightPower = power;
+    	//Set the starting values if this is the first time the function is being called
+    	if (turnState == 0) {
+    		startingLeftDistance = getLeftEncoder();
+    		startingRightDistance = getRightEncoder();
+    		turnState ++;
+    	}
+    	
+    	//Determine the difference there should be between the encoders when the robot has completed the turn
+    	int goalDifference = (int)(ENCODER_DIFFERENCE_PER_TURN * (degrees / 360));
+    	int currentDifference = Math.abs(getLeftEncoder() - getRightEncoder());
+    	int percentThere = (currentDifference / goalDifference);
+    	
+    	//If the robot has overshot, do not start increasing the speed
+    	if (percentThere > 1) {
+    		percentThere = 1 - (percentThere - 1);
+    	}
+    	
+    	//Start reducing speed if the robot has passed the reduction distance
+    	if (percentThere > AUTO_TURN_REDUCTION_DISTANCE) {
+    		leftPower *= (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
+    		rightPower *= (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
+    	}
+    	
+    	//If the robot is within the margin, stop the motors and return true
+    	if (currentDifference < AUTO_TURN_MARGIN) {
+    		setMotor("both", 0);
+    		turnState = 0;
+    		return true;
+    	}
+    	
+    	//Invert the powers if necessary
+    	if (degrees > 0) {
+    		if (currentDifference < goalDifference) {
+    			//If the robot is turning right and has not hit the target
+    			leftPower *= -1;
+    		} else {
+    			//If the robot is turning right and has gone too far
+    			rightPower *= -1;
+    		}
+    	} else {
+    		if (currentDifference > goalDifference) {
+    			//If the robot is turning left and has not hit the target
+    			rightPower *= -1;
+    		} else {
+    			//If the robot is turning left and has gone too far
+    			leftPower *= -1;
+    		}
     	}
     	
     	setMotor("left", leftPower);
