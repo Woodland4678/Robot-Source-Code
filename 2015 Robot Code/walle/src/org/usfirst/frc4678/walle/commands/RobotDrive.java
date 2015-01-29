@@ -90,6 +90,8 @@ public class  RobotDrive extends Command {
         SmartDashboard.putNumber("Right Motor Power", rightPower);
         SmartDashboard.putNumber("Left Motor Power", leftPower);
         SmartDashboard.putNumber("Current through 0", current0);
+        SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
+        SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
     }
 
     // Make this return true when this Command no longer needs to run execute()
