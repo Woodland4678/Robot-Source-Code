@@ -22,6 +22,7 @@ import org.usfirst.frc4678.walle.Robot;
  */
 public class  RobotDrive extends Command {
 	double MAX_DECCELERATION_SPEED = 0.02;
+	double POWER_REDUCTION = 0.5;
 	double joystickX;
 	double joystickY;
 	double leftPower;
@@ -46,6 +47,8 @@ public class  RobotDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.logger.info("RobotDrive", "Left Encoder = " + Robot.drivetrain.getLeftEncoder());
+    	Robot.logger.info("RobotDrive", "Right Encoder = " + Robot.drivetrain.getRightEncoder());
     	//Get the joystick values
     	joystickX = Robot.oi.getGamepad1().getX();
         joystickY = Robot.oi.getGamepad1().getY();
@@ -73,8 +76,8 @@ public class  RobotDrive extends Command {
         } else if (Robot.oi.getButton(Robot.oi.getGamepad1(), 6)) {
         	Robot.logger.info("RobotDrive", "Button 6 Held");
         	
-        	leftPower *= 0.5;
-        	rightPower*= 0.5;
+        	leftPower *= POWER_REDUCTION;
+        	rightPower*= POWER_REDUCTION;
         }
         
         //Set the drivetrain motors
