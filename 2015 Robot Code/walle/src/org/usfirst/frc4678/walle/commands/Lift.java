@@ -35,8 +35,8 @@ public class  Lift extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	while (Robot.pickup.getLifterHeight() <= 75) {
-    		Robot.pickup.setLifterPower(0.3);
+    	while (Robot.pickup.getLifterHeight() <= Robot.lifterUpperLimit()) {
+    		Robot.pickup.setLifterPower(Robot.lifterPower());
     	}
     }
 
