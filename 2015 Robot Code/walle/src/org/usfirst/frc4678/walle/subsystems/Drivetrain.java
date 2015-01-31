@@ -25,12 +25,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Drivetrain extends Subsystem {
-	int ENCODER_DIFFERENCE_PER_TURN = 500;
-	int LIGHT_SENSOR_MARGIN = 50;
-	double GO_TO_BOX_TURN_SPEED = .05;
-	int TARGET_LIGHT_SENSOR_VALUE;
+	int ENCODER_DIFFERENCE_PER_TURN = Robot.encoderChangePerTurn();
+	int LIGHT_SENSOR_MARGIN = Robot.lightSensorMargin();
+	double GO_TO_BOX_TURN_SPEED = Robot.goToBoxTurnSpeed();
+	int TARGET_LIGHT_SENSOR_VALUE = Robot.targetLightSensorValue();
 	int AUTO_TURN_MARGIN = 10;
-	double AUTO_TURN_REDUCTION_SPEED = 2;
+	double AUTO_TURN_REDUCTION_SPEED = Robot.autoTurnReductionSpeed();
 	double AUTO_TURN_REDUCTION_DISTANCE = 0.7;//Starts reducing the speed when it is x percent of the way to the target distance
 	long goalTime;
 	int timedDriveState = 0;
@@ -67,11 +67,12 @@ public class Drivetrain extends Subsystem {
     	Robot.logger.debug("Drivetrain", "Setting " + motor + " to " + power);
     	if (motor.equals("left") || motor.equals("Left")) {
     		//This is negative because the left gearbox is facing in the opposite direction
-    		leftMotor.set(power);
+    		leftMotor.set(-power);
     	} else if (motor.equals("right") || motor.equals("Right")) {
     		rightMotor.set(power);
     	} else if (motor.equals("both") || motor.equals("Both")) {
-    		leftMotor.set(power);
+    		//This is negative because the left gearbox is facing in the opposite direction
+    		leftMotor.set(-power);
     		rightMotor.set(power);
     	}
     }
@@ -106,13 +107,13 @@ public class Drivetrain extends Subsystem {
     	}
     	
     	//Get how far the left and right sides have traveled
-    	double currentLeft = (getLeftEncoder() - startingLeftDistance);
+    	double currentLeft = getLeftEncoder() - startingLeftDistance;
     	double currentRight = getRightEncoder() - startingRightDistance;
     	
     	//Find the percentage the left and right are to their target
     	double leftPercentThere = currentLeft / targetLeft;
     	double rightPercentThere = currentRight / targetRight;
-    	Robot.logger.debug("Drivetrain", "Percentages At " + rightPercentThere + ", " + leftPercentThere);
+    	Robot.logger.debug("Drivetrain", "gpToDistance Percentages At " + rightPercentThere + ", " + leftPercentThere);
     	
     	//Initially set the powers to their default values
         double leftPower = power;
@@ -123,6 +124,7 @@ public class Drivetrain extends Subsystem {
         	
         	//This finds the difference between how far the left and right sides have gone
             double powerOffset = 20 * Math.abs(rightPercentThere - leftPercentThere);
+            Robot.logger.debug("Drivetrain", "goToDistance Power Offset At " + powerOffset);
             
             //If the right is closer than the left, increase the left power and decrease the right power
             if (rightPercentThere > (leftPercentThere + 0.001)) {
@@ -139,6 +141,7 @@ public class Drivetrain extends Subsystem {
         
         //We use the absolute values for setting the powers, so we have to flip the powers based on what direction the robot is going
         if (targetRight > startingRightDistance) {
+        	Robot.logger.debug("Drivetrain", "Setting " + rightPercentThere + ", " + leftPercentThere);
             setMotor("left", leftPower);
             setMotor("right", rightPower);
         } else {
@@ -248,7 +251,7 @@ public class Drivetrain extends Subsystem {
     
     public int getRightLightSensor() {return rightDistSensor.getValue();}
     
-    public int getLeftEncoder() {return leftEncoder.get();}
+    public int getLeftEncoder() {return -leftEncoder.get();}
     
     public int getRightEncoder() {return rightEncoder.get();}
     

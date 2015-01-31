@@ -39,7 +39,7 @@ public class  TestingCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.drivetrain.timedDrive(.3, .3, 500);
+        return Robot.drivetrain.goToDistance(1300, 1500, .3);
     }
 
     // Called once after isFinished returns true
