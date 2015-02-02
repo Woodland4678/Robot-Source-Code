@@ -46,25 +46,25 @@ public class Robot extends IterativeRobot {
     public static double lifterPower() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("lifterPower")) {
-            prefs.putDouble("lifterPower", 0.3);
+            prefs.putDouble("lifterPower", 1);
         }
-        return prefs.getDouble("lifterPower", 0.3);
+        return prefs.getDouble("lifterPower", 1);
     }
     
-    public static double lifterUpperLimit() {
+    public static double lifterUpperTarget() {
         Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("lifterUpperLimit")) {
-            prefs.putDouble("lifterUpperLimit", 75);
+        if (!prefs.containsKey("lifterUpperTarget")) {
+            prefs.putDouble("lifterUpperTarget", 5);
         }
-        return prefs.getDouble("lifterUpperLimit", 75);
+        return prefs.getDouble("lifterUpperTarget", 5);
     }
     
-    public static double lifterLowerLimit() {
+    public static double lifterLowerTarget() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("lifterLowerLimit")) {
-            prefs.putDouble("lifterLowerLimit", 10);
+            prefs.putDouble("lifterLowerLimit", 1);
         }
-        return prefs.getDouble("lifterLowerLimit", 10);
+        return prefs.getDouble("lifterLowerLimit", 1);
     }
     
     public static int encoderChangePerTurn() {

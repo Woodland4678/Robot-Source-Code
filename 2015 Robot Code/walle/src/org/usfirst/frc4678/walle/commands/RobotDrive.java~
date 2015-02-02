@@ -21,8 +21,8 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  RobotDrive extends Command {
-	double MAX_DECCELERATION_SPEED = 0.02;
-	double POWER_REDUCTION = 0.5;
+	double MAX_DECCELERATION_SPEED = Robot.maxDecelerationSpeed();
+	double POWER_REDUCTION = Robot.driveMotorPowerReduction();
 	double joystickX;
 	double joystickY;
 	double leftPower;
@@ -49,9 +49,11 @@ public class  RobotDrive extends Command {
     protected void execute() {
     	Robot.logger.info("RobotDrive", "Left Encoder = " + Robot.drivetrain.getLeftEncoder());
     	Robot.logger.info("RobotDrive", "Right Encoder = " + Robot.drivetrain.getRightEncoder());
+    	
     	//Get the joystick values
     	joystickX = Robot.oi.getGamepad1().getX();
         joystickY = Robot.oi.getGamepad1().getY();
+        
         //Determine the powers based on the joystick values, cubic for side to side
         leftPower = (Math.abs(joystickY) * joystickY) - (joystickX * joystickX * joystickX);
         rightPower = (Math.abs(joystickY) * joystickY) + (joystickX * joystickX * joystickX);
@@ -60,19 +62,32 @@ public class  RobotDrive extends Command {
         if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
         	Robot.logger.info("RobotDrive", "Button 5 Held");
         	
-        	//Smooth left acceleration 
+        	//If the left power has increased by more than the max
         	if (leftPower - lastLeftPower > MAX_DECCELERATION_SPEED) {
+        		
+        		//Manually set the power so the power does not change so quickly
         		leftPower = lastLeftPower + MAX_DECCELERATION_SPEED;
+        	
+        	//If the left power has decreased by more than the max
         	} else if (lastLeftPower - leftPower > MAX_DECCELERATION_SPEED) {
+        		
+        		//Manually set the power so the power does not change so quickly
         		leftPower = lastLeftPower - MAX_DECCELERATION_SPEED;
         	}
         	
-        	//Smooth right acceleration
+        	//If the right power has increased by more than the max
         	if (rightPower - lastRightPower > MAX_DECCELERATION_SPEED) {
+        		
+        		//Manually set the power so the power does not change so quickly
         		rightPower = lastRightPower + MAX_DECCELERATION_SPEED;
+        		
+        	//If the right power has decreased more than the max
         	} else if (lastRightPower - rightPower > MAX_DECCELERATION_SPEED) {
+        		
+        		//Manually set the power so the power does not change so quickly
         		rightPower = lastRightPower - MAX_DECCELERATION_SPEED;
         	}
+        	
         } else if (Robot.oi.getButton(Robot.oi.getGamepad1(), 6)) {
         	Robot.logger.info("RobotDrive", "Button 6 Held");
         	
@@ -92,6 +107,7 @@ public class  RobotDrive extends Command {
         SmartDashboard.putNumber("Current through 0", current0);
         SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
         SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
+        SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
     }
 
     // Make this return true when this Command no longer needs to run execute()

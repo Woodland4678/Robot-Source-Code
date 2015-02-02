@@ -40,6 +40,7 @@ public class Logger extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
     
+    //You call this function to print out a debug statement
     public void debug (String className, String message) {
          System.out.println("D: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
     }

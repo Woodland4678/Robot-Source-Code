@@ -12,16 +12,14 @@
 package org.usfirst.frc4678.walle.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.usfirst.frc4678.walle.Robot;
 
 /**
  *
  */
-public class  Lift extends Command {
+public class  Lower extends Command {
 
-    public Lift() {
+    public Lower() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 
@@ -37,10 +35,8 @@ public class  Lift extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("Lifter command called");
     	
-    	Robot.pickup.lift(Robot.lifterUpperTarget());
-    	
+    	Robot.pickup.lift(Robot.lifterLowerTarget());
     }
 
     // Make this return true when this Command no longer needs to run execute()
