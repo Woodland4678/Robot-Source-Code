@@ -11,6 +11,9 @@
 
 package org.usfirst.frc4678.walle.subsystems;
 
+
+
+import org.usfirst.frc4678.walle.Robot;
 import org.usfirst.frc4678.walle.RobotMap;
 import org.usfirst.frc4678.walle.commands.*;
 
@@ -39,25 +42,33 @@ public class Logger extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
-    
+
     //You call this function to print out a debug statement
     public void debug (String className, String message) {
-         System.out.println("D: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	if (Robot.classLoggerEnabled().equals("any") || Robot.classLoggerEnabled().equals(className)) {
+    		System.out.println("D: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	}
     }
     
     //You call this function to print out a info print statement
     public void info (String className, String message) {
-         System.out.println("I: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	if (Robot.classLoggerEnabled().equals("any") || Robot.classLoggerEnabled().equals(className)) {
+    		System.out.println("I: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	}
     }
     
     //You call this function to print out a warning print statement
     public void warning (String className, String message) {
-         System.out.println("W: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	if (Robot.classLoggerEnabled().equals("any") || Robot.classLoggerEnabled().equals(className)) {
+    		System.out.println("W: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	}
     }
     
     //You call this function to print out a error print statement
     public void error (String className, String message) {
-         System.out.println("E: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	if (Robot.classLoggerEnabled().equals("any") || Robot.classLoggerEnabled().equals(className)) {
+    		System.out.println("E: " + (System.currentTimeMillis() - startTime) + " : " + className + " : " + message);
+    	}
     }
 }
 

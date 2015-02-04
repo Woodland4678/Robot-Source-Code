@@ -54,9 +54,9 @@ public class Robot extends IterativeRobot {
     public static double lifterUpperTarget() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("lifterUpperTarget")) {
-            prefs.putDouble("lifterUpperTarget", 5);
+            prefs.putDouble("lifterUpperTarget", 5.3);
         }
-        return prefs.getDouble("lifterUpperTarget", 5);
+        return prefs.getDouble("lifterUpperTarget", 5.3);
     }
     
     public static double lifterLowerTarget() {
@@ -75,6 +75,14 @@ public class Robot extends IterativeRobot {
         return prefs.getInt("encoderChangePerTurn", 3000);
     }
     
+    public static String classLoggerEnabled() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("loggerClassEnabled")) {
+            prefs.putString("loggerClassEnabled", "PickTote");
+        }
+        return prefs.getString("loggerClassEnabled", "PickTote");
+    }
+
     public static double goToBoxTurnSpeed() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("goToBoxTurnSpeed")) {

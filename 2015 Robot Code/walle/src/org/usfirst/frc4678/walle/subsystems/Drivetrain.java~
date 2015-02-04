@@ -113,7 +113,7 @@ public class Drivetrain extends Subsystem {
     	//Find the percentage the left and right are to their target
     	double leftPercentThere = currentLeft / targetLeft;
     	double rightPercentThere = currentRight / targetRight;
-    	Robot.logger.debug("Drivetrain", "gpToDistance Percentages At " + rightPercentThere + ", " + leftPercentThere);
+    	//Robot.logger.debug("Drivetrain", "gpToDistance Percentages At " + rightPercentThere + ", " + leftPercentThere);
     	
     	//Initially set the powers to their default values
         double leftPower = power;

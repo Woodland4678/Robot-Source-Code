@@ -71,13 +71,13 @@ public class OI {
         gamepad1 = new Joystick(0);
         
         button4 = new JoystickButton(gamepad1, 4);
-        button4.whenPressed(new PickTote());
+        button4.whenPressed(new Lift());
         button3 = new JoystickButton(gamepad1, 3);
         button3.whenPressed(new Lower());
         button2 = new JoystickButton(gamepad1, 2);
-        button2.whenPressed(new Lift());
+        button2.whenPressed(new PickTote());
         button1 = new JoystickButton(gamepad1, 1);
-        button1.whenPressed(new TestingCommand());
+        button1.whenPressed(new PickTote());
 
 	    
         // SmartDashboard Buttons
