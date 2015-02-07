@@ -78,9 +78,9 @@ public class Robot extends IterativeRobot {
     public static String classLoggerEnabled() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("loggerClassEnabled")) {
-            prefs.putString("loggerClassEnabled", "PickTote");
+            prefs.putString("loggerClassEnabled", "all");
         }
-        return prefs.getString("loggerClassEnabled", "PickTote");
+        return prefs.getString("loggerClassEnabled", "all");
     }
 
     public static double goToBoxTurnSpeed() {

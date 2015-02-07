@@ -29,7 +29,7 @@ public class Drivetrain extends Subsystem {
 	int LIGHT_SENSOR_MARGIN = Robot.lightSensorMargin();
 	double GO_TO_BOX_TURN_SPEED = Robot.goToBoxTurnSpeed();
 	int TARGET_LIGHT_SENSOR_VALUE = Robot.targetLightSensorValue();
-	int AUTO_TURN_MARGIN = 10;
+	double AUTO_TURN_MARGIN = .05;//This is a percentage
 	double AUTO_TURN_REDUCTION_SPEED = Robot.autoTurnReductionSpeed();
 	double AUTO_TURN_REDUCTION_DISTANCE = 0.7;//Starts reducing the speed when it is x percent of the way to the target distance
 	long goalTime;
@@ -64,21 +64,21 @@ public class Drivetrain extends Subsystem {
     }
     
     public void setMotor(String motor, double power) {
-    	Robot.logger.debug("Drivetrain", "Setting " + motor + " to " + power);
     	if (motor.equals("left") || motor.equals("Left")) {
     		//This is negative because the left gearbox is facing in the opposite direction
-    		leftMotor.set(-power);
+    		leftMotor.set(power);
     	} else if (motor.equals("right") || motor.equals("Right")) {
-    		rightMotor.set(power);
+    		rightMotor.set(-power);
     	} else if (motor.equals("both") || motor.equals("Both")) {
     		//This is negative because the left gearbox is facing in the opposite direction
-    		leftMotor.set(-power);
-    		rightMotor.set(power);
+    		leftMotor.set(power);
+    		rightMotor.set(-power);
     	}
     }
     
   //To use this method, you keep calling it until it returns true
     public boolean timedDrive(double leftPower, double rightPower, int milliseconds) {
+    	Robot.logger.debug("Drivetrain", "Timed drive " + (goalTime - milliseconds) + " milliseconds from target");
     	//Goal time is -1 if it has not been set
     	if (timedDriveState == 0) {
     		goalTime = System.currentTimeMillis() + milliseconds;
@@ -92,6 +92,7 @@ public class Drivetrain extends Subsystem {
     	} else {
     		Robot.drivetrain.setMotor("both", 0);
     		timedDriveState = 0;
+    		Robot.logger.info("Drivetrain", "Timed drive completed");
     		return true;
     	}
     	
@@ -99,61 +100,86 @@ public class Drivetrain extends Subsystem {
     }
     
     //To use this method, you keep calling it until it returns true
-    public boolean goToDistance(double targetLeft, double targetRight, double power) {
+    public boolean goToDistance(double leftCentimeters, double rightCentimeters, double power) {
+    	double targetLeft = leftCentimeters *= Robot.encoderClicksPerCentimeter();
+    	double targetRight = rightCentimeters *= Robot.encoderClicksPerCentimeter();
     	//If this method is being called for the first time since it last finished, you want to record the initial encoder values
     	if (goToDistanceState == 0) {
+    		goToDistanceState ++;
     		startingLeftDistance = getLeftEncoder();
     		startingRightDistance = getRightEncoder();
+    		Robot.logger.info("Drivetrain", "goToDistance starting encoder values are " + startingRightDistance + ", " + startingLeftDistance);
     	}
     	
     	//Get how far the left and right sides have traveled
-    	double currentLeft = getLeftEncoder() - startingLeftDistance;
-    	double currentRight = getRightEncoder() - startingRightDistance;
+    	double currentLeft = Math.abs(getLeftEncoder() - startingLeftDistance);
+    	double currentRight = Math.abs(getRightEncoder() - startingRightDistance);
+    	Robot.logger.debug("Drivetrain", "goToDistance current distances at " + currentRight + ", " + currentLeft);
     	
     	//Find the percentage the left and right are to their target
-    	double leftPercentThere = currentLeft / targetLeft;
-    	double rightPercentThere = currentRight / targetRight;
+    	double leftPercentThere = Math.abs(currentLeft / targetLeft);
+    	double rightPercentThere = Math.abs(currentRight / targetRight);
     	//Robot.logger.debug("Drivetrain", "gpToDistance Percentages At " + rightPercentThere + ", " + leftPercentThere);
     	
     	//Initially set the powers to their default values
-        double leftPower = power;
-        double rightPower = power;
+        double leftMotorMultiplier = 1;
+        double rightMotorMultiplier = 1;
         
         //Only start adjusting the powers once the motors have gone 2 percent of the target distance, to avoid calculation errors
-        if ((currentRight >= (targetRight * 0.02)) && (currentLeft >= (targetLeft * 0.02))) {
+        if (currentRight >= (targetRight * 0.02) && (currentLeft >= (targetLeft * 0.02))) {
         	
         	//This finds the difference between how far the left and right sides have gone
-            double powerOffset = 20 * Math.abs(rightPercentThere - leftPercentThere);
+            double powerOffset = Math.abs(rightPercentThere - leftPercentThere);
             Robot.logger.debug("Drivetrain", "goToDistance Power Offset At " + powerOffset);
             
             //If the right is closer than the left, increase the left power and decrease the right power
             if (rightPercentThere > (leftPercentThere + 0.001)) {
-                leftPower *= 1 - powerOffset;
-                rightPower *= 1 + powerOffset;
+            	leftMotorMultiplier *= 1 + powerOffset;
+                rightMotorMultiplier *= 1 - powerOffset;
             }
             
             //If the left is closer than the right, increase the right power, and decrease the left power
             if ((rightPercentThere + 0.001) < leftPercentThere) {
-                leftPower *= 1 + powerOffset;
-                rightPower *= 1 - powerOffset;
+            	leftMotorMultiplier *= 1 - powerOffset;
+                rightMotorMultiplier *= 1 + powerOffset;
             }
         }
+        Robot.logger.debug("Drivetrain", "goToDistance percentages at " + rightPercentThere + ", " + leftPercentThere);
         
         //We use the absolute values for setting the powers, so we have to flip the powers based on what direction the robot is going
-        if (targetRight > startingRightDistance) {
-        	Robot.logger.debug("Drivetrain", "Setting " + rightPercentThere + ", " + leftPercentThere);
-            setMotor("left", leftPower);
-            setMotor("right", rightPower);
+        if (targetRight < 0) {
+        	//If the robot is trying to go backwards and has not passed the target
+        	if (getRightEncoder() - startingRightDistance > targetRight) {
+        		rightMotorMultiplier = -1;
+        	}
         } else {
-        	setMotor("left", -leftPower);
-            setMotor("right", -rightPower);
+        	//If the robot is trying to go forwards and has passed the target
+        	if (getRightEncoder() - startingRightDistance > targetRight) {
+        		rightMotorMultiplier = -1;
+        	}
         }
+        
+        if (targetLeft < 0) {
+        	//If the robot is trying to go backwards and has not passed the target
+        	if (getLeftEncoder() - startingLeftDistance > targetLeft) {
+        		leftMotorMultiplier = -1;
+        	}
+        } else {
+        	//If the robot is trying to go forwards and has passed the target
+        	if (getLeftEncoder() - startingLeftDistance > targetLeft) {
+        		leftMotorMultiplier = -1;
+        	}
+        }
+        
+        Robot.drivetrain.setMotor("left", leftMotorMultiplier * leftPower * power);
+        Robot.drivetrain.setMotor("right", rightMotorMultiplier * rightPower * power);
         
         //If the left and the right both have gone far enough stop the motors, and reset the goToDistanceState so that the next time
         //the method is called, it will record the starting encoder values again
-        if (rightPercentThere >= 100 && leftPercentThere >= 100) {
+        if (rightPercentThere >= 1 && leftPercentThere >= 1) {
         	setMotor("both", 0);
         	goToDistanceState = 0;
+        	Robot.logger.info("Drivetrain", "goToDistance at target");
         	return true;
         }
         
@@ -165,6 +191,7 @@ public class Drivetrain extends Subsystem {
     	double leftPower = power;
     	double rightPower = power;
     	
+    	Robot.logger.debug("Drivetrain", "goToBox light sensors at " + getRightLightSensor() + ", " + getLeftLightSensor());
     	//If the left is sensing and the right is not, turn left
     	if (getLeftLightSensor() > getRightLightSensor() + LIGHT_SENSOR_MARGIN) {
     		leftPower -= GO_TO_BOX_TURN_SPEED;
@@ -179,12 +206,13 @@ public class Drivetrain extends Subsystem {
     	//Return true if the sensors are close enough to the target
     	if (getRightLightSensor() > TARGET_LIGHT_SENSOR_VALUE || getLeftLightSensor() > TARGET_LIGHT_SENSOR_VALUE) {
     		setMotor("both", 0);
+    		Robot.logger.info("Drivetrain", "goToBox at box");
     		return true;
     	}
     	
+    	Robot.logger.debug("Drivetrain", "goToDistance setting powers to " + rightPower + ", " + leftPower);
     	setMotor("left", leftPower);
     	setMotor("right", rightPower);
-    	
     	return false;
     }
     
@@ -198,11 +226,18 @@ public class Drivetrain extends Subsystem {
     		startingRightDistance = getRightEncoder();
     		turnState ++;
     	}
-    	
     	//Determine the difference there should be between the encoders when the robot has completed the turn
-    	int goalDifference = (int)(ENCODER_DIFFERENCE_PER_TURN * (degrees / 360));
-    	int currentDifference = Math.abs(getLeftEncoder() - getRightEncoder());
+    	int goalDifference = (ENCODER_DIFFERENCE_PER_TURN * degrees);
+    	goalDifference = goalDifference / 360;
+    	
+    	if (goalDifference == 0) {
+    		goalDifference = 1;
+    		Robot.logger.warning("Drivetrain", "turn goalDifference is 0");
+    	}
+    	
+    	int currentDifference = Math.abs((getLeftEncoder() - startingLeftDistance) - (getRightEncoder() - startingRightDistance));
     	int percentThere = (currentDifference / goalDifference);
+    	Robot.logger.debug("Drivetrain", "turn " + percentThere + "% through the turn");
     	
     	//If the robot has overshot, do not start increasing the speed
     	if (percentThere > 1) {
@@ -213,12 +248,14 @@ public class Drivetrain extends Subsystem {
     	if (percentThere > AUTO_TURN_REDUCTION_DISTANCE) {
     		leftPower *= (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
     		rightPower *= (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
+    		Robot.logger.debug("Drivetrain", "turn reducing power because it is close to the target");
     	}
     	
     	//If the robot is within the margin, stop the motors and return true
-    	if (currentDifference < AUTO_TURN_MARGIN) {
+    	if (Math.abs(percentThere - 1) < AUTO_TURN_MARGIN) {
     		setMotor("both", 0);
     		turnState = 0;
+    		Robot.logger.info("Drivetrain", "turn completed turn");
     		return true;
     	}
     	
@@ -243,6 +280,7 @@ public class Drivetrain extends Subsystem {
     	
     	setMotor("left", leftPower);
     	setMotor("right", rightPower);
+    	Robot.logger.debug("Drivetrain", "turn setting powers to " + rightPower + ", " + leftPower);
     	
     	return false;
     }
@@ -251,9 +289,9 @@ public class Drivetrain extends Subsystem {
     
     public int getRightLightSensor() {return rightDistSensor.getValue();}
     
-    public int getLeftEncoder() {return -leftEncoder.get();}
+    public int getLeftEncoder() {return leftEncoder.get();}
     
-    public int getRightEncoder() {return rightEncoder.get();}
+    public int getRightEncoder() {return -rightEncoder.get();}
     
     
 }

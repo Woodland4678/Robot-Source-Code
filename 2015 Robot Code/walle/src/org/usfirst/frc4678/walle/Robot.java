@@ -67,6 +67,22 @@ public class Robot extends IterativeRobot {
         return prefs.getDouble("lifterLowerLimit", 1);
     }
     
+    public static double lifterDroppedTarget() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("lifterDroppedTarget")) {
+            prefs.putDouble("lifterDroppedTarget", 0.7);
+        }
+        return prefs.getDouble("lifterDroppedTarget", 0.7);
+    }
+    
+    public static double encoderClicksPerCentimeter() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("encoderClicksPerCentimeter")) {
+            prefs.putDouble("encoderClicksPerCentimeter", 7.2);
+        }
+        return prefs.getDouble("encoderClicksPerCentimeter", 7.2);
+    }
+    
     public static int encoderChangePerTurn() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("encoderChangePerTurn")) {
@@ -78,9 +94,9 @@ public class Robot extends IterativeRobot {
     public static String classLoggerEnabled() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("loggerClassEnabled")) {
-            prefs.putString("loggerClassEnabled", "PickTote");
+            prefs.putString("loggerClassEnabled", "all");
         }
-        return prefs.getString("loggerClassEnabled", "PickTote");
+        return prefs.getString("loggerClassEnabled", "all");
     }
 
     public static double goToBoxTurnSpeed() {

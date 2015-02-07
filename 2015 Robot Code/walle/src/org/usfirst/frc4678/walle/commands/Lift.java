@@ -20,7 +20,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  Lift extends Command {
-
+	boolean finished = false;
     public Lift() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -33,28 +33,29 @@ public class  Lift extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	finished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("Lifter command called");
-    	
-    	Robot.pickup.lift(Robot.lifterUpperTarget());
-    	
+    	finished = Robot.pickup.lift(Robot.lifterUpperTarget());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.pickup.setLifterPower(0);
+    	Robot.logger.info("Lower", "Ended");
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	System.out.println("Lift command interrupted");
+    	Robot.pickup.setLifterPower(0);
+    	Robot.logger.warning("Lower", "Interrupted");
     }
 }

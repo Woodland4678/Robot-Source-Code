@@ -32,40 +32,30 @@ public class  PickTote extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	System.out.println("PickTote initialized");
-    	Robot.logger.debug("PickTote", "Initialized");
+    	Robot.logger.info("PickTote", "Initialized");
     	lift = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("lift = " + lift);
-    	if (lift) {
-    		Robot.logger.debug("PickTote", "Lifting");
-    	} else {
-    		Robot.logger.debug("PickTote", "Lowering");
-    	}
-    	
     	if (Robot.pickup.getLifterHeight() > Robot.lifterLowerTarget()) {
     		
     		//If it is not currently lifting, lower
     		if (!lift) {
-    			System.out.println("lowering");
     			Robot.pickup.lift(Robot.lifterLowerTarget());
+    			Robot.logger.debug("PickTote", "Lowering");
     		}
     		
     	} else {
-    		System.out.println("lifting");
     		lift = true;
     		Robot.pickup.lift(Robot.lifterUpperTarget());
+    		Robot.logger.debug("PickTote", "Lifting");
     	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	System.out.println("ended picktote");
     	if (Robot.pickup.getLifterHeight() > Robot.lifterUpperTarget() && lift) {
-    		Robot.pickup.setLifterPower(0);
     		return true;
     	}
         return false;
@@ -74,11 +64,13 @@ public class  PickTote extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.pickup.setLifterPower(0);
+    	Robot.logger.info("PickTote", "Ended");
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.pickup.setLifterPower(0);
+    	Robot.logger.warning("PickTote", "Interrupted");
     }
 }
