@@ -32,6 +32,7 @@ public class  PickTote extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.pickup.setLifterServo(Robot.servoRemoveLock());
     	Robot.logger.info("PickTote", "Initialized");
     	lift = false;
     }
@@ -42,13 +43,13 @@ public class  PickTote extends Command {
     		
     		//If it is not currently lifting, lower
     		if (!lift) {
-    			Robot.pickup.lift(Robot.lifterLowerTarget(), Robot.servoRemoveLock());
+    			Robot.pickup.lift(Robot.lifterLowerTarget());
     			Robot.logger.debug("PickTote", "Lowering");
     		}
     		
     	} else {
     		lift = true;
-    		Robot.pickup.lift(Robot.lifterUpperTarget(), Robot.servoLockPos());
+    		Robot.pickup.lift(Robot.lifterUpperTarget());
     		Robot.logger.debug("PickTote", "Lifting");
     	}
     }
@@ -63,6 +64,7 @@ public class  PickTote extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.pickup.setLifterServo(Robot.servoLockPos());
     	Robot.pickup.setLifterPower(0);
     	Robot.logger.info("PickTote", "Ended");
     }

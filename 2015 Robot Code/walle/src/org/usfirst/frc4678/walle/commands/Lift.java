@@ -33,12 +33,13 @@ public class  Lift extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.pickup.setLifterServo(Robot.servoRemoveLock());
     	finished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	finished = Robot.pickup.lift(Robot.lifterUpperTarget(), Robot.servoLockPos());
+    	finished = Robot.pickup.lift(Robot.lifterUpperTarget());
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -48,6 +49,7 @@ public class  Lift extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.pickup.setLifterServo(Robot.servoLockPos());
     	Robot.pickup.setLifterPower(0);
     	Robot.logger.info("Lower", "Ended");
     }

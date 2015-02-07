@@ -31,13 +31,14 @@ public class  Lower extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.pickup.setLifterServo(Robot.servoRemoveLock());
     	finished = false;
     	Robot.logger.info("Lower", "Initialized");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	finished = Robot.pickup.lift(Robot.lifterDroppedTarget(), Robot.servoRemoveLock());
+    	finished = Robot.pickup.lift(Robot.lifterDroppedTarget());
     }
 
     // Make this return true when this Command no longer needs to run execute()
