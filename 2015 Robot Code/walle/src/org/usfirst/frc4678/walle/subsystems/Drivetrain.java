@@ -112,7 +112,7 @@ public class Drivetrain extends Subsystem {
     		goToDistanceState ++;
     		startingLeftDistance = getLeftEncoder();
     		startingRightDistance = getRightEncoder();
-    		Robot.logger.info("Drivetrain", "goToDistance starting encoder values are " + startingRightDistance + ", " + startingLeftDistance);
+    		Robot.logger.info("Drivetrain", "goToDistance starting encoder values are " + getRightEncoder() + ", " + getLeftEncoder());
     	}
     	
     	//Get how far the left and right sides have traveled
@@ -120,7 +120,7 @@ public class Drivetrain extends Subsystem {
     	double currentRight = Math.abs(getRightEncoder() - startingRightDistance);
     	double currentLeftCentimeters = currentLeft / Robot.encoderClicksPerCentimeter();
     	double currentRightCentimeters = currentRight / Robot.encoderClicksPerCentimeter();
-    	Robot.logger.debug("Drivetrain", "goToDistance target is " + rightCentimeters + ", " + leftCentimeters + " current is " + (int)((getRightEncoder() - startingRightDistance) / Robot.encoderClicksPerCentimeter()) + ", " + (int)((getLeftEncoder() - startingLeftDistance) / Robot.encoderClicksPerCentimeter()));
+    	Robot.logger.debug("Drivetrain", "goToDistance target is " + rightCentimeters + ", " + leftCentimeters + " current is " + (-(int)((getRightEncoder() - startingRightDistance) / Robot.encoderClicksPerCentimeter())) + ", " + (-(int)((getLeftEncoder() - startingLeftDistance) / Robot.encoderClicksPerCentimeter())));
     	
     	//Find the percentage the left and right are to their target
     	double leftPercentThere = Math.abs(currentLeft / targetLeft);
@@ -136,7 +136,7 @@ public class Drivetrain extends Subsystem {
         	
         	//This finds the difference between how far the left and right sides have gone
             double powerOffset = GO_TO_DISTANCE_CORRECTION_SPEED * Math.abs(rightPercentThere - leftPercentThere);
-            Robot.logger.debug("Drivetrain", "goToDistance Power Offset At " + powerOffset);
+            Robot.logger.debug("Drivetrain", "goToDistance Power Offset At " + (((int)(1000 * powerOffset)) / 1000.0));
             
             //If the right is closer than the left, increase the left power and decrease the right power
             if (rightPercentThere > (leftPercentThere + 0.001)) {
@@ -202,6 +202,7 @@ public class Drivetrain extends Subsystem {
         	setMotor("both", 0);
         	goToDistanceState = 0;
         	Robot.logger.info("Drivetrain", "goToDistance at target");
+        	Robot.logger.info("Drivetrain", "goToDistance final encoder values are " + getRightEncoder() + ", " + getLeftEncoder());
         	return true;
         }
         
