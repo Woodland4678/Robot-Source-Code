@@ -42,13 +42,13 @@ public class  PickTote extends Command {
     		
     		//If it is not currently lifting, lower
     		if (!lift) {
-    			Robot.pickup.lift(Robot.lifterLowerTarget());
+    			Robot.pickup.lift(Robot.lifterLowerTarget(), Robot.servoRemoveLock());
     			Robot.logger.debug("PickTote", "Lowering");
     		}
     		
     	} else {
     		lift = true;
-    		Robot.pickup.lift(Robot.lifterUpperTarget());
+    		Robot.pickup.lift(Robot.lifterUpperTarget(), Robot.servoLockPos());
     		Robot.logger.debug("PickTote", "Lifting");
     	}
     }

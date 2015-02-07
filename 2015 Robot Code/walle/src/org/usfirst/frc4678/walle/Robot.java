@@ -146,6 +146,20 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getDouble("driveMotorPowerReduction", .5);
     }
+    public static double servoLockPos() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("servoLockPos")) {
+            prefs.putDouble("servoLockPos", 20);
+        }
+        return prefs.getDouble("servoLockPos", 20);
+    }
+    public static double servoRemoveLock() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("servoRemoveLock")) {
+            prefs.putDouble("servoRemoveLock", 50);
+        }
+        return prefs.getDouble("servoRemoveLock", 50);
+    }
     
     public void robotInit() {
 	RobotMap.init();
