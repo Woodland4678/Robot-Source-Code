@@ -171,8 +171,8 @@ public class Drivetrain extends Subsystem {
         	}
         }
         
-        Robot.drivetrain.setMotor("left", leftMotorMultiplier * leftPower * power);
-        Robot.drivetrain.setMotor("right", rightMotorMultiplier * rightPower * power);
+        Robot.drivetrain.setMotor("left", leftMotorMultiplier * leftMotorMultiplier * power);
+        Robot.drivetrain.setMotor("right", rightMotorMultiplier * rightMotorMultiplier * power);
         
         //If the left and the right both have gone far enough stop the motors, and reset the goToDistanceState so that the next time
         //the method is called, it will record the starting encoder values again
