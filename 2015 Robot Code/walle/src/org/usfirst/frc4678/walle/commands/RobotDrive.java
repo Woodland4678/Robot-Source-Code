@@ -96,8 +96,8 @@ public class  RobotDrive extends Command {
         }
         
         //Set the drivetrain motors
-        Robot.drivetrain.setMotor("left", leftPower);
-        Robot.drivetrain.setMotor("right", rightPower);
+        Robot.drivetrain.setMotor("left", -leftPower);
+        Robot.drivetrain.setMotor("right", -rightPower);
         
         lastLeftPower = leftPower;
         lastRightPower = rightPower;
