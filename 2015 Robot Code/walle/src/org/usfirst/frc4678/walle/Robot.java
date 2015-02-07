@@ -149,16 +149,16 @@ public class Robot extends IterativeRobot {
     public static double servoLockPos() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("servoLockPos")) {
-            prefs.putDouble("servoLockPos", 20);
+            prefs.putDouble("servoLockPos", 180);
         }
-        return prefs.getDouble("servoLockPos", 20);
+        return prefs.getDouble("servoLockPos", 180);
     }
     public static double servoRemoveLock() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("servoRemoveLock")) {
-            prefs.putDouble("servoRemoveLock", 50);
+            prefs.putDouble("servoRemoveLock", 0);
         }
-        return prefs.getDouble("servoRemoveLock", 50);
+        return prefs.getDouble("servoRemoveLock", 0);
     }
     
     public void robotInit() {
