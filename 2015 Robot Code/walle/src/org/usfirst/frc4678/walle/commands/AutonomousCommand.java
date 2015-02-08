@@ -117,7 +117,7 @@ public class  AutonomousCommand extends Command {
     		}
     	break;
     	case 11:
-    		if (Robot.drivetrain.goToDistance(200, 200, .8, 20, 50)) {
+    		if (Robot.drivetrain.goToDistance(100, 100, .8, 10, 50)) {
     			autoState ++;
     		}
     	case 12:
