@@ -31,7 +31,7 @@ public class  Lower extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.pickup.setLifterServo(Robot.servoRemoveLock());
+    	Robot.pickup.setLifterState(0);
     	finished = false;
     	Robot.logger.info("Lower", "Initialized");
     }

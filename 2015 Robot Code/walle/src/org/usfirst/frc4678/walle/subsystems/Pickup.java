@@ -76,8 +76,8 @@ public class Pickup extends Subsystem {
     	SmartDashboard.putNumber("Lifter Height", lifterHeight.get());
     	switch(lifterState) {
     		case 0:
-    			lifterMotor.set(0.2);	
     			lifterServo.set(Robot.servoRemoveLock());
+    			lifterMotor.set(0.2);	
     			if (cnt == 30) {
     				lifterState++;
     			}
@@ -116,8 +116,9 @@ public class Pickup extends Subsystem {
     				Robot.logger.info("Pickup", "Tote at the correct height");
     				return true;
     			}
-    			
-    			lifterMotor.set(-power);
+    			System.out.println("error: " + error);
+    			System.out.println("Power: " + power);
+    			lifterMotor.set(power);
     			break;
     			
     	}

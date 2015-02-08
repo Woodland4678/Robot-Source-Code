@@ -33,7 +33,8 @@ public class  Lift extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.pickup.setLifterServo(Robot.servoRemoveLock());
+    	Robot.pickup.setLifterState(1);
+    	Robot.pickup.setLifterServo(Robot.servoLockPos());
     	finished = false;
     }
 
