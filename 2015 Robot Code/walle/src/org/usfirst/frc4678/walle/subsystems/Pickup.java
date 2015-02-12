@@ -77,51 +77,57 @@ public class Pickup extends Subsystem {
     	switch(lifterState) {
     		case 0:
     			lifterServo.set(Robot.servoRemoveLock());
-    			lifterMotor.set(0.2);	
-    			if (cnt == 30) {
+    			lifterMotor.set(0.2);
+    			cnt = 0;
+    			lifterState ++;
+    			break;
+    		case 1:
+    			
+    			if (cnt >= 30) {
     				lifterState++;
     			}
     			cnt++;
     			break;
-    		case 1:
+    		case 2:
     			
     			//Finds the difference between target and current position
     			error = lifterTarget - lifterHeight.get();
-    			//if the difference is greater than 1.2 power should be full
-    			if (error > 1.2) {
+    			//if the difference is greater than 0 power should be full
+    			if (error > 0) {
     				power = lifterMaxPower;
     			}
-    			//if the difference is less than -1.2, power should be full in reverse
-    			else if (error < -1.2) {
+    			//if the difference is less than 0, power should be full in reverse
+    			else if (error < 0) {
     				power = -lifterMaxPower;
-    			}
-    			else {
-    				//creates a power reduction as the lifter gets closer to the target
-    				power = error * 0.5;
-    				// if power goes greater than 1, power is set to 1
-    				if (power > lifterMaxPower) {
-    					power = lifterMaxPower;
-    				}
-    				// if power goes less than -1, power is set to -1
-    				else if (power < -lifterMaxPower) {
-    					power = -lifterMaxPower;
-    				}
     			}
     					
     			SmartDashboard.putNumber("Lifter Power", power);
+    			lifterMotor.set(power);
     			
     			if (Math.abs(error) < 0.1) {
-    				
     				lifterMotor.set(0);
-    				Robot.logger.info("Pickup", "Tote at the correct height");
+    				lifterServo.set(Robot.servoLockPos());
+    				cnt = 0;
+    				lifterState++;
     				return true;
     			}
     			System.out.println("error: " + error);
     			System.out.println("Power: " + power);
-    			lifterMotor.set(power);
+
     			break;
+    		/*case 3:
+    			if (cnt > 30) {
+    				lifterState++;
+    			}
+    			cnt++;
+    			break;
+    		case 4:
+    			lifterMotor.set(0);
+    			lifterState = 0;
+    			cnt = 0;*/
     			
-    	}
+    			
+    		}
     	return false;
     	
     }

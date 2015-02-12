@@ -47,6 +47,7 @@ public class  RobotDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println("-------Lifter at " + Robot.pickup.getLifterHeight() + ", distance sensor at " + Robot.drivetrain.getLeftLightSensor());
     	Robot.logger.info("RobotDrive", "Left Encoder = " + Robot.drivetrain.getLeftEncoder());
     	Robot.logger.info("RobotDrive", "Right Encoder = " + Robot.drivetrain.getRightEncoder());
     	

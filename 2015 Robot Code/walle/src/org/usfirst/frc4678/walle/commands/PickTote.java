@@ -19,6 +19,7 @@ import org.usfirst.frc4678.walle.Robot;
  */
 public class  PickTote extends Command {
 	boolean lift = false;
+	boolean finished = false;
     public PickTote() {
     	
         // Use requires() here to declare subsystem dependencies
@@ -35,37 +36,33 @@ public class  PickTote extends Command {
     	Robot.pickup.setLifterState(0);
     	Robot.logger.info("PickTote", "Initialized");
     	lift = false;
+    	finished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (Robot.pickup.getLifterHeight() > Robot.lifterLowerTarget()) {
-    		
-    		//If it is not currently lifting, lower
-    		if (!lift) {
-    			Robot.pickup.lift(Robot.lifterLowerTarget());
-    			Robot.logger.debug("PickTote", "Lowering");
+    	//If the robot has not hit the bottom, lower the lifter
+    	if (!lift) {
+    		if (Robot.pickup.lift(Robot.lifterDroppedTarget())) {
+    			//If the lifter is at the bottom, start lifting up
+    			lift = true;
     		}
-    		
+    	
+    	//If the robot has hit the bottom, lift up
     	} else {
-    		lift = true;
-    		Robot.pickup.lift(Robot.lifterUpperTarget());
+    		Robot.pickup.setLifterState(2);
+    		finished = Robot.pickup.lift(Robot.lifterUpperTarget());
     		Robot.logger.debug("PickTote", "Lifting");
     	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (Robot.pickup.getLifterHeight() > Robot.lifterUpperTarget() && lift) {
-    		return true;
-    	}
-        return false;
+        return finished;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.pickup.setLifterServo(Robot.servoLockPos());
-    	Robot.pickup.setLifterPower(0);
     	Robot.logger.info("PickTote", "Ended");
     }
 
