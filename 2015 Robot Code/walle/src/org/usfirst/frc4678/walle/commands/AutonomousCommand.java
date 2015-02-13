@@ -112,12 +112,12 @@ public class  AutonomousCommand extends Command {
     	case 10:
     		count ++;
     		//Wait for a bit, to allow the robot to drop the tote
-    		if (count > 50) {
+    		if (count > 150) {
     			autoState ++;
     		}
     	break;
     	case 11:
-    		if (Robot.drivetrain.goToDistance(100, 100, .8, 10, 50)) {
+    		if (Robot.drivetrain.goToDistance(200, 200, .8, 10, 50)) {
     			autoState ++;
     		}
     	case 12:
@@ -125,22 +125,26 @@ public class  AutonomousCommand extends Command {
     	break;
     	}
     	
+    	Robot.logger.debug("Autonomous Command", "Pickup state is " + pickupState);
+    	
     	switch(pickupState) {
     	case 0:
-    		//Robot.pickup.lift(Robot.lifterDroppedTarget());
+    		Robot.pickup.lift(Robot.lifterScoreTarget());
+    		
     	break;
     	case 1:
-    		//Robot.pickup.lift(Robot.lifterLowerTarget());
+    		Robot.pickup.lift(Robot.lifterPickupTarget());
     	break;
     	case 2:
-    		//Robot.pickup.lift(Robot.lifterUpperTarget());
+    		Robot.pickup.lift(Robot.lifterUpperTarget());
     	break;
     	case 3:
-    		//if (Robot.pickup.lift(Robot.lifterLowerTarget())) {
-    			pickupState ++;
-    		//}
+    		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
+    			pickupState = 2;
+    		}
     	break;
     	}
+    	
     	/*
     	switch(autoState){
     	case 0:

@@ -43,7 +43,7 @@ public class  PickTote extends Command {
     protected void execute() {
     	//If the robot has not hit the bottom, lower the lifter
     	if (!lift) {
-    		if (Robot.pickup.lift(Robot.lifterLowerTarget())) {
+    		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
     			//If the lifter is at the bottom, start lifting up
     			lift = true;
     		}

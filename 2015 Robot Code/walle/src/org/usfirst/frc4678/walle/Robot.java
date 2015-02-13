@@ -61,19 +61,12 @@ public class Robot extends IterativeRobot {
     
     public static double lifterPickupTarget() {
         Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("lifterLowerLimit")) {
-            prefs.putDouble("lifterLowerLimit", 2.07);
+        if (!prefs.containsKey("lifterPickupTarget")) {
+            prefs.putDouble("lifterPickupTarget", 2.07);
         }
-        return prefs.getDouble("lifterLowerLimit", 2.07);
+        return prefs.getDouble("lifterPickupTarget", 2.07);
     }
     
-    public static double lifterLowerTarget() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("lifterLowerTarget")) {
-            prefs.putDouble("lifterLowerTarget", 2.0);
-        }
-        return prefs.getDouble("lifterLowerTarget", 2.0);
-    }
     public static double lifterScoreTarget() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("lifterScoreTarget")) {
