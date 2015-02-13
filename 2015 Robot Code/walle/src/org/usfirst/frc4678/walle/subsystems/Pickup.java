@@ -77,13 +77,15 @@ public class Pickup extends Subsystem {
     	switch(lifterState) {
     		case 0:
     			lifterServo.set(Robot.servoRemoveLock());
-    			lifterMotor.set(0.2);
-    			cnt = 0;
-    			lifterState ++;
+    			if (cnt > 10) {
+    				lifterState ++;	
+    			}
+    			cnt++;
+
     			break;
     		case 1:
-    			
-    			if (cnt >= 30) {
+    			lifterMotor.set(-0.7);
+    			if (cnt > 16) {
     				lifterState++;
     			}
     			cnt++;
@@ -102,7 +104,7 @@ public class Pickup extends Subsystem {
     			}
     					
     			SmartDashboard.putNumber("Lifter Power", power);
-    			lifterMotor.set(power);
+    			lifterMotor.set(-power);
     			
     			if (Math.abs(error) < 0.1) {
     				lifterMotor.set(0);
@@ -113,6 +115,7 @@ public class Pickup extends Subsystem {
     			}
     			System.out.println("error: " + error);
     			System.out.println("Power: " + power);
+    			System.out.println("lifterservo:" + lifterServo.get());
 
     			break;
     		/*case 3:
