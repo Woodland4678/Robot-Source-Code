@@ -204,7 +204,7 @@ Children:
           name: Command
           type: Command
           validators: &id013 [TypeDropdownSelected]
-          value: PickTote
+          value: Lower
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
           choices: &id014 [whileHeld, whenPressed, whenReleased]
           default: whileHeld
@@ -228,7 +228,7 @@ Children:
           name: Command
           type: Command
           validators: *id013
-          value: Lower
+          value: Lift
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
           choices: *id014
           default: whileHeld
@@ -252,7 +252,7 @@ Children:
           name: Command
           type: Command
           validators: *id013
-          value: Lift
+          value: PickTote
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
           choices: *id014
           default: whileHeld
@@ -343,7 +343,7 @@ Children:
   Name: Commands
 Properties:
   Eclipse Workspace: !!robotbuilder.data.properties.FileProperty {default: 'C:\Users\Developer\workspace',
-    extension: null, folder: true, name: Eclipse Workspace, validators: null, value: 'C:\Users\Developer\Documents\GitHub\Robot-Source-Code\2015
+    extension: null, folder: true, name: Eclipse Workspace, validators: null, value: 'C:\Users\Developer\Documents\GitHub\4678-Robot-Java-Code\2015
       Robot Code'}
   Export Commands: !!robotbuilder.data.properties.BooleanProperty {default: true,
     name: Export Commands, validators: null, value: true}

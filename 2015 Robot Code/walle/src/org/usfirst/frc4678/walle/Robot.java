@@ -59,7 +59,7 @@ public class Robot extends IterativeRobot {
         return prefs.getDouble("lifterUpperTarget", 5.6);
     }
     
-    public static double lifterLowerTarget() {
+    public static double lifterPickupTarget() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("lifterLowerLimit")) {
             prefs.putDouble("lifterLowerLimit", 2.07);
@@ -67,12 +67,19 @@ public class Robot extends IterativeRobot {
         return prefs.getDouble("lifterLowerLimit", 2.07);
     }
     
-    public static double lifterDroppedTarget() {
+    public static double lifterLowerTarget() {
         Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("lifterDroppedTarget")) {
-            prefs.putDouble("lifterDroppedTarget", 1.86);
+        if (!prefs.containsKey("lifterLowerTarget")) {
+            prefs.putDouble("lifterLowerTarget", 2.0);
         }
-        return prefs.getDouble("lifterDroppedTarget", 1.86);
+        return prefs.getDouble("lifterLowerTarget", 2.0);
+    }
+    public static double lifterScoreTarget() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("lifterScoreTarget")) {
+            prefs.putDouble("lifterScoreTarget", 1.52);
+        }
+        return prefs.getDouble("lifterScoreTarget", 1.52);
     }
     
     public static double encoderClicksPerCentimeter() {

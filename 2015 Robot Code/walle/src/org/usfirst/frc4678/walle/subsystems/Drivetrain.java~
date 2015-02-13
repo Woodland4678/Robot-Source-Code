@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Drivetrain extends Subsystem {
+	//start ramping down when you are this many centimeters from the target or from the start
+	double GO_TO_DISTANCE_CORRECTION_SPEED = 20;
+	int AUTO_DRIVE_RAMP_DISTANCE = 30;
 	int ENCODER_DIFFERENCE_PER_TURN = Robot.encoderChangePerTurn();
 	int LIGHT_SENSOR_MARGIN = Robot.lightSensorMargin();
 	double GO_TO_BOX_TURN_SPEED = Robot.goToBoxTurnSpeed();
@@ -100,21 +103,24 @@ public class Drivetrain extends Subsystem {
     }
     
     //To use this method, you keep calling it until it returns true
-    public boolean goToDistance(double leftCentimeters, double rightCentimeters, double power) {
-    	double targetLeft = leftCentimeters *= Robot.encoderClicksPerCentimeter();
-    	double targetRight = rightCentimeters *= Robot.encoderClicksPerCentimeter();
+    public boolean goToDistance(double rightCentimeters, double leftCentimeters, double power, int rampUpDistance, int rampDownDistance) {
+    	double targetLeft = leftCentimeters * Robot.encoderClicksPerCentimeter();
+    	double targetRight = rightCentimeters * Robot.encoderClicksPerCentimeter();
+    	
     	//If this method is being called for the first time since it last finished, you want to record the initial encoder values
     	if (goToDistanceState == 0) {
     		goToDistanceState ++;
     		startingLeftDistance = getLeftEncoder();
     		startingRightDistance = getRightEncoder();
-    		Robot.logger.info("Drivetrain", "goToDistance starting encoder values are " + startingRightDistance + ", " + startingLeftDistance);
+    		Robot.logger.info("Drivetrain", "goToDistance starting encoder values are " + getRightEncoder() + ", " + getLeftEncoder());
     	}
     	
     	//Get how far the left and right sides have traveled
     	double currentLeft = Math.abs(getLeftEncoder() - startingLeftDistance);
     	double currentRight = Math.abs(getRightEncoder() - startingRightDistance);
-    	Robot.logger.debug("Drivetrain", "goToDistance current distances at " + currentRight + ", " + currentLeft);
+    	double currentLeftCentimeters = currentLeft / Robot.encoderClicksPerCentimeter();
+    	double currentRightCentimeters = currentRight / Robot.encoderClicksPerCentimeter();
+    	Robot.logger.debug("Drivetrain", "goToDistance target is " + rightCentimeters + ", " + leftCentimeters + " current is " + (-(int)((getRightEncoder() - startingRightDistance) / Robot.encoderClicksPerCentimeter())) + ", " + (-(int)((getLeftEncoder() - startingLeftDistance) / Robot.encoderClicksPerCentimeter())));
     	
     	//Find the percentage the left and right are to their target
     	double leftPercentThere = Math.abs(currentLeft / targetLeft);
@@ -129,8 +135,8 @@ public class Drivetrain extends Subsystem {
         if (currentRight >= (targetRight * 0.02) && (currentLeft >= (targetLeft * 0.02))) {
         	
         	//This finds the difference between how far the left and right sides have gone
-            double powerOffset = Math.abs(rightPercentThere - leftPercentThere);
-            Robot.logger.debug("Drivetrain", "goToDistance Power Offset At " + powerOffset);
+            double powerOffset = GO_TO_DISTANCE_CORRECTION_SPEED * Math.abs(rightPercentThere - leftPercentThere);
+            Robot.logger.debug("Drivetrain", "goToDistance Power Offset At " + (((int)(1000 * powerOffset)) / 1000.0));
             
             //If the right is closer than the left, increase the left power and decrease the right power
             if (rightPercentThere > (leftPercentThere + 0.001)) {
@@ -144,35 +150,51 @@ public class Drivetrain extends Subsystem {
                 rightMotorMultiplier *= 1 + powerOffset;
             }
         }
-        Robot.logger.debug("Drivetrain", "goToDistance percentages at " + rightPercentThere + ", " + leftPercentThere);
+        Robot.logger.debug("Drivetrain", "goToDistance percentages at " + (int)(rightPercentThere * 100) + ", " + (int)(leftPercentThere * 100));
         
         //We use the absolute values for setting the powers, so we have to flip the powers based on what direction the robot is going
         if (targetRight < 0) {
         	//If the robot is trying to go backwards and has not passed the target
         	if (getRightEncoder() - startingRightDistance > targetRight) {
-        		rightMotorMultiplier = -1;
+        		rightMotorMultiplier *= -1;
         	}
         } else {
         	//If the robot is trying to go forwards and has passed the target
         	if (getRightEncoder() - startingRightDistance > targetRight) {
-        		rightMotorMultiplier = -1;
+        		rightMotorMultiplier *= -1;
         	}
         }
         
         if (targetLeft < 0) {
         	//If the robot is trying to go backwards and has not passed the target
         	if (getLeftEncoder() - startingLeftDistance > targetLeft) {
-        		leftMotorMultiplier = -1;
+        		leftMotorMultiplier *= -1;
         	}
         } else {
         	//If the robot is trying to go forwards and has passed the target
         	if (getLeftEncoder() - startingLeftDistance > targetLeft) {
-        		leftMotorMultiplier = -1;
+        		leftMotorMultiplier *= -1;
         	}
         }
         
-        Robot.drivetrain.setMotor("left", leftMotorMultiplier * leftPower * power);
-        Robot.drivetrain.setMotor("right", rightMotorMultiplier * rightPower * power);
+        //Ramp up or down
+        double rampDownPercentage = 1;
+        if (currentRightCentimeters < rampUpDistance) {
+        	rampDownPercentage = ((currentRightCentimeters / rampUpDistance) / 2) + 0.5;
+        	if (rampDownPercentage < 0.5) {
+        		rampDownPercentage = 0.5;
+        	}
+        	Robot.logger.info("Drivetrain", "goToDistance ramping down " + (int)(rampDownPercentage * 100) + "%");
+        } else if (currentRightCentimeters > Math.abs(rightCentimeters) - rampDownDistance) {
+        	rampDownPercentage = (Math.abs(rightCentimeters) - currentRightCentimeters) / rampDownDistance;
+        	if (rampDownPercentage < 0.3) {
+        		rampDownPercentage = 0.3;
+        	}
+        	Robot.logger.info("Drivetrain", "goToDistance ramping down " + (int)(rampDownPercentage * 100) + "%");
+        }
+        
+        Robot.drivetrain.setMotor("left", leftMotorMultiplier * power * rampDownPercentage);
+        Robot.drivetrain.setMotor("right", rightMotorMultiplier * power * rampDownPercentage);
         
         //If the left and the right both have gone far enough stop the motors, and reset the goToDistanceState so that the next time
         //the method is called, it will record the starting encoder values again
@@ -180,6 +202,7 @@ public class Drivetrain extends Subsystem {
         	setMotor("both", 0);
         	goToDistanceState = 0;
         	Robot.logger.info("Drivetrain", "goToDistance at target");
+        	Robot.logger.info("Drivetrain", "goToDistance final encoder values are " + getRightEncoder() + ", " + getLeftEncoder());
         	return true;
         }
         
