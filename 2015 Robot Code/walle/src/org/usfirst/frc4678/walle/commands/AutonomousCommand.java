@@ -55,13 +55,13 @@ public class  AutonomousCommand extends Command {
     	case 1:
     		count ++;
     		//Wait for a bit, to allow the robot to pick up the tote
-    		if (count > 50) {
+    		if (count > 40) {
     			autoState ++;
     		}
     	break;
     	case 2:
     		//move forwards a bit
-    		if (Robot.drivetrain.goToDistance(206, 206, .5, 20, 20)) {
+    		if (Robot.drivetrain.goToDistance(250, 250, .8, 10, 75)) {
     			autoState ++;
     			count = 0;
     			pickupState = 3;
@@ -70,13 +70,13 @@ public class  AutonomousCommand extends Command {
     	case 3:
     		count ++;
     		//Wait for a bit, to allow the robot to pick up the tote
-    		if (count > 50) {
+    		if (count > 100) {
     			autoState ++;
     		}
     	break;
     	case 4:
     		//move forwards
-    		if (Robot.drivetrain.goToDistance(206, 206, .5, 30, 30)) {
+    		if (Robot.drivetrain.goToDistance(235, 235, .7, 20, 70)) {
     			autoState ++;
     			count = 0;
     			pickupState = 3;
@@ -85,7 +85,7 @@ public class  AutonomousCommand extends Command {
     	case 5:
     		count ++;
     		//Wait for a bit, to allow the robot to pick up the tote
-    		if (count > 50) {
+    		if (count > 80) {
     			autoState ++;
     		}
     	break;
@@ -96,7 +96,7 @@ public class  AutonomousCommand extends Command {
     	break;
     	case 7:
     		//Back up
-    		if (Robot.drivetrain.goToDistance(-575, -383, .7, 0, 30)) {
+    		if (Robot.drivetrain.goToDistance(-575, -350, .7, 0, 30)) {
     			autoState ++;
     		}
     	break;
@@ -117,7 +117,7 @@ public class  AutonomousCommand extends Command {
     		}
     	break;
     	case 11:
-    		if (Robot.drivetrain.goToDistance(200, 200, .8, 10, 50)) {
+    		if (Robot.drivetrain.goToDistance(60, 60, .6, 10, 10)) {
     			autoState ++;
     		}
     	case 12:
@@ -167,6 +167,7 @@ public class  AutonomousCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	autoState = 0;
+    	Robot.pickup.setLifterPower(0);
     	Robot.drivetrain.setMotor("both", 0);
     }
 
@@ -174,6 +175,7 @@ public class  AutonomousCommand extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
     	autoState = 0;
+    	Robot.pickup.setLifterPower(0);
     	Robot.drivetrain.setMotor("both", 0);
     }
 }

@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Drivetrain extends Subsystem {
 	//start ramping down when you are this many centimeters from the target or from the start
-	double GO_TO_DISTANCE_CORRECTION_SPEED = 20;
+	double GO_TO_DISTANCE_CORRECTION_SPEED = 50;
 	int AUTO_DRIVE_RAMP_DISTANCE = 30;
 	int ENCODER_DIFFERENCE_PER_TURN = Robot.encoderChangePerTurn();
 	int LIGHT_SENSOR_MARGIN = Robot.lightSensorMargin();
@@ -186,9 +186,9 @@ public class Drivetrain extends Subsystem {
         	}
         	Robot.logger.info("Drivetrain", "goToDistance ramping down " + (int)(rampDownPercentage * 100) + "%");
         } else if (currentRightCentimeters > Math.abs(rightCentimeters) - rampDownDistance) {
-        	rampDownPercentage = (Math.abs(rightCentimeters) - currentRightCentimeters) / rampDownDistance;
-        	if (rampDownPercentage < 0.3) {
-        		rampDownPercentage = 0.3;
+        	rampDownPercentage = (((Math.abs(rightCentimeters) - currentRightCentimeters) / rampDownDistance) / 4);
+        	if (rampDownPercentage < 0.25) {
+        		rampDownPercentage = 0.25;
         	}
         	Robot.logger.info("Drivetrain", "goToDistance ramping down " + (int)(rampDownPercentage * 100) + "%");
         }

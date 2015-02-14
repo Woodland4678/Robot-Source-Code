@@ -43,6 +43,7 @@ public class  RobotDrive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.pickup.setLifterPower(0);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -61,33 +62,32 @@ public class  RobotDrive extends Command {
         
         //Reduce the acceleration if the button is held down
         if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
-        	Robot.logger.info("RobotDrive", "Button 5 Held");
+        	Robot.logger.info("RobotDrive", "Limiting acceleration to " + MAX_DECCELERATION_SPEED);
         	
-        	//If the left power has increased by more than the max
-        	if (leftPower - lastLeftPower > MAX_DECCELERATION_SPEED) {
-        		
-        		//Manually set the power so the power does not change so quickly
-        		leftPower = lastLeftPower + MAX_DECCELERATION_SPEED;
-        	
-        	//If the left power has decreased by more than the max
-        	} else if (lastLeftPower - leftPower > MAX_DECCELERATION_SPEED) {
-        		
-        		//Manually set the power so the power does not change so quickly
-        		leftPower = lastLeftPower - MAX_DECCELERATION_SPEED;
+        	//If the left power has changed by more than the max
+        	if (Math.abs(leftPower - lastLeftPower) > MAX_DECCELERATION_SPEED) {
+        		if (leftPower > lastLeftPower) {
+        			//Manually set the power so the power does not change so quickly
+        			leftPower = lastLeftPower + MAX_DECCELERATION_SPEED;
+        			
+        		} else {
+        			//Manually set the power so the power does not change so quickly
+        			leftPower = lastLeftPower - MAX_DECCELERATION_SPEED;
+        		}
         	}
         	
-        	//If the right power has increased by more than the max
-        	if (rightPower - lastRightPower > MAX_DECCELERATION_SPEED) {
-        		
-        		//Manually set the power so the power does not change so quickly
-        		rightPower = lastRightPower + MAX_DECCELERATION_SPEED;
-        		
-        	//If the right power has decreased more than the max
-        	} else if (lastRightPower - rightPower > MAX_DECCELERATION_SPEED) {
-        		
-        		//Manually set the power so the power does not change so quickly
-        		rightPower = lastRightPower - MAX_DECCELERATION_SPEED;
+        	//If the left power has changed by more than the max
+        	if (Math.abs(rightPower - lastRightPower) > MAX_DECCELERATION_SPEED) {
+        		if (rightPower > lastRightPower) {
+        			//Manually set the power so the power does not change so quickly
+        			rightPower = lastRightPower + MAX_DECCELERATION_SPEED;
+        			
+        		} else {
+        			//Manually set the power so the power does not change so quickly
+        			rightPower = lastRightPower - MAX_DECCELERATION_SPEED;
+        		}
         	}
+        	
         	
         } else if (Robot.oi.getButton(Robot.oi.getGamepad1(), 6)) {
         	Robot.logger.info("RobotDrive", "Button 6 Held");
