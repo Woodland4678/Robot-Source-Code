@@ -61,7 +61,7 @@ public class  AutonomousCommand extends Command {
     	break;
     	case 2:
     		//move forwards a bit
-    		if (Robot.drivetrain.goToDistance(250, 250, .8, 10, 75)) {
+    		if (Robot.drivetrain.goToDistance(250, 250, .85, 10, 60)) {
     			autoState ++;
     			count = 0;
     			pickupState = 3;
@@ -76,7 +76,7 @@ public class  AutonomousCommand extends Command {
     	break;
     	case 4:
     		//move forwards
-    		if (Robot.drivetrain.goToDistance(235, 235, .7, 20, 70)) {
+    		if (Robot.drivetrain.goToDistance(235, 235, .85, 20, 60)) {
     			autoState ++;
     			count = 0;
     			pickupState = 3;
@@ -90,13 +90,13 @@ public class  AutonomousCommand extends Command {
     		}
     	break;
     	case 6:
-    		if (Robot.drivetrain.goToDistance(-300, -300, .7, 60, 0)) {
+    		if (Robot.drivetrain.goToDistance(-300, -300, .85, 60, 0)) {
     			autoState ++;
     		}
     	break;
     	case 7:
     		//Back up
-    		if (Robot.drivetrain.goToDistance(-575, -350, .7, 0, 30)) {
+    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30)) {
     			autoState ++;
     		}
     	break;

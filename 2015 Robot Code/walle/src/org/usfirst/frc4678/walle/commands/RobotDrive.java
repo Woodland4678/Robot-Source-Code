@@ -29,6 +29,7 @@ public class  RobotDrive extends Command {
 	double rightPower;
 	double lastLeftPower = 0;
 	double lastRightPower = 0;
+	double averagePower = 0;
 	double current0;
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
     public RobotDrive() {
@@ -48,21 +49,39 @@ public class  RobotDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("-------Lifter at " + Robot.pickup.getLifterHeight() + ", distance sensor at " + Robot.drivetrain.getLeftLightSensor());
-    	Robot.logger.info("RobotDrive", "Left Encoder = " + Robot.drivetrain.getLeftEncoder());
-    	Robot.logger.info("RobotDrive", "Right Encoder = " + Robot.drivetrain.getRightEncoder());
-    	
     	//Get the joystick values
-    	joystickX = Robot.oi.getGamepad1().getX();
+    	joystickX = -Robot.oi.getGamepad1().getX();
         joystickY = Robot.oi.getGamepad1().getY();
         
         //Determine the powers based on the joystick values, cubic for side to side
-        leftPower = (Math.abs(joystickY) * joystickY) - (joystickX * joystickX * joystickX);
-        rightPower = (Math.abs(joystickY) * joystickY) + (joystickX * joystickX * joystickX);
+        leftPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
+        rightPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
+        
+        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 8)) {
+        	//Average the powers so you make the motors go the same speed
+        	averagePower = ((Math.abs(leftPower) + Math.abs(rightPower)) / 2);
+        	System.out.println("------- average power = " + averagePower);
+        	//Flip the powers if neccesary
+        	if (leftPower > 0) {
+        		leftPower = averagePower;
+        	} else {
+        		leftPower = -averagePower;
+        	}
+        	
+        	//Flip the powers if neccesary
+        	if (rightPower > 0) {
+        		rightPower = averagePower;
+        	} else {
+        		rightPower = -averagePower;
+        	}
+        }
+        
         
         //Reduce the acceleration if the button is held down
-        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
-        	Robot.logger.info("RobotDrive", "Limiting acceleration to " + MAX_DECCELERATION_SPEED);
+        if (Robot.drivetrain.getGentleMode()) {
+        	leftPower *= POWER_REDUCTION;
+        	rightPower *= POWER_REDUCTION;
+        	Robot.logger.debug("RobotDrive", "Acceleration smoothing and power reduction active");
         	
         	//If the left power has changed by more than the max
         	if (Math.abs(leftPower - lastLeftPower) > MAX_DECCELERATION_SPEED) {
@@ -88,9 +107,9 @@ public class  RobotDrive extends Command {
         		}
         	}
         	
+        }
         	
-        } else if (Robot.oi.getButton(Robot.oi.getGamepad1(), 6)) {
-        	Robot.logger.info("RobotDrive", "Button 6 Held");
+        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
         	
         	leftPower *= POWER_REDUCTION;
         	rightPower*= POWER_REDUCTION;
@@ -105,10 +124,10 @@ public class  RobotDrive extends Command {
         
         SmartDashboard.putNumber("Right Motor Power", rightPower);
         SmartDashboard.putNumber("Left Motor Power", leftPower);
-        SmartDashboard.putNumber("Current through 0", current0);
         SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
         SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
         SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
+        SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
     }
 
     // Make this return true when this Command no longer needs to run execute()
