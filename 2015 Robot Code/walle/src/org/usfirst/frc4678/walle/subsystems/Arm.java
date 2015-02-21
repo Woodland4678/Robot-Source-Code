@@ -97,7 +97,7 @@ public class Arm extends Subsystem {
     	//set the power
     }
     
-    public boolean setClaw(boolean open) {//Make this return true when it is open and closed
+    public boolean setClaw(boolean open) {//Make this return true when it is open and false if closed
     	if (open) {
     		//open
     		return true;
