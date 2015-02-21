@@ -21,8 +21,10 @@ public class  AutonomousCommand extends Command {
 	boolean finished = false;
 	boolean pickingUpTote = false;
 	int autoState = 0;
-	int pickupState = 1;
+	int pickupState = 0;
+	int armState = 0;
 	int count = 0;
+	int autoMode = Robot.autoMode();
     public AutonomousCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -37,126 +39,289 @@ public class  AutonomousCommand extends Command {
     protected void initialize() {
     	autoState = 0;
     	count = 0;
-    	//pickup state is dropped at 0, just below the bottom tote at 1, at the top at 2, and automatically pickup the tote at 3
-    	pickupState = 0;
+    	pickupState = 5;
+    	armState = 5;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	switch(autoState) {
+    	switch (autoMode) {
+//--------------------------------------------------------------------------
+//------------------------------move 2 meters-------------------------------
+//--------------------------------------------------------------------------
+    	
     	case 0:
-    		//hook onto first bin
-    		//use arm to grab second
-    		//pick up first tote
-    		pickupState = 2;
-    		count = 0;
-    		autoState ++;
+    		switch(autoState) {
+    		case 0://Get the pickup ready for the match and move forwards
+    			pickupState = 5;
+	    		if (Robot.drivetrain.goToDistance(200, 200, .7, 30, 20)) {
+	    			autoState ++;
+	    		}
+	    	break;
+    		}
     	break;
+
+//--------------------------------------------------------------------------
+//----------------------------1 tote 2 containers---------------------------
+//--------------------------------------------------------------------------
+    	
     	case 1:
-    		count ++;
-    		//Wait for a bit, to allow the robot to pick up the tote
-    		if (count > 40) {
-    			autoState ++;
-    		}
-    	break;
+	    	switch(autoState) {
+	    	case 0://Grab the first tote and bin(s)
+	    		pickupState = 7;
+	    		armState = 0;
+	    		count = 0;
+	    		autoState ++;
+	    	break;
+	    	case 1://Wait for the robot to pick everything up
+	    		count ++;
+	    		if (count > 80) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 2://Turn to face the auto zone
+	    		if (Robot.drivetrain.turn(90, 0.7)) {
+	    			autoState ++;
+	    			count = 0;
+	    		}
+	    	break;
+	    	case 3://Move into the auto zone
+	    		if (Robot.drivetrain.goToDistance(200, 200, .85, 20, 60)) {
+	    			autoState ++;
+	    			count = 0;
+	    		}
+	    	break;
+	    	case 4://Turn to be parallel to the scoring platform, and start dropping the totes
+	    		if (Robot.drivetrain.turn(-90, 0.7)) {
+	    			autoState ++;
+	    			pickupState = 6;
+	    			count = 0;
+	    		}
+	    	break;
+	    	case 10://Wait for the totes to be dropped
+	    		count ++;
+	    		if (count > 80) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 11://Go forwards
+	    		if (Robot.drivetrain.goToDistance(120, 120, .6, 10, 10)) {
+	    			autoState ++;
+	    		}
+	    	case 12://Get the pickup ready for the match
+	    		pickupState = 5;
+	    	break;
+	    }
+    	
+//--------------------------------------------------------------------------
+//------------------------------3 totes 1 bin-------------------------------
+//--------------------------------------------------------------------------
+    	
     	case 2:
-    		//move forwards a bit
-    		if (Robot.drivetrain.goToDistance(250, 250, .85, 10, 60)) {
-    			autoState ++;
-    			count = 0;
-    			pickupState = 3;
-    		}
-    	break;
+	    	switch(autoState) {
+	    	case 0://Grab the first tote and bin
+	    		pickupState = 2;
+	    		armState = 0;
+	    		count = 0;
+	    		autoState ++;
+	    	break;
+	    	case 1://Move to the last tote, slowly so that the robot can automatically pick up the other totes
+	    		if (Robot.drivetrain.goToDistance(520, 520, .7, 20, 60)) {
+	    			autoState ++;
+	    			count = 0;
+	    		}
+	    	break;
+	    	case 2://Wait for the robot to pick up the last tote
+	    		count ++;
+	    		if (count > 60) {
+	    			autoState ++;
+	    			pickupState = 7;
+	    		}
+	    	break;
+	    	case 3://Go back a bit
+	    		if (Robot.drivetrain.goToDistance(-300, -300, .85, 60, 0)) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 7://Curve around the scoring platform
+	    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30)) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 9://Drop the totes
+	    		pickupState = 6;
+	    		count = 0;
+	    		autoState ++;
+	    	break;
+	    	case 10://Wait for the robot to drop the totes
+	    		count ++;
+	    		if (count > 100) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 11://Go forwards a bit
+	    		if (Robot.drivetrain.goToDistance(60, 60, .6, 10, 10)) {
+	    			autoState ++;
+	    		}
+	    	case 12://Get the pickup ready for the match
+	    		pickupState = 5;
+	    	break;
+	    }
+	    	
+//--------------------------------------------------------------------------
+//--------------------------3 totes and containers--------------------------
+//--------------------------------------------------------------------------
+	    	
     	case 3:
-    		count ++;
-    		//Wait for a bit, to allow the robot to pick up the tote
-    		if (count > 100) {
-    			autoState ++;
-    		}
-    	break;
-    	case 4:
-    		//move forwards
-    		if (Robot.drivetrain.goToDistance(235, 235, .85, 20, 60)) {
-    			autoState ++;
-    			count = 0;
-    			pickupState = 3;
-    		}
-    	break;
-    	case 5:
-    		count ++;
-    		//Wait for a bit, to allow the robot to pick up the tote
-    		if (count > 80) {
-    			autoState ++;
-    		}
-    	break;
-    	case 6:
-    		if (Robot.drivetrain.goToDistance(-300, -300, .85, 60, 0)) {
-    			autoState ++;
-    		}
-    	break;
-    	case 7:
-    		//Back up
-    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30)) {
-    			autoState ++;
-    		}
-    	break;
-    	case 8:
-    		autoState ++;
-    	break;
-    	case 9:
-    		//Drop totes
-    		pickupState = 0;
-    		count = 0;
-    		autoState ++;
-    	break;
-    	case 10:
-    		count ++;
-    		//Wait for a bit, to allow the robot to drop the tote
-    		if (count > 150) {
-    			autoState ++;
-    		}
-    	break;
-    	case 11:
-    		if (Robot.drivetrain.goToDistance(60, 60, .6, 10, 10)) {
-    			autoState ++;
-    		}
-    	case 12:
-    		pickupState = 2;
-    	break;
+	    	switch(autoState) {
+	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
+	    		pickupState = 2;
+	    		armState = 0;
+	    		count = 0;
+	    		autoState ++;
+	    	break;
+	    	case 1://Wait for the Robot to pick up the bin and tote
+	    		count ++;
+	    		if (count > 40) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 2://Move forwards to the next bin
+	    		if (Robot.drivetrain.goToDistance(250, 250, .85, 10, 60)) {
+	    			autoState ++;
+	    			armState = 0;
+	    			count = 0;
+	    		}
+	    	break;
+	    	case 3://Wait for the robot to pick up the container
+	    		count ++;
+	    		if (count > 80) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 4://Move forwards to the last tote
+	    		if (Robot.drivetrain.goToDistance(235, 235, .85, 20, 60)) {
+	    			autoState ++;
+	    			armState = 5;
+	    			count = 0;
+	    		}
+	    	break;
+	    	case 5://Wait for the robot to automatically pick up the tote
+	    		count ++;
+	    		if (count > 50) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 6://Drive backwards a bit
+	    		if (Robot.drivetrain.goToDistance(-300, -300, .85, 60, 0)) {
+	    			autoState ++;
+	    			pickupState = 7;
+	    		}
+	    	break;
+	    	case 7://Curve around the end of the scoring platform
+	    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30)) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 8://Drop the totes
+	    		pickupState = 6;
+	    		count = 0;
+	    		autoState ++;
+	    	break;
+	    	case 9://Wait for the robot to drop the totes
+	    		count ++;
+	    		if (count > 100) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 10://Go forwards to clear the totes
+	    		if (Robot.drivetrain.goToDistance(80, 80, .6, 10, 10)) {
+	    			autoState ++;
+	    			pickupState = 5;
+	    		}
+	    	}
+	    break;
     	}
     	
-    	Robot.logger.debug("Autonomous Command", "Pickup state is " + pickupState);
+//--------------------------------------------------------------------------
+//-------------------------------Pickup setter------------------------------
+//--------------------------------------------------------------------------
     	
+    	//This code automatically sets the pickup height based on the pickupState
+    	//States 0-3 automatically pick up a tote when it is under the robot, and
+    	//State 4 makes the pickup ready to pick up
+    	//State 5 lifts the pickup to the max height
+    	//State 6 lowers the pickup to the minimum height
+    	//State 7 lowers the pickup to the minimum height without scoring the totes
     	switch(pickupState) {
-    	case 0:
-    		Robot.pickup.lift(Robot.lifterScoreTarget());
-    		
+    	case 0://Wait for a tote to be sensed
+    		if (Robot.pickup.getDrivingOverTote()) {
+    			pickupState ++;
+    		}
     	break;
-    	case 1:
+    	case 1://Wait for the tote to pass under the robot
+    		if (!Robot.pickup.getDrivingOverTote()) {
+    			pickupState ++;
+    		}
+    	break;
+    	case 2://Drop the pickup down
+    		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
+    			pickupState ++;
+    		}
+    	break;
+    	case 3://Lift the pickup up, and then go back to state 0
+    		if (Robot.pickup.lift(Robot.lifterUpperTarget())) {
+    			pickupState = 0;
+    		}
+    	break;
+    	case 4://Go to the pickup target
     		Robot.pickup.lift(Robot.lifterPickupTarget());
     	break;
-    	case 2:
+    	case 5://Go to the pickup max
     		Robot.pickup.lift(Robot.lifterUpperTarget());
     	break;
-    	case 3:
-    		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
-    			pickupState = 2;
-    		}
+    	case 6://Go to the pickup min
+    		Robot.pickup.lift(Robot.lifterScoreTarget());
+    	break;
+    	case 7://Go as low as the pickup can go without scoring
+    		Robot.pickup.lift(Robot.lifterSixToteTarget());
     	break;
     	}
     	
-    	/*
-    	switch(autoState){
-    	case 0:
-    		if (Robot.drivetrain.goToDistance(3000, 4500, 0.4)) {
-    			autoState ++;
+//--------------------------------------------------------------------------
+//-------------------------------Arm setter------------------------------
+//--------------------------------------------------------------------------
+    	
+    	//When the pickup state is 0, it goes through the pickup loop
+    	switch(armState) {
+    	case 0://go to pickup position
+    		if (Robot.arm.setArm(Robot.armPickupPosition())) {
+    			armState ++;
+    		}
+    	case 1://Close the claw
+    		if (true) {//Add code to close the claw
+    			armState ++;
     		}
     	break;
-    	case 1:
-    		finished = Robot.drivetrain.turn(90, .4);
+    	case 2://Go to set bin position
+    		if (Robot.arm.setArm(Robot.armSetBinPosition())) {
+    			armState ++;
+    		}
+    	break;
+    	case 3://Open the claw
+    		if (true) {//Add code to open the claw
+    			armState ++;
+    		}
+    	case 4://Go to pickup position
+    		Robot.arm.setArm(Robot.armPickupPosition());
+    	break;
+    	case 5://Go to rest position
+    		Robot.arm.setArm(Robot.armRestPosition());
+    	break;
+    	case 6://Go to the bin setting position
+    		Robot.arm.setArm(Robot.armSetBinPosition());
     	break;
     	}
-    	*/
     }
 
     // Make this return true when this Command no longer needs to run execute()

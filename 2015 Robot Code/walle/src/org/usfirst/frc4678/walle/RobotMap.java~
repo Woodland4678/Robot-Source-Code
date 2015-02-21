@@ -35,6 +35,7 @@ public class RobotMap {
     public static SpeedController pickupLifterMotor;
     public static Servo pickupLifterServo;
     public static Relay pickupIndexMotor;
+    public static DigitalInput pickupdrivingOverTote;
     public static SpeedController armArmMotor;
     public static AnalogPotentiometer armArmPosition;
 
@@ -73,6 +74,9 @@ public class RobotMap {
         
         pickupIndexMotor = new Relay(0);
         LiveWindow.addActuator("Pickup", "IndexMotor", pickupIndexMotor);
+        
+        pickupdrivingOverTote = new DigitalInput(4);
+        LiveWindow.addSensor("Pickup", "drivingOverTote", pickupdrivingOverTote);
         
         armArmMotor = new Victor(3);
         LiveWindow.addActuator("Arm", "ArmMotor", (Victor) armArmMotor);

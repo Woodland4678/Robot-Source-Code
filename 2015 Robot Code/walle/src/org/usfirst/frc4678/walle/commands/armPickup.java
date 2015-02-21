@@ -18,7 +18,6 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  armPickup extends Command {
-	boolean finished = false;
     public armPickup() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -31,17 +30,17 @@ public class  armPickup extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	finished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	finished = Robot.arm.setArm(Robot.armPickupPosition());
+    	Robot.arm.setArm(Robot.armPickupPosition());
+    	Robot.arm.setClaw(true);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return finished;
+        return false;
     }
 
     // Called once after isFinished returns true
@@ -51,5 +50,7 @@ public class  armPickup extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.arm.setArm(0);
+    	Robot.arm.setClawPower(0);
     }
 }

@@ -22,7 +22,7 @@ public class  goToScore extends Command {
 	double difference;
 	double leftCurrent;
 	double rightCurrent;
-	double power = 0.2;
+	double power = 0.1;
 	double MAX_POWER_CHANGE = 0.005;
 	double GOAL_SPEED = 4;//Target encoder clicks per turn
 	double lastEncoderValue = 0;
@@ -40,6 +40,7 @@ public class  goToScore extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	lastEncoderValue = Robot.drivetrain.getRightEncoder();
+    	power = 0.1;
     }
 
     // Called repeatedly when this Command is scheduled to run

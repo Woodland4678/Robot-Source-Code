@@ -55,42 +55,58 @@ public class Arm extends Subsystem {
     public void setArmMotor(double power) {
     	armMotor.set(power);
     }
+    
     public double getArmPosition() {
     	return armPosition.get();
     }
+    
     public boolean setArm(double Target) {
     	power = Robot.armPower();
     	armMaxPower = Robot.armPower();
     	double armTarget = Target;
 
     	//switch(armState) {
-    		//case 0:
-		    	//Finds the difference between target and current position
-				error = armTarget - armPosition.get();
-				//if the difference is greater than 0 power should be full
-				if (error > 1) {
-					power = armMaxPower;
-				}
-				//if the difference is less than 0, power should be full in reverse
-				else if (error < -1) {
-					power = -armMaxPower;
-				}
-				else {
-					power = error * 0.9;
-				}
-				armMotor.set(power);
-				
-				/*if (Math.abs(error) < 0.1) {
-					armMotor.set(0);
-					cnt = 0;
-					return true;
-				}*/
-				//break;
-    		//}
+		//case 0:
+	    	//Finds the difference between target and current position
+			error = armTarget - armPosition.get();
+			//if the difference is greater than 0 power should be full
+			if (error > 1) {
+				power = armMaxPower;
+			}
+			//if the difference is less than 0, power should be full in reverse
+			else if (error < -1) {
+				power = -armMaxPower;
+			}
+			else {
+				power = error * 0.9;
+			}
+			armMotor.set(power);
+			
+			/*if (Math.abs(error) < 0.1) {
+				armMotor.set(0);
+				cnt = 0;
+				return true;
+			}*/
+			//break;
+		//}
+		return false;
+    	
+    }
+    
+    public void setClawPower(double power) {
+    	//set the power
+    }
+    
+    public boolean setClaw(boolean open) {//Make this return true when it is open and closed
+    	if (open) {
+    		//open
+    		return true;
+    	} else {
+    		//close
     		return false;
-    	
     	}
-    	
-	}
+    	//return false;
+    }
+}
 
 

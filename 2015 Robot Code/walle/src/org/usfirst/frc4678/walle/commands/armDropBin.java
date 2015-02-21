@@ -18,7 +18,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  armDropBin extends Command {
-	Boolean finished = false;
+	int state = 0;
     public armDropBin() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -31,11 +31,27 @@ public class  armDropBin extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	state = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.arm.setArm(Robot.armSetBinPosition());
+    	switch (state) {
+    	case 0:
+    		if (Robot.arm.setArm(Robot.armSetBinPosition())) {
+    			state ++;
+    		}
+    	break;
+    	case 1:
+    		Robot.arm.setArm(Robot.armSetBinPosition());
+    		if (Robot.arm.setClaw(true)) {
+    			state ++;
+    		}
+    	break;
+    	case 2:
+    		Robot.arm.setArm(Robot.armSetBinPosition());
+    	break;
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -45,7 +61,8 @@ public class  armDropBin extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	
+    	Robot.arm.setArm(0);
+    	Robot.arm.setClawPower(0);
     }
 
     // Called when another command which requires one or more of the same

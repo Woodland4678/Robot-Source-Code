@@ -17,9 +17,9 @@ import org.usfirst.frc4678.walle.Robot;
 /**
  *
  */
-public class  armPickup extends Command {
+public class  CenterIndexWheels extends Command {
 
-    public armPickup() {
+    public CenterIndexWheels() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 

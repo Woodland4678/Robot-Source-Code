@@ -57,18 +57,24 @@ public class  RobotDrive extends Command {
         leftPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
         rightPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
         
+//--------------------------------------------------------------------------
+//-------------------------------Steering Snap------------------------------
+//--------------------------------------------------------------------------
+        
+        SmartDashboard.putBoolean("Drivetrain Steering Snap", Robot.oi.getButton(Robot.oi.getGamepad1(), 8));
+        
         if (Robot.oi.getButton(Robot.oi.getGamepad1(), 8)) {
         	//Average the powers so you make the motors go the same speed
         	averagePower = ((Math.abs(leftPower) + Math.abs(rightPower)) / 2);
         	System.out.println("------- average power = " + averagePower);
-        	//Flip the powers if neccesary
+        	//Flip the powers if necessary
         	if (leftPower > 0) {
         		leftPower = averagePower;
         	} else {
         		leftPower = -averagePower;
         	}
         	
-        	//Flip the powers if neccesary
+        	//Flip the powers if necessary
         	if (rightPower > 0) {
         		rightPower = averagePower;
         	} else {
@@ -76,12 +82,15 @@ public class  RobotDrive extends Command {
         	}
         }
         
+//--------------------------------------------------------------------------
+//--------------------------------Gentle Mode-------------------------------
+//--------------------------------------------------------------------------
         
-        //Reduce the acceleration if the button is held down
+        SmartDashboard.putBoolean("Drivetrain Gentle Mode", Robot.drivetrain.getGentleMode());
+        
         if (Robot.drivetrain.getGentleMode()) {
         	leftPower *= POWER_REDUCTION;
         	rightPower *= POWER_REDUCTION;
-        	Robot.logger.debug("RobotDrive", "Acceleration smoothing and power reduction active");
         	
         	//If the left power has changed by more than the max
         	if (Math.abs(leftPower - lastLeftPower) > MAX_DECCELERATION_SPEED) {
@@ -109,13 +118,21 @@ public class  RobotDrive extends Command {
         	
         }
         	
+//--------------------------------------------------------------------------
+//------------------------------Power Reduction-----------------------------
+//--------------------------------------------------------------------------
+        
+        SmartDashboard.putBoolean("Drivetrain Power Reduction", Robot.oi.getButton(Robot.oi.getGamepad1(), 5));
+        
         if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
-        	
         	leftPower *= POWER_REDUCTION;
         	rightPower*= POWER_REDUCTION;
         }
         
-        //Set the drivetrain motors
+//--------------------------------------------------------------------------
+//---------------------------------Set Powers-------------------------------
+//--------------------------------------------------------------------------
+
         Robot.drivetrain.setMotor("left", -leftPower);
         Robot.drivetrain.setMotor("right", -rightPower);
         
