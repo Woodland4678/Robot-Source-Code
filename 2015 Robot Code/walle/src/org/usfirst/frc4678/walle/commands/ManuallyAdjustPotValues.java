@@ -39,8 +39,8 @@ public class  ManuallyAdjustPotValues extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	leftY = Robot.oi.getGamepad2().getRawAxis(1);
-    	rightY = Robot.oi.getGamepad2().getRawAxis(3);
+    	leftY = Robot.oi.getGamepad3().getRawAxis(1);
+    	rightY = Robot.oi.getGamepad3().getRawAxis(3);
     	
     	if (leftY < 0.1) {
     		leftY = 0;

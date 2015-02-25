@@ -221,6 +221,20 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getDouble("armRestPosition", 7);
     }
+    public static double armBottomPosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("armBottomPosition")) {
+            prefs.putDouble("armBottomPosition", 2);
+        }
+        return prefs.getDouble("armBottomPosition", 2);
+    }
+    public static double fourStackHeight() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("fourStackHeight")) {
+            prefs.putDouble("fourStackHeight", 6.5);
+        }
+        return prefs.getDouble("fourStackHeight", 6.5);
+    }
     
     public void robotInit() {
 	RobotMap.init();
