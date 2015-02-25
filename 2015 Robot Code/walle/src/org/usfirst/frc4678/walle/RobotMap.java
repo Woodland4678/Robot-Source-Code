@@ -33,6 +33,8 @@ public class RobotMap {
     public static SpeedController pickupLifterMotor;
     public static Servo pickupLifterServo;
     public static DigitalInput pickupdrivingOverTote;
+    public static DigitalInput pickupToteSensor1;
+    public static DigitalInput pickupToteSensor2;
     public static SpeedController armArmMotor;
     public static AnalogPotentiometer armArmPosition;
     public static Relay indexWheelsIndexMotor;
@@ -69,6 +71,12 @@ public class RobotMap {
         pickupdrivingOverTote = new DigitalInput(4);
         LiveWindow.addSensor("Pickup", "drivingOverTote", pickupdrivingOverTote);
         
+        pickupToteSensor1 = new DigitalInput(5);
+        LiveWindow.addSensor("Pickup", "ToteSensor1", pickupToteSensor1);
+        
+        pickupToteSensor2 = new DigitalInput(6);
+        LiveWindow.addSensor("Pickup", "ToteSensor2", pickupToteSensor2);
+        
         armArmMotor = new Victor(3);
         LiveWindow.addActuator("Arm", "ArmMotor", (Victor) armArmMotor);
         
@@ -81,7 +89,7 @@ public class RobotMap {
         clawClawMotor = new Victor(0);
         LiveWindow.addActuator("Claw", "ClawMotor", (Victor) clawClawMotor);
         
-        clawClawPosition = new AnalogPotentiometer(1, 1.0, 0.0);
+        clawClawPosition = new AnalogPotentiometer(1, 10.0, 0.0);
         LiveWindow.addSensor("Claw", "ClawPosition", clawClawPosition);
         
 

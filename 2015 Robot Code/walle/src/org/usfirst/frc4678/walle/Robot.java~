@@ -243,6 +243,28 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getDouble("clawMaxPower", 1);
     }
+    public static double clawPickUprightPosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("clawPickUprightPosition")) {
+            prefs.putDouble("clawPickUprightPosition", 5);
+        }
+        return prefs.getDouble("clawPickUprightPosition", 5);
+    }
+    public static double clawPickDownPosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("clawPickDownPosition")) {
+            prefs.putDouble("clawPickDownPosition", 8);
+        }
+        return prefs.getDouble("clawPickDownPosition", 8);
+    }
+    public static double clawDropBinPosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("clawDropBinPosition")) {
+            prefs.putDouble("clawDropBinPosition", 6);
+        }
+        return prefs.getDouble("clawDropBinPosition", 6);
+    }
+    
     
     public void robotInit() {
 	RobotMap.init();

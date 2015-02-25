@@ -53,11 +53,13 @@ public class Claw extends Subsystem {
     	power = Robot.clawMaxPower();
     	clawMaxPower = Robot.clawMaxPower();
     	clawTarget = target;
+    	//calculating the difference between the taret and current position
     	error = clawTarget - clawPosition.get();
+    	//if the difference is greater than 0.5 power should be full forward
     	if (error > 0.5) {
 			power = clawMaxPower;
 		}
-		//if the difference is less than 0, power should be full in reverse
+		//if the difference is less than -0.5, power should be full in reverse
 		else if (error < -0.5) {
 			power = -clawMaxPower;
 		}
