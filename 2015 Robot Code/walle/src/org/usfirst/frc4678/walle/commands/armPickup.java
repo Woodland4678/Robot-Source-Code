@@ -35,7 +35,7 @@ public class  armPickup extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.arm.setArm(Robot.armPickupPosition());
-    	Robot.arm.setClaw(true);
+    	Robot.claw.setClaw(Robot.clawPickUprightPosition());
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -51,6 +51,6 @@ public class  armPickup extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.arm.setArm(0);
-    	Robot.arm.setClawPower(0);
+    	Robot.arm.setOpenPower(0);
     }
 }

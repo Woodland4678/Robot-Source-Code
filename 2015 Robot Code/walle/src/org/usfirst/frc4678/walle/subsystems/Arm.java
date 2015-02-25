@@ -99,19 +99,15 @@ public class Arm extends Subsystem {
     	
     }
    
-    public void setClawPower(double power) {
+    public void setOpenPower(double power) {
     	//set the power
     }
     
-    public boolean setClaw(boolean open) {//Make this return true when it is open and false if closed
-    	if (open) {
-    		//open
-    		return true;
-    	} else {
-    		//close
-    		return false;
-    	}
-    	//return false;
+    public void openArm() {
+    	//open
+    }
+    public void closeArm() {
+    	//close
     }
 }
 
