@@ -35,7 +35,7 @@ public class  ManualOverrideArm extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.arm.setArm(Robot.oi.getGamepad3().getY());
+    	Robot.arm.setArmMotor(Robot.oi.getGamepad3().getY());
     }
 
     // Make this return true when this Command no longer needs to run execute()
