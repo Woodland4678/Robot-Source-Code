@@ -145,6 +145,8 @@ public class  RobotDrive extends Command {
         SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
         SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
         SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
+        SmartDashboard.putNumber("Arm Open Position", Robot.squeeze.getOpenPosition());
+        SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
     }
 
     // Make this return true when this Command no longer needs to run execute()
