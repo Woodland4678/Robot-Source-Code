@@ -71,6 +71,39 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getInt("autoMode", 1);
     }
+    
+    public static double armZeroDegreesValue() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("armZeroDegreesValue")) {
+            prefs.putDouble("armZeroDegreesValue", 1);
+        }
+        return prefs.getDouble("armZeroDegreesValue", 1);
+    }
+    
+    public static double armNinetyDegreesValue() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("armNinetyDegreesValue")) {
+            prefs.putDouble("armNinetyDegreesValue", 1);
+        }
+        return prefs.getDouble("armNinetyDegreesValue", 1);
+    }
+    
+    public static double clawZeroDegreesValue() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("clawZeroDegreesValue")) {
+            prefs.putDouble("clawZeroDegreesValue", 1);
+        }
+        return prefs.getDouble("clawZeroDegreesValue", 1);
+    }
+    
+    public static double clawNinetyDegreesValue() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("clawNinetyDegreesValue")) {
+            prefs.putDouble("clawNinetyDegreesValue", 1);
+        }
+        return prefs.getDouble("clawNinetyDegreesValue", 1);
+    }
+    
     //**************************************************************//
     //*********Begin Parameters relating to the DRIVETRAIN*********//
     //************************************************************//

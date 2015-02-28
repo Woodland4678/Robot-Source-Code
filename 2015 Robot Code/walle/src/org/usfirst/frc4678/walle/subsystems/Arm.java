@@ -63,6 +63,12 @@ public class Arm extends Subsystem {
     public double getArmPosition() {
     	return armPosition.get();
     }
+    
+    public double getArmDegrees() {
+    	double ticsPerDegree = (Robot.armNinetyDegreesValue() - Robot.armZeroDegreesValue()) / 90;
+    	return (Robot.arm.getArmPosition() - Robot.armZeroDegreesValue()) * ticsPerDegree;
+    }
+    
     public boolean getArmReady() {
     	return armReady;	
     }
