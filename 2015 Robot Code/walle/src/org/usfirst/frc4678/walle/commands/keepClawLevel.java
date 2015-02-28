@@ -18,10 +18,10 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  keepClawLevel extends Command {
-	double armDegrees;
+	double armDegrees = Robot.arm.getArmDegrees();
 	double goalClawDegrees;
 	double goalClawPosition;
-	int startingClawPosition;
+	double clawOffset = -1;
     public keepClawLevel() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -34,15 +34,19 @@ public class  keepClawLevel extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	startingClawPosition = Robot.claw.getClawPosition();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	armDegrees = Robot.arm.getArmDegrees();
-    	goalClawDegrees = -armDegrees + 90 + Robot.claw.getClawTargetDegrees();
-    	goalClawPosition = (goalClawDegrees * Robot.clawTicsPerDegree()) + startingClawPosition;
-    	Robot.claw.setClaw(goalClawPosition + startingClawPosition);
+    	if (clawOffset == -1) {
+    		clawOffset = -armDegrees - Robot.claw.getClawTargetDegrees();
+    	}
+    	goalClawDegrees = armDegrees + Robot.claw.getClawTargetDegrees() + clawOffset;
+    	goalClawPosition = (goalClawDegrees * Robot.clawTicsPerDegree());
+    	Robot.claw.setClaw(goalClawPosition);
+    	System.out.println("going to: " + goalClawDegrees);
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -36,7 +36,7 @@ public class  armRest extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.arm.setArm(Robot.armRestPosition());
-    	Robot.claw.setClaw(Robot.clawPickDownPosition());
+    	//Robot.claw.setClaw(Robot.clawPickDownPosition());
     }
 
     // Make this return true when this Command no longer needs to run execute()

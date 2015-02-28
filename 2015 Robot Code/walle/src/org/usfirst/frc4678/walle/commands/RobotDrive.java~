@@ -50,12 +50,12 @@ public class  RobotDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//Get the joystick values
-    	joystickX = -Robot.oi.getGamepad1().getX();
-        joystickY = Robot.oi.getGamepad1().getY();
+    	joystickX = Robot.oi.getGamepad1().getX();
+        joystickY = -Robot.oi.getGamepad1().getY();
         
         //Determine the powers based on the joystick values, cubic for side to side
-        leftPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
-        rightPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
+        leftPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
+        rightPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
         
 //--------------------------------------------------------------------------
 //-------------------------------Steering Snap------------------------------
@@ -145,7 +145,7 @@ public class  RobotDrive extends Command {
         SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
         SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
         SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
-        //SmartDashboard.putNumber("Arm Open Position", Robot.squeeze.getOpenPosition());
+        SmartDashboard.putNumber("Arm Open Position", Robot.pIDSubsystem1.getOpenPosition());
         SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
     }
 

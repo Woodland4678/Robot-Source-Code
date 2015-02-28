@@ -89,20 +89,12 @@ public class Robot extends IterativeRobot {
         return prefs.getDouble("armNinetyDegreesValue", 1);
     }
     
-    public static double clawZeroDegreesValue() {
+    public static double clawTicsPerDegree() {
         Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("clawZeroDegreesValue")) {
-            prefs.putDouble("clawZeroDegreesValue", 1);
+        if (!prefs.containsKey("clawTicsPerDegree")) {
+            prefs.putDouble("clawTicsPerDegree", 1.38);
         }
-        return prefs.getDouble("clawZeroDegreesValue", 1);
-    }
-    
-    public static double clawNinetyDegreesValue() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("clawNinetyDegreesValue")) {
-            prefs.putDouble("clawNinetyDegreesValue", 1);
-        }
-        return prefs.getDouble("clawNinetyDegreesValue", 1);
+        return prefs.getDouble("clawTicsPerDegree", 1.38);
     }
     
     //**************************************************************//

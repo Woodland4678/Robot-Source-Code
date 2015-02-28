@@ -70,7 +70,7 @@ public class RobotMap {
         pickupLifterServo = new Servo(7);
         LiveWindow.addActuator("Pickup", "LifterServo", pickupLifterServo);
         
-        pickupdrivingOverTote = new DigitalInput(4);
+        pickupdrivingOverTote = new DigitalInput(9);
         LiveWindow.addSensor("Pickup", "drivingOverTote", pickupdrivingOverTote);
         
         pickupToteSensor1 = new DigitalInput(5);

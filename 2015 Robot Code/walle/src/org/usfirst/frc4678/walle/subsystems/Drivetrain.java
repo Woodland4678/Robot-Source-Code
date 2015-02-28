@@ -156,20 +156,20 @@ public class Drivetrain extends Subsystem {
 //--------------------------------------------------------------------------
         
         //Difference between how far the left and right have gone
-        powerOffset = GO_TO_DISTANCE_CORRECTION_SPEED * Math.abs(rightPercentThere - leftPercentThere);
+        powerOffset = GO_TO_DISTANCE_CORRECTION_SPEED * Math.abs(leftPercentThere - rightPercentThere);
         
         //Only start adjusting the powers once the motors have gone 2 percent of the target distance, to avoid calculation errors
         if (currentRight >= (targetRight * 0.02) && (currentLeft >= (targetLeft * 0.02))) {
             //If the right is closer than the left, increase the left power and decrease the right power
             if (rightPercentThere > (leftPercentThere + 0.001)) {
-            	leftMotorMultiplier *= 1 - powerOffset;
-                rightMotorMultiplier *= 1 + powerOffset;
+            	leftMotorMultiplier *= 1 + powerOffset;
+                rightMotorMultiplier *= 1 - powerOffset;
             }
             
             //If the left is closer than the right, increase the right power, and decrease the left power
             if ((rightPercentThere + 0.001) < leftPercentThere) {
-            	leftMotorMultiplier *= 1 + powerOffset;
-                rightMotorMultiplier *= 1 - powerOffset;
+            	leftMotorMultiplier *= 1 - powerOffset;
+                rightMotorMultiplier *= 1 + powerOffset;
             }
         }
         Robot.logger.debug("Drivetrain", "goToDistance percentages at " + (int)(rightPercentThere * 100) + ", " + (int)(leftPercentThere * 100) + " Power Offset At " + (((int)(1000 * powerOffset)) / 1000.0));
@@ -224,8 +224,8 @@ public class Drivetrain extends Subsystem {
         
         Robot.logger.debug("Drivetrain", "goToDistance target is " + rightCentimeters + ", " + leftCentimeters + " current is " + (-(int)((getRightEncoder() - startingRightDistance) / Robot.encoderClicksPerCentimeter())) + ", " + (-(int)((getLeftEncoder() - startingLeftDistance) / Robot.encoderClicksPerCentimeter())));
     	
-        Robot.drivetrain.setMotor("left", leftMotorMultiplier * power * rampDownPercentage);
-        Robot.drivetrain.setMotor("right", rightMotorMultiplier * power * rampDownPercentage);
+        Robot.drivetrain.setMotor("left", -leftMotorMultiplier * power * rampDownPercentage);
+        Robot.drivetrain.setMotor("right", -rightMotorMultiplier * power * rampDownPercentage);
         Robot.logger.debug("Drivetrain", "goToDistance target is " + rightCentimeters + ", " + leftCentimeters + " current is " + (-(int)((getRightEncoder() - startingRightDistance) / Robot.encoderClicksPerCentimeter())) + ", " + (-(int)((getLeftEncoder() - startingLeftDistance) / Robot.encoderClicksPerCentimeter())));
     	
         //If the left and the right both have gone far enough stop the motors, and reset the goToDistanceState so that the next time
@@ -333,8 +333,8 @@ public class Drivetrain extends Subsystem {
     		}
     	}
     	
-    	setMotor("left", leftPower);
-    	setMotor("right", rightPower);
+    	setMotor("left", -leftPower);
+    	setMotor("right", -rightPower);
     	Robot.logger.debug("Drivetrain", "turn setting powers to " + rightPower + ", " + leftPower);
     	
     	return false;
@@ -348,9 +348,9 @@ public class Drivetrain extends Subsystem {
     
     public int getRightLightSensor() {return 0;}
     
-    public int getLeftEncoder() {return leftEncoder.get();}
+    public int getLeftEncoder() {return -leftEncoder.get();}
     
-    public int getRightEncoder() {return -rightEncoder.get();}
+    public int getRightEncoder() {return rightEncoder.get();}
     
     
 }

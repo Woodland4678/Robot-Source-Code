@@ -36,7 +36,7 @@ public class  armPickup extends Command {
     protected void execute() {
     	//Robot.squeeze.openArm(Robot.armOpenPosition());
     	Robot.arm.setArm(Robot.armPickupPosition());
-    	Robot.claw.setClaw(Robot.clawPickUprightPosition());
+    	//Robot.claw.setClaw(Robot.clawPickUprightPosition());
     	//if (Robot.arm.getArmReady()) {
     	//	Robot.squeeze.openArm(Robot.armClosePosition());
     	//}
