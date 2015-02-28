@@ -91,7 +91,7 @@ public class Claw extends Subsystem {
 			power = -clawMaxPower;
 		}
 		else {
-			power = error * 0.05;
+			power = error * 0.02;
 			if (power > clawMaxPower) {
 				power = clawMaxPower;
 			}

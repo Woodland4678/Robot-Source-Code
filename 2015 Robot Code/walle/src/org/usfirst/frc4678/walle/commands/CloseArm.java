@@ -36,7 +36,7 @@ public class  CloseArm extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.pIDSubsystem1.setSetpoint(0.3);
+    	Robot.pIDSubsystem1.setSetpoint(0.22);
     	Robot.pIDSubsystem1.enable();
     	//Robot.squeeze.openArmControl(Robot.armClosePosition());
     }
