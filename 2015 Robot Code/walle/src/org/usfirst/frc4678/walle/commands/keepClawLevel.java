@@ -21,7 +21,6 @@ public class  keepClawLevel extends Command {
 	double armDegrees;
 	double goalClawDegrees;
 	double goalClawPosition;
-	int startingClawPosition;
     public keepClawLevel() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -34,15 +33,15 @@ public class  keepClawLevel extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	startingClawPosition = Robot.claw.getClawPosition();
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	armDegrees = Robot.arm.getArmDegrees();
     	goalClawDegrees = -armDegrees + 90 + Robot.claw.getClawTargetDegrees();
-    	goalClawPosition = (goalClawDegrees * Robot.clawTicsPerDegree()) + startingClawPosition;
-    	Robot.claw.setClaw(goalClawPosition + startingClawPosition);
+    	goalClawPosition = (goalClawDegrees * Robot.clawTicsPerDegree());
+    	Robot.claw.setClaw(goalClawPosition);
     }
 
     // Make this return true when this Command no longer needs to run execute()
