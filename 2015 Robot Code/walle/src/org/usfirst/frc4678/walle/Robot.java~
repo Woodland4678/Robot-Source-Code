@@ -258,9 +258,9 @@ public class Robot extends IterativeRobot {
     public static double armClosePosition() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("armClosePosition")) {
-            prefs.putDouble("armClosePosition", 0.26);
+            prefs.putDouble("armClosePosition", 0.285);
         }
-        return prefs.getDouble("armClosePosition", 0.26);
+        return prefs.getDouble("armClosePosition", 0.285);
     }
     //********************************************************//
     //*********Begin Parameters relating to the CLAW*********//
