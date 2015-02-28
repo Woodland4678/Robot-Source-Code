@@ -97,9 +97,9 @@ public class OI {
         g3Button5 = new JoystickButton(gamepad3, 5);
         g3Button5.whenPressed(new clawPickUpright());
         g3Button3 = new JoystickButton(gamepad3, 3);
-        g3Button3.whenPressed(new CloseArm());
+        g3Button3.whileHeld(new CloseArm());
         g3Button2 = new JoystickButton(gamepad3, 2);
-        g3Button2.whenPressed(new OpenArm2());
+        g3Button2.whileHeld(new OpenArm2());
         g3Button1 = new JoystickButton(gamepad3, 1);
         g3Button1.whileHeld(new ManuallyAdjustPotValues());
         g3Button4 = new JoystickButton(gamepad3, 4);
