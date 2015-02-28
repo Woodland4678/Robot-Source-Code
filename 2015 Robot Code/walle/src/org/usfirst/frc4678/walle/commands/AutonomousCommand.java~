@@ -111,7 +111,8 @@ public class  AutonomousCommand extends Command {
 	    	case 12://Get the pickup ready for the match
 	    		pickupState = 5;
 	    	break;
-	    }
+	    	}
+	    break;
     	
 //--------------------------------------------------------------------------
 //------------------------------3 totes 1 bin-------------------------------
@@ -126,7 +127,7 @@ public class  AutonomousCommand extends Command {
 	    		autoState ++;
 	    	break;
 	    	case 1://Move to the last tote, slowly so that the robot can automatically pick up the other totes
-	    		if (Robot.drivetrain.goToDistance(520, 520, .7, 20, 60)) {
+	    		if (Robot.drivetrain.goToDistance(520, 520, .4, 20, 80)) {
 	    			autoState ++;
 	    			count = 0;
 	    		}
@@ -139,7 +140,7 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 3://Go back a bit
-	    		if (Robot.drivetrain.goToDistance(-300, -300, .85, 60, 0)) {
+	    		if (Robot.drivetrain.goToDistance(-300, -300, .4, 80, 0)) {
 	    			autoState ++;
 	    		}
 	    	break;
@@ -166,7 +167,8 @@ public class  AutonomousCommand extends Command {
 	    	case 12://Get the pickup ready for the match
 	    		pickupState = 5;
 	    	break;
-	    }
+	    	}
+	    break;
 	    	
 //--------------------------------------------------------------------------
 //--------------------------3 totes and containers--------------------------
@@ -239,6 +241,7 @@ public class  AutonomousCommand extends Command {
 	    			autoState ++;
 	    			pickupState = 5;
 	    		}
+	    	break;
 	    	}
 	    break;
     	}

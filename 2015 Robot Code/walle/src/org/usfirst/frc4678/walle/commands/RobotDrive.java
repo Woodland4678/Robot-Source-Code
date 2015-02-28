@@ -50,12 +50,12 @@ public class  RobotDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//Get the joystick values
-    	joystickX = -Robot.oi.getGamepad1().getX();
-        joystickY = Robot.oi.getGamepad1().getY();
+    	joystickX = Robot.oi.getGamepad1().getX();
+        joystickY = -Robot.oi.getGamepad1().getY();
         
         //Determine the powers based on the joystick values, cubic for side to side
-        leftPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
-        rightPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
+        leftPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
+        rightPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
         
 //--------------------------------------------------------------------------
 //-------------------------------Steering Snap------------------------------

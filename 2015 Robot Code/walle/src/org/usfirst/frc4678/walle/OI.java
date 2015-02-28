@@ -74,6 +74,8 @@ public class OI {
     public JoystickButton g2Button9;
     public JoystickButton g2Button10;
     public JoystickButton g2Button8;
+    public JoystickButton g2Button11;
+    public JoystickButton g2Button12;
     public Joystick gamepad2;
     public JoystickButton g3Button4;
     public JoystickButton g3Button1;
@@ -107,6 +109,10 @@ public class OI {
         g3Button4.whileHeld(new ManualOverrideArm());
         gamepad2 = new Joystick(1);
         
+        g2Button12 = new JoystickButton(gamepad2, 12);
+        g2Button12.whileHeld(new CloseArm());
+        g2Button11 = new JoystickButton(gamepad2, 11);
+        g2Button11.whileHeld(new OpenArm2());
         g2Button8 = new JoystickButton(gamepad2, 8);
         g2Button8.whileHeld(new OpenArm());
         g2Button10 = new JoystickButton(gamepad2, 10);
