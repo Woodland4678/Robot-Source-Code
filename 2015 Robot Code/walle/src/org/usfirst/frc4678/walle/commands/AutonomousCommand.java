@@ -45,12 +45,11 @@ public class  AutonomousCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	switch (autoMode) {
 //--------------------------------------------------------------------------
 //------------------------------move 2 meters-------------------------------
 //--------------------------------------------------------------------------
     	
-    	case 0:
+    	if (autoState == 0) {
     		switch(autoState) {
     		case 0://Get the pickup ready for the match and move forwards
     			pickupState = 5;
@@ -59,13 +58,13 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
     		}
-    	break;
+    	
 
 //--------------------------------------------------------------------------
 //----------------------------1 tote 2 containers---------------------------
 //--------------------------------------------------------------------------
     	
-    	case 1:
+    	} else if (autoState == 1) {
 	    	switch(autoState) {
 	    	case 0://Grab the first tote and bin(s)
 	    		pickupState = 7;
@@ -112,13 +111,12 @@ public class  AutonomousCommand extends Command {
 	    		pickupState = 5;
 	    	break;
 	    	}
-	    break;
     	
 //--------------------------------------------------------------------------
 //------------------------------3 totes 1 bin-------------------------------
 //--------------------------------------------------------------------------
     	
-    	case 2:
+    	} else if (autoState == 2) {
 	    	switch(autoState) {
 	    	case 0://Grab the first tote and bin
 	    		pickupState = 2;
@@ -168,13 +166,12 @@ public class  AutonomousCommand extends Command {
 	    		pickupState = 5;
 	    	break;
 	    	}
-	    break;
 	    	
 //--------------------------------------------------------------------------
 //--------------------------3 totes and containers--------------------------
 //--------------------------------------------------------------------------
 	    	
-    	case 3:
+    	} else if (autoState == 3) {
 	    	switch(autoState) {
 	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
 	    		pickupState = 2;
@@ -243,7 +240,6 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	}
-	    break;
     	}
     	
 //--------------------------------------------------------------------------
