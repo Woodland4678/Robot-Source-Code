@@ -18,8 +18,9 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  ReverseIndexWheels extends Command {
-
+	boolean wheelsRunning = true;
     public ReverseIndexWheels() {
+
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 
@@ -35,12 +36,19 @@ public class  ReverseIndexWheels extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.indexWheels.setIndexMotor(-1);
+    	if (wheelsRunning) {
+    		Robot.indexWheels.setIndexMotor(1);
+    		wheelsRunning = false;
+    	}
+    	else {
+    		Robot.indexWheels.setIndexMotor(0);
+    		wheelsRunning = true;
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
