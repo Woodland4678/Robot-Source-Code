@@ -30,10 +30,10 @@ public class  toggleClawAngle extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	if (Robot.claw.getClawTargetDegrees() == 90) {
-    		Robot.claw.setClawTargetDegrees(0);
-    	} else {
+    	if (Robot.claw.getClawTargetDegrees() == 0) {
     		Robot.claw.setClawTargetDegrees(90);
+    	} else {
+    		Robot.claw.setClawTargetDegrees(0);
     	}
     }
 
