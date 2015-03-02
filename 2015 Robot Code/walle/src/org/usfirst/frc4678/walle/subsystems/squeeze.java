@@ -57,9 +57,13 @@ public class squeeze extends Subsystem {
     	return armOpenPosition.get();
     }
     public void resetFactor() {
+    	
     }
     public void setOpenState(int state) {
     	openState = state;
+    }
+    public void setOpenMotor(double power) {
+    	openMotor.set(power);
     }
     public void openArm(double target) {
     	current2 = pdp.getCurrent(2);
@@ -86,7 +90,7 @@ public class squeeze extends Subsystem {
 				openPower = -openMaxPower;
 			}
 		}
-		openMotor.set(-openPower);
+		openMotor.set(openPower);
 		System.out.println("Power: " + openPower);
     }
    /* public void openArmControl(double target) {

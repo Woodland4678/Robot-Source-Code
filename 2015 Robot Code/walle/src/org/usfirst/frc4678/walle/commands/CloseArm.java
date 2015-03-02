@@ -31,13 +31,12 @@ public class  CloseArm extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	//Robot.squeeze.setOpenState(0);
+    	Robot.squeeze.setOpenState(0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.pIDSubsystem1.setSetpoint(0.22);
-    	Robot.pIDSubsystem1.enable();
+    	Robot.squeeze.openArm(Robot.armClosePosition());
     	//Robot.squeeze.openArmControl(Robot.armClosePosition());
     }
 
@@ -48,12 +47,12 @@ public class  CloseArm extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.pIDSubsystem1.disable();
+    	Robot.squeeze.setOpenMotor(0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.pIDSubsystem1.disable();
+    	Robot.squeeze.setOpenMotor(0);
     }
 }
