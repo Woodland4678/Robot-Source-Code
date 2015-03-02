@@ -35,17 +35,17 @@ public class  armDropBin extends Command {
     protected void initialize() {
     	state = 0;
     	startingClawTarget = Robot.claw.getClawTargetDegrees();
+    	Robot.arm.setCurrentArmPosition(Robot.armSetBinPosition());
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.arm.setArm(Robot.armSetBinPosition());
+    	//Tilt the claw as the arm goes up
     	distancePastNinety = (Robot.arm.getArmPosition() - Robot.armNinetyDegreesValue() - 0.1);
     	if (distancePastNinety < 0) {
     		distancePastNinety = 0;
     	}
     	Robot.claw.setClawTargetDegrees((int)(startingClawTarget + (distancePastNinety * clawAngleIncreace)));
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -55,7 +55,6 @@ public class  armDropBin extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.arm.setArm(0);
     	Robot.arm.setOpenPower(0);
     	Robot.claw.setClawTargetDegrees(startingClawTarget);
     }

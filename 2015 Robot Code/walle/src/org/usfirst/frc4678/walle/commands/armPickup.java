@@ -29,16 +29,12 @@ public class  armPickup extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.arm.setCurrentArmPosition(Robot.armPickupPosition());
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Robot.squeeze.openArm(Robot.armOpenPosition());
-    	Robot.arm.setArm(Robot.armPickupPosition());
-    	//Robot.claw.setClaw(Robot.clawPickUprightPosition());
-    	//if (Robot.arm.getArmReady()) {
-    	//	Robot.squeeze.openArm(Robot.armClosePosition());
-    	//}
+
     }
 
     // Make this return true when this Command no longer needs to run execute()

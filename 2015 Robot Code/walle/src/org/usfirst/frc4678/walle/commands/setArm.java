@@ -18,7 +18,8 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  setArm extends Command {
-
+	boolean dPadPressed = false;
+	double armAdjustment;
     public setArm() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -31,10 +32,17 @@ public class  setArm extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	dPadPressed = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.arm.setArm(Robot.arm.getCurrentArmPosition());
+    	
+    	if (Robot.oi.getGamepad2().getRawAxis(6) != 0 && !dPadPressed) { //If the dpad is pressed, and is not being held down
+    		armAdjustment = 0.1 * Robot.oi.getGamepad2().getRawAxis(6); //The dpad is axis 6, and is -1 or 0 or 1
+    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + armAdjustment);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

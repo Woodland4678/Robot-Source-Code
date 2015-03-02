@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class Arm extends Subsystem {
+	double currentArmPosition;
 	double power;
 	double error;
 	int armState;
@@ -137,6 +138,12 @@ public class Arm extends Subsystem {
 		return false;
     	
     }
+    
+    //Get and set the current arm position
+    public void setCurrentArmPosition(double value) { currentArmPosition = value; }
+    
+    public double getCurrentArmPosition() { return currentArmPosition; }
+    
     public void setClawArm() {
     	
     }
