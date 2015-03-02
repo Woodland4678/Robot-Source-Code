@@ -53,6 +53,6 @@ public class  CloseArm extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.squeeze.setOpenMotor(0);
+    	end();
     }
 }

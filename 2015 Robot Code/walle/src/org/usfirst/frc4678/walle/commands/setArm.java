@@ -19,7 +19,10 @@ import org.usfirst.frc4678.walle.Robot;
  */
 public class  setArm extends Command {
 	boolean dPadPressed = false;
-	double armAdjustment;
+	boolean placingBin = false;
+	double clawAngleIncreace = 10;
+	double distancePastNinety;
+	double startingClawTarget;
     public setArm() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -34,15 +37,33 @@ public class  setArm extends Command {
     protected void initialize() {
     	dPadPressed = false;
     	Robot.arm.setCurrentArmPosition(Robot.armPickupPosition());
+    	startingClawTarget = Robot.claw.getClawTargetDegrees();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (Robot.arm.getCurrentArmPosition() == Robot.armSetBinPosition()) {
+    		placingBin = true;
+        	//Tilt the claw as the arm goes up
+        	distancePastNinety = (Robot.arm.getArmPosition() - Robot.armNinetyDegreesValue() - 0.1);
+        	if (distancePastNinety < 0) {
+        		distancePastNinety = 0;
+        	}
+        	
+        	Robot.claw.setClawTargetDegrees((startingClawTarget + (distancePastNinety * clawAngleIncreace)));
+    	} else {
+    		if (placingBin) {
+    			Robot.claw.setClawTargetDegrees(startingClawTarget);
+    			placingBin = false;
+    		}
+    	}
+    	
     	Robot.arm.setArm(Robot.arm.getCurrentArmPosition());
     	
-    	if (Robot.oi.getGamepad2().getRawAxis(6) != 0 && !dPadPressed) { //If the dpad is pressed, and is not being held down
-    		armAdjustment = 0.1 * Robot.oi.getGamepad2().getRawAxis(6); //The dpad is axis 6, and is -1 or 0 or 1
-    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + armAdjustment);
+    	if (Robot.oi.getGamepad2().getPOV() == 0 && !dPadPressed) {
+    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.03);
+    	} else if (Robot.oi.getGamepad2().getPOV() == 180 && !dPadPressed) {
+    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.01);
     	}
     }
 
