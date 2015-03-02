@@ -113,8 +113,6 @@ public class OI {
         g2Button12.whileHeld(new CloseArm());
         g2Button11 = new JoystickButton(gamepad2, 11);
         g2Button11.whileHeld(new OpenArm2());
-        g2Button8 = new JoystickButton(gamepad2, 8);
-        g2Button8.whileHeld(new OpenArm());
         g2Button10 = new JoystickButton(gamepad2, 10);
         g2Button10.whenPressed(new ReverseIndexWheels());
         g2Button9 = new JoystickButton(gamepad2, 9);

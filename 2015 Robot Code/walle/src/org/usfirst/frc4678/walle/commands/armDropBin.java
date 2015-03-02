@@ -18,10 +18,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  armDropBin extends Command {
-	int state = 0;
-	double clawAngleIncreace = 10;
-	double distancePastNinety;
-	double startingClawTarget;
+
 	public armDropBin() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -33,31 +30,21 @@ public class  armDropBin extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	state = 0;
-    	startingClawTarget = Robot.claw.getClawTargetDegrees();
     	Robot.arm.setCurrentArmPosition(Robot.armSetBinPosition());
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Tilt the claw as the arm goes up
-    	distancePastNinety = (Robot.arm.getArmPosition() - Robot.armNinetyDegreesValue() - 0.1);
-    	if (distancePastNinety < 0) {
-    		distancePastNinety = 0;
-    	}
-    	
-    	Robot.claw.setClawTargetDegrees((startingClawTarget + (distancePastNinety * clawAngleIncreace)));
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.arm.setOpenPower(0);
-    	Robot.claw.setClawTargetDegrees(startingClawTarget);
     }
 
     // Called when another command which requires one or more of the same

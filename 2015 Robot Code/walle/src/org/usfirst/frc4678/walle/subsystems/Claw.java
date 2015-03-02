@@ -74,8 +74,7 @@ public class Claw extends Subsystem {
     	clawTarget = target;
     	//calculating the difference between the target and current position
     	error = clawTarget - clawPosition.get();
-    	System.out.println("Claw Position: " + clawPosition.get());
-    	System.out.println("Encoder Initialized is: " + getStopped);
+    	
     	//if the difference is greater than 0.5 power should be full forward
     	if (error > 50) {
 			power = clawMaxPower;
@@ -85,7 +84,12 @@ public class Claw extends Subsystem {
 			power = -clawMaxPower;
 		}
 		else {
-			power = error * 0.02;
+			if (Robot.claw.getClawPosition() < 0.3) {
+				power = error * 0.02;
+			} else {
+				power = error * 0.05;
+			}
+			
 			if (power > clawMaxPower) {
 				power = clawMaxPower;
 			}

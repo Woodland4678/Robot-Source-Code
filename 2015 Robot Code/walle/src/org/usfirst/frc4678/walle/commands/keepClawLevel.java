@@ -21,7 +21,7 @@ public class  keepClawLevel extends Command {
 	double armDegrees = Robot.arm.getArmDegrees();
 	double goalClawDegrees;
 	double goalClawPosition;
-	double clawOffset = -1;
+	double clawOffset = -1000;
     public keepClawLevel() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -40,14 +40,17 @@ public class  keepClawLevel extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//Adjust the angle of the claw when the dpad is held
-    	if (Robot.oi.getGamepad2().getRawAxis(5) != 0) {
-    		Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() + (Robot.oi.getGamepad2().getRawAxis(5) / 2));
+    	if (Robot.oi.getGamepad2().getPOV() == 90) {
+    		clawOffset += 0.5;
+    	} else if (Robot.oi.getGamepad2().getPOV() == 270) {
+    		clawOffset -= 0.5;
     	}
     	
     	armDegrees = Robot.arm.getArmDegrees();
-    	if (clawOffset == -1) {
+    	if (clawOffset == -1000) {
     		clawOffset = -armDegrees - Robot.claw.getClawTargetDegrees();
     	}
+    	
     	goalClawDegrees = armDegrees + Robot.claw.getClawTargetDegrees() + clawOffset;
     	goalClawPosition = (goalClawDegrees * Robot.clawTicsPerDegree());
     	Robot.claw.setClaw(goalClawPosition);
