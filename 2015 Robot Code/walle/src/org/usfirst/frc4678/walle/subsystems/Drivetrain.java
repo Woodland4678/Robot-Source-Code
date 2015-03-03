@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Drivetrain extends Subsystem {
 	//start ramping down when you are this many centimeters from the target or from the start
+	boolean robotDriving = false;
 	double GO_TO_DISTANCE_CORRECTION_SPEED = 50;
 	int AUTO_DRIVE_RAMP_DISTANCE = 30;
 	int ENCODER_DIFFERENCE_PER_TURN = Robot.encoderChangePerTurn();
@@ -351,6 +352,10 @@ public class Drivetrain extends Subsystem {
     public int getLeftEncoder() {return -leftEncoder.get();}
     
     public int getRightEncoder() {return rightEncoder.get();}
+    
+    public boolean isDriving() {return robotDriving; }
+    
+    public void setIsDriving(boolean value) {robotDriving = value; }
     
     
 }

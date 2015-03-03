@@ -18,6 +18,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  AutonomousCommand extends Command {
+	boolean liftUpLess = false;
 	boolean finished = false;
 	boolean pickingUpTote = false;
 	int autoState = 0;
@@ -38,6 +39,7 @@ public class  AutonomousCommand extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	autoState = 0;
+    	autoMode = Robot.autoMode();
     	count = 0;
     	pickupState = 5;
     	armState = 5;
@@ -45,11 +47,12 @@ public class  AutonomousCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println("Auto state is " + autoState);
 //--------------------------------------------------------------------------
 //------------------------------move 2 meters-------------------------------
 //--------------------------------------------------------------------------
     	
-    	if (autoState == 0) {
+    	if (autoMode == 0) {
     		switch(autoState) {
     		case 0://Get the pickup ready for the match and move forwards
     			pickupState = 5;
@@ -64,7 +67,7 @@ public class  AutonomousCommand extends Command {
 //----------------------------1 tote 2 containers---------------------------
 //--------------------------------------------------------------------------
     	
-    	} else if (autoState == 1) {
+    	} else if (autoMode == 1) {
 	    	switch(autoState) {
 	    	case 0://Grab the first tote and bin(s)
 	    		pickupState = 7;
@@ -116,7 +119,7 @@ public class  AutonomousCommand extends Command {
 //------------------------------3 totes 1 bin-------------------------------
 //--------------------------------------------------------------------------
     	
-    	} else if (autoState == 2) {
+    	} else if (autoMode == 2) {
 	    	switch(autoState) {
 	    	case 0://Grab the first tote and bin
 	    		pickupState = 2;
@@ -171,22 +174,24 @@ public class  AutonomousCommand extends Command {
 //--------------------------3 totes and containers--------------------------
 //--------------------------------------------------------------------------
 	    	
-    	} else if (autoState == 3) {
+    	} else if (autoMode == 3) {
 	    	switch(autoState) {
 	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
 	    		pickupState = 2;
+	    		liftUpLess = false;
 	    		armState = 0;
 	    		count = 0;
 	    		autoState ++;
+	    		Robot.indexWheels.setIndexMotor(-1);
 	    	break;
 	    	case 1://Wait for the Robot to pick up the bin and tote
 	    		count ++;
-	    		if (count > 40) {
+	    		if (count > 60) {
 	    			autoState ++;
 	    		}
 	    	break;
 	    	case 2://Move forwards to the next bin
-	    		if (Robot.drivetrain.goToDistance(250, 250, .85, 10, 60)) {
+	    		if (Robot.drivetrain.goToDistance(230, 230, .5, 10, 60)) {
 	    			autoState ++;
 	    			armState = 0;
 	    			count = 0;
@@ -199,42 +204,49 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 4://Move forwards to the last tote
-	    		if (Robot.drivetrain.goToDistance(235, 235, .85, 20, 60)) {
+	    		if (Robot.drivetrain.goToDistance(230, 230, .65, 20, 60)) {
 	    			autoState ++;
 	    			armState = 5;
 	    			count = 0;
+	    			liftUpLess = true;
 	    		}
 	    	break;
-	    	case 5://Wait for the robot to automatically pick up the tote
+	    	case 5://Wait for the robot to stop pick up the tote
 	    		count ++;
-	    		if (count > 50) {
+	    		if (count > 30) {
 	    			autoState ++;
 	    		}
 	    	break;
-	    	case 6://Drive backwards a bit
-	    		if (Robot.drivetrain.goToDistance(-300, -300, .85, 60, 0)) {
+	    	case 6://Turn to face the platform
+	    		if (Robot.drivetrain.turn(90, 0.3)) {
 	    			autoState ++;
 	    			pickupState = 7;
 	    		}
 	    	break;
-	    	case 7://Curve around the end of the scoring platform
-	    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30)) {
+	    	case 7://Go over the platform
+	    		if (Robot.drivetrain.goToDistance(400, 400, .3, 80, 20)) {
+	    			autoState ++;
+	    			pickupState = 6;
+	    		}
+	    	break;
+	    	case 8://Turn again
+	    		if (Robot.drivetrain.turn(60, 0.3)) {
 	    			autoState ++;
 	    		}
 	    	break;
-	    	case 8://Drop the totes
-	    		pickupState = 6;
+	    	case 9://Reverse the indexing wheels
 	    		count = 0;
 	    		autoState ++;
+	    		Robot.indexWheels.setIndexMotor(1);
 	    	break;
-	    	case 9://Wait for the robot to drop the totes
+	    	case 10://Wait for the robot to drop the totes
 	    		count ++;
 	    		if (count > 100) {
 	    			autoState ++;
 	    		}
 	    	break;
-	    	case 10://Go forwards to clear the totes
-	    		if (Robot.drivetrain.goToDistance(80, 80, .6, 10, 10)) {
+	    	case 11://Go forwards to clear the totes
+	    		if (Robot.drivetrain.goToDistance(150, 150, .8, 10, 10)) {
 	    			autoState ++;
 	    			pickupState = 5;
 	    		}
@@ -253,6 +265,7 @@ public class  AutonomousCommand extends Command {
     	//State 6 lowers the pickup to the minimum height
     	//State 7 lowers the pickup to the minimum height without scoring the totes
     	switch(pickupState) {
+    	
     	case 0://Wait for a tote to be sensed
     		if (Robot.pickup.getDrivingOverTote()) {
     			pickupState ++;
@@ -266,6 +279,9 @@ public class  AutonomousCommand extends Command {
     	case 2://Drop the pickup down
     		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
     			pickupState ++;
+    			if (liftUpLess) {
+    				pickupState = 7;
+    			}
     		}
     	break;
     	case 3://Lift the pickup up, and then go back to state 0
@@ -321,6 +337,7 @@ public class  AutonomousCommand extends Command {
     		Robot.arm.setArm(Robot.armSetBinPosition());
     	break;
     	}
+    	System.out.println("pickup state is " + pickupState);
     }
 
     // Make this return true when this Command no longer needs to run execute()

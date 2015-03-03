@@ -99,7 +99,7 @@ public class Pickup extends Subsystem {
     				power = lifterMaxPower;
     			}
     			//if the difference is less than 0, power should be full in reverse
-    			else if (error < 0) {
+    			else {
     				power = -lifterMaxPower;
     			}
     					
@@ -116,6 +116,8 @@ public class Pickup extends Subsystem {
     			break;
     			
     		}
+    	
+    	System.out.println("lifter case is " + lifterState + " Trying to get to " + lifterTarget);
     	return false;
     	
     }

@@ -36,27 +36,29 @@ public class  AutoPickTote extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	switch(pickupState) {
-    	case 0://Wait for a tote to be sensed
-    		if (Robot.pickup.getDrivingOverTote()) {
-    			pickupState ++;
-    		}
-    	break;
-    	case 1://Wait for the tote to pass under the robot
-    		if (!Robot.pickup.getDrivingOverTote()) {
-    			pickupState ++;
-    		}
-    	break;
-    	case 2://Drop the pickup down
-    		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
-    			pickupState ++;
-    		}
-    	break;
-    	case 3://Lift the pickup up, and then go back to state 0
-    		if (Robot.pickup.lift(Robot.lifterUpperTarget())) {
-    			pickupState = 0;
-    		}
-    	break;
+    	if (Robot.drivetrain.isDriving()) {//To ensure this does not run in autonomous
+	    	switch(pickupState) {
+	    	case 0://Wait for a tote to be sensed
+	    		if (Robot.pickup.getDrivingOverTote()) {
+	    			pickupState ++;
+	    		}
+	    	break;
+	    	case 1://Wait for the tote to pass under the robot
+	    		if (!Robot.pickup.getDrivingOverTote()) {
+	    			pickupState ++;
+	    		}
+	    	break;
+	    	case 2://Drop the pickup down
+	    		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
+	    			pickupState ++;
+	    		}
+	    	break;
+	    	case 3://Lift the pickup up, and then go back to state 0
+	    		if (Robot.pickup.lift(Robot.lifterUpperTarget())) {
+	    			pickupState = 0;
+	    		}
+	    	break;
+	    	}
     	}
     }
 
