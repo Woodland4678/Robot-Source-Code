@@ -75,7 +75,7 @@ public class Pickup extends Subsystem {
     	SmartDashboard.putNumber("Lifter Power", power);
     	
     	switch(lifterState) {
-    		case 0:
+    		/*case 0:
     			lifterServo.set(Robot.servoRemoveLock());
     			if (cnt > 10) {
     				lifterState ++;	
@@ -89,8 +89,8 @@ public class Pickup extends Subsystem {
     				lifterState++;
     			}
     			cnt++;
-    			break;
-    		case 2:
+    			break;*/
+    		case 0:
     			
     			//Finds the difference between target and current position
     			error = lifterTarget - lifterHeight.get();

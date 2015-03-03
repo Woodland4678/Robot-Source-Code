@@ -54,7 +54,7 @@ public class  PickTote extends Command {
 	    	
 	    	//If the robot has hit the bottom, lift up
 	    	} else {
-	    		Robot.pickup.setLifterState(2);
+	    		Robot.pickup.setLifterState(0);
 	    		finished = Robot.pickup.lift(Robot.lifterUpperTarget());
 	    		Robot.logger.debug("PickTote", "Lifting");
 	    	}
