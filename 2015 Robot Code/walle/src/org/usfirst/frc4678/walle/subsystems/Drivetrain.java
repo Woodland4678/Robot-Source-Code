@@ -35,7 +35,7 @@ public class Drivetrain extends Subsystem {
 	int TARGET_LIGHT_SENSOR_VALUE = Robot.targetLightSensorValue();
 	double AUTO_TURN_MARGIN = .05;//This is a percentage
 	double AUTO_TURN_REDUCTION_SPEED = Robot.autoTurnReductionSpeed();
-	double AUTO_TURN_REDUCTION_DISTANCE = 0.7;//Starts reducing the speed when it is x percent of the way to the target distance
+	double AUTO_TURN_REDUCTION_DISTANCE = 0.6;//Starts reducing the speed when it is x percent of the way to the target distance
 	long goalTime;
 	int timedDriveState = 0;
 	int goToDistanceState = 0;
@@ -282,6 +282,7 @@ public class Drivetrain extends Subsystem {
     		startingRightDistance = getRightEncoder();
     		turnState ++;
     	}
+    	
     	//Determine the difference there should be between the encoders when the robot has completed the turn
     	int goalDifference = (ENCODER_DIFFERENCE_PER_TURN * degrees);
     	goalDifference = goalDifference / 360;
@@ -302,9 +303,16 @@ public class Drivetrain extends Subsystem {
     	
     	//Start reducing speed if the robot has passed the reduction distance
     	if (percentThere > AUTO_TURN_REDUCTION_DISTANCE) {
-    		leftPower *= (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
-    		rightPower *= (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
-    		Robot.logger.debug("Drivetrain", "turn reducing power because it is close to the target");
+    		double reduction = (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
+    		if (reduction > 1) {
+    			reduction = 1;
+    		} else if (reduction < 0.3) {
+    			reduction = 0.3;
+    		}
+    		
+    		leftPower *= reduction;
+    		rightPower *= reduction;
+    		Robot.logger.debug("Drivetrain", "turn reducing power by %" + (int)(reduction * 100));
     	}
     	
     	//If the robot is within the margin, stop the motors and return true
