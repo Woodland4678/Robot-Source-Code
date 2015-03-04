@@ -74,7 +74,6 @@ public class Pickup extends Subsystem {
     	lastLifterTarget = target;
     	SmartDashboard.putNumber("Lifter Power", power);
     	
-    	switch(lifterState) {
     		/*case 0:
     			lifterServo.set(Robot.servoRemoveLock());
     			if (cnt > 10) {
@@ -90,32 +89,35 @@ public class Pickup extends Subsystem {
     			}
     			cnt++;
     			break;*/
-    		case 0:
     			
     			//Finds the difference between target and current position
     			error = lifterTarget - lifterHeight.get();
     			//if the difference is greater than 0 power should be full
-    			if (error > 0) {
+    			if (error > 1.5) {
     				power = lifterMaxPower;
     			}
     			//if the difference is less than 0, power should be full in reverse
-    			else {
+    			else if (error < -1.5) {
     				power = -lifterMaxPower;
     			}
-    					
+    			else {
+    				power = error * 1;
+    				if (power > lifterMaxPower){
+    					power = lifterMaxPower;
+    				}
+    				else if (power < -lifterMaxPower) {
+    					power = -lifterMaxPower;
+    				}
+    			}		
     			
     			lifterMotor.set(-power);
     			
     			if (Math.abs(error) < 0.1) {
-    				lifterMotor.set(0);
-    				lifterServo.set(Robot.servoLockPos());
     				cnt = 0;
     				lifterState++;
     				return true;
     			}
-    			break;
-    			
-    		}
+    		
     	
     	System.out.println("lifter case is " + lifterState + " Trying to get to " + lifterTarget);
     	return false;

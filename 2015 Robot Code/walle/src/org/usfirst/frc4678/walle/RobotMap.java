@@ -38,6 +38,8 @@ public class RobotMap {
     public static SpeedController armArmMotor;
     public static AnalogPotentiometer armArmPosition;
     public static Relay indexWheelsIndexMotor;
+    public static Relay indexWheelsOpenIndexWheels;
+    public static AnalogPotentiometer indexWheelsIndexPosition;
     public static SpeedController clawClawMotor;
     public static Encoder clawClawPosition;
     public static AnalogPotentiometer squeezeArmOpenPosition;
@@ -87,6 +89,12 @@ public class RobotMap {
         
         indexWheelsIndexMotor = new Relay(0);
         LiveWindow.addActuator("Index Wheels", "IndexMotor", indexWheelsIndexMotor);
+        
+        indexWheelsOpenIndexWheels = new Relay(1);
+        LiveWindow.addActuator("Index Wheels", "OpenIndexWheels", indexWheelsOpenIndexWheels);
+        
+        indexWheelsIndexPosition = new AnalogPotentiometer(5, 1.0, 0.0);
+        LiveWindow.addSensor("Index Wheels", "IndexPosition", indexWheelsIndexPosition);
         
         clawClawMotor = new Victor(1);
         LiveWindow.addActuator("Claw", "ClawMotor", (Victor) clawClawMotor);

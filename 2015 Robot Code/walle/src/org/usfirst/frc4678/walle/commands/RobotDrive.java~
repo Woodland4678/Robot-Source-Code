@@ -45,6 +45,7 @@ public class  RobotDrive extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.pickup.setLifterPower(0);
+    	Robot.drivetrain.setIsDriving(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -145,8 +146,8 @@ public class  RobotDrive extends Command {
         SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
         SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
         SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
-        SmartDashboard.putNumber("Arm Open Position", Robot.pIDSubsystem1.getOpenPosition());
         SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
+        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
     }
 
     // Make this return true when this Command no longer needs to run execute()

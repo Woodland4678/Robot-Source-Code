@@ -54,7 +54,6 @@ public class  PickTote extends Command {
 	    	
 	    	//If the robot has hit the bottom, lift up
 	    	} else {
-	    		Robot.pickup.setLifterState(0);
 	    		finished = Robot.pickup.lift(Robot.lifterUpperTarget());
 	    		Robot.logger.debug("PickTote", "Lifting");
 	    	}
@@ -63,7 +62,7 @@ public class  PickTote extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return finished;
+        return false;
     }
 
     // Called once after isFinished returns true

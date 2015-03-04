@@ -318,6 +318,30 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getDouble("clawDropBinPosition", 75);
     }
+    //**************************************************************//
+    //*********Begin Parameters relating to the indexWheels*********//
+    //**************************************************************//
+    public static double indexClosePosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("indexClosePosition")) {
+            prefs.putDouble("indexClosePosition", 0.2);
+        }
+        return prefs.getDouble("indexClosePosition", 0.2);
+    }
+    public static double indexOpenPosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("indexOpenPosition")) {
+            prefs.putDouble("indexOpenPosition", 0.8);
+        }
+        return prefs.getDouble("indexOpenPosition", 0.8);
+    }
+    public static double indexCenterPosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("indexCenterPosition")) {
+            prefs.putDouble("indexCenterPosition", 0.5);
+        }
+        return prefs.getDouble("indexCenterPosition", 0.5);
+    }
     
     
     public void robotInit() {
