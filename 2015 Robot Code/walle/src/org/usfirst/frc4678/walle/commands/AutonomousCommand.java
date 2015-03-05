@@ -25,6 +25,7 @@ public class  AutonomousCommand extends Command {
 	int pickupState = 0;
 	int armState = 0;
 	int armCount = 0;
+	int indexState = 0;
 	int count = 0;
 	int autoMode = Robot.autoMode();
     public AutonomousCommand() {
@@ -180,6 +181,7 @@ public class  AutonomousCommand extends Command {
 	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
 	    		armCount = 0;
 	    		pickupState = 2;
+	    		indexState = 0;
 	    		liftUpLess = false;
 	    		armState = 0;
 	    		count = 0;
@@ -190,11 +192,10 @@ public class  AutonomousCommand extends Command {
 	    		count ++;
 	    		if (count > 80) {
 	    			autoState ++;
-	    			armState = 4;
 	    		}
 	    	break;
 	    	case 2://Move forwards to the next bin
-	    		if (Robot.drivetrain.goToDistance(230, 230, .5, 10, 60)) {
+	    		if (Robot.drivetrain.goToDistance(230, 230, .5, 30, 30)) {
 	    			autoState ++;
 	    			armState = 0;
 	    			count = 0;
@@ -202,16 +203,19 @@ public class  AutonomousCommand extends Command {
 	    	break;
 	    	case 3://Wait for the robot to pick up the container
 	    		count ++;
-	    		if (count > 80) {
+	    		if (armState == 2) {//This ensures the arm goes to rest, and not to drop the bin
+	    			armState = 5;
+	    		}
+	    		
+	    		if (count > 120) {
 	    			autoState ++;
 	    		}
 	    	break;
 	    	case 4://Move forwards to the last tote
-	    		if (Robot.drivetrain.goToDistance(230, 230, .65, 20, 60)) {
+	    		if (Robot.drivetrain.goToDistance(230, 230, .35, 10, 10)) {
 	    			autoState ++;
 	    			armState = 5;
 	    			count = 0;
-	    			liftUpLess = true;
 	    		}
 	    	break;
 	    	case 5://Wait for the robot to stop pick up the tote
@@ -221,28 +225,40 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 6://Turn to face the platform
-	    		if (Robot.drivetrain.turn(90, 0.3)) {
+	    		if (Robot.drivetrain.turn(70, 0.3)) {
 	    			autoState ++;
-	    			pickupState = 7;
+	    			count = 0;
+	    			liftUpLess = true;
 	    		}
 	    	break;
-	    	case 7://Turn 45 degrees
-	    		if (Robot.drivetrain.goToDistance(145, 80, .85, 30, 0)) {
+	    	case 7:
+	    		count ++;
+	    		if (count > 20) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 8://Go over the platform
+	    		if (Robot.drivetrain.goToDistance(100, 100, .5, 60, 0)) {
+	    			autoState ++;
+	    		}
+	    	break;
+	    	case 9://Turn 45 degrees
+	    		if (Robot.drivetrain.goToDistance(210, 140, .6, 30, 0)) {
 	    			autoState ++;
 	    			pickupState = 6;
 	    			Robot.indexWheels.setIndexMotor(1);
+	    			indexState = 2;
 	    		}
 	    	break;
-	    	case 8://Turn the last 45 degrees while dropping the totes
-	    		if (Robot.drivetrain.goToDistance(145, 80, .85, 0, 30)) {
+	    	case 10://Turn the last 45 degrees while dropping the totes
+	    		if (Robot.drivetrain.goToDistance(210, 140, .6, 0, 0)) {
 	    			autoState ++;
 	    			pickupState = 6;
 	    		}
 	    	break;
-	    	case 9://Go back a bit to make sure the totes are clear
-	    		if (Robot.drivetrain.goToDistance(100, 100, .85, 30, 30)) {
+	    	case 11://Go back a bit to make sure the totes are clear
+	    		if (Robot.drivetrain.goToDistance(100, 100, .85, 0, 30)) {
 	    			autoState ++;
-	    			pickupState = 5;
 	    		}
 	    	break;
 	    	}
@@ -300,47 +316,73 @@ public class  AutonomousCommand extends Command {
 //--------------------------------------------------------------------------
 //-------------------------------Arm setter------------------------------
 //--------------------------------------------------------------------------
-    	
+    	System.out.println("Arm state " + armState);
     	//When the pickup state is 0, it goes through the pickup loop
     	switch(armState) {
     	case 0://go to pickup position and open the claw
     		Robot.squeeze.openArm(Robot.armOpenPosition());
-    		if (Robot.arm.setArm(Robot.armPickupPosition())) {
+    		Robot.arm.setCurrentArmPosition(Robot.armPickupPosition());
+    		if (Math.abs(Robot.arm.getArmPosition() - Robot.armPickupPosition()) < 0.75) {
     			armCount = 0;
     			armState ++;
     		}
+    	break;
     	case 1://Close the claw
     		armCount ++;
     		Robot.squeeze.openArm(Robot.armClosePosition());
-    		if (armCount > 20) {//Wait for the claw to close
-    			armState ++;
+    		if (armCount > 10) {//Wait for the claw to close
+    			Robot.claw.setClawTargetDegrees(15);
+    			if (armCount > 20) {
+    				armState ++;
+    			}
     		}
     	break;
     	case 2://Go to set bin position
+    		if (Robot.armZeroDegreesValue() < Robot.arm.getArmPosition()) {
+    			Robot.claw.setClawTargetDegrees(0);
+    		}
+    		
+    		Robot.arm.setCurrentArmPosition(Robot.armSetBinPosition());
     		Robot.squeeze.openArm(Robot.armClosePosition());
-    		if (Robot.arm.setArm(Robot.armSetBinPosition())) {
+    		if (Math.abs(Robot.armSetBinPosition() - Robot.arm.getArmPosition())  < 0.75) {
     			armCount = 0;
     			armState ++;
     		}
     	break;
     	case 3://Open the claw
     		armCount ++;
-    		Robot.squeeze.openArm(Robot.armOpenPosition());
-    		if (armCount > 20) {//Wait for the claw to open
-    			armState ++;
+    		if (armCount > 30) {//Wait for the claw to close
+    			Robot.squeeze.openArm(Robot.armOpenPosition());
+    			if (armCount > 60) {
+    				armState ++;
+    			}
     		}
+    	break;
     	case 4://Go to pickup position
     		Robot.squeeze.openArm(Robot.armOpenPosition());
-    		Robot.arm.setArm(Robot.armPickupPosition());
+    		Robot.arm.setCurrentArmPosition(Robot.armPickupPosition());
     	break;
     	case 5://Go to rest position
-    		Robot.arm.setArm(Robot.armRestPosition());
+    		Robot.squeeze.openArm(Robot.armClosePosition());
+    		Robot.arm.setCurrentArmPosition(Robot.armRestPosition() - 0.5);
     	break;
     	case 6://Go to the bin setting position
-    		Robot.arm.setArm(Robot.armSetBinPosition());
+    		Robot.arm.setCurrentArmPosition(Robot.armSetBinPosition());
     	break;
     	}
-    	System.out.println("pickup state is " + pickupState);
+   //Index wheel setter
+    	switch (indexState) {
+    	case 0:
+    		Robot.indexWheels.setIndexWheels(Robot.indexClosePosition());
+    		break;
+    	case 1:
+    		Robot.indexWheels.setIndexWheels(Robot.indexCenterPosition());
+    		break;
+    	case 2:
+    		Robot.indexWheels.setIndexWheels(Robot.indexOpenPosition());
+    		break;
+    	}
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()

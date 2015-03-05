@@ -57,7 +57,7 @@ public class  goToScore extends Command {
     		power += MAX_POWER_CHANGE;
     	}
     	//Negative, because it is going backwards
-    	Robot.drivetrain.setMotor("both", -power);
+    	Robot.drivetrain.setMotor("both", power);
     	System.out.println("Going to score, setting powers to " + power + ", difference = " + difference);
     	
     	lastEncoderValue = Robot.drivetrain.getRightEncoder();

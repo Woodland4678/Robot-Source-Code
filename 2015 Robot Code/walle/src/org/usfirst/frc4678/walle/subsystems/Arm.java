@@ -133,6 +133,7 @@ public class Arm extends Subsystem {
 			if (Math.abs(error) < 0.1) {
 				System.out.println("its true");
 				armReady = true;
+				return true;
 			}
 			//break;
 		//}

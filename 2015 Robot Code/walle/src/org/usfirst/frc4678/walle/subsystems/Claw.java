@@ -100,5 +100,9 @@ public class Claw extends Subsystem {
     	clawMotor.set(-power);
     	
     }
+    
+    public void resetClawPosition() {
+    	clawPosition.reset();
+    }
 }
 

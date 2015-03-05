@@ -19,7 +19,6 @@ import org.usfirst.frc4678.walle.Robot;
  */
 public class  PickTote extends Command {
 	boolean lift = false;
-	boolean finished = false;
 	boolean canPickup = false;
     public PickTote() {
     	
@@ -37,13 +36,11 @@ public class  PickTote extends Command {
     	Robot.pickup.setLifterState(0);
     	Robot.logger.info("PickTote", "Initialized");
     	lift = false;
-    	finished = false;
-    	canPickup = Robot.pickup.toteInPlace();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	finished = !canPickup;
+    	canPickup = Robot.pickup.toteInPlace();
     	if (canPickup) {
 	    	//If the robot has not hit the bottom, lower the lifter
 	    	if (!lift) {
@@ -54,9 +51,10 @@ public class  PickTote extends Command {
 	    	
 	    	//If the robot has hit the bottom, lift up
 	    	} else {
-	    		finished = Robot.pickup.lift(Robot.lifterUpperTarget());
 	    		Robot.logger.debug("PickTote", "Lifting");
 	    	}
+    	} else {
+    		Robot.pickup.lift(Robot.lifterUpperTarget());
     	}
     }
 
