@@ -61,7 +61,6 @@ public class OI {
     public JoystickButton g1Button2;
     public JoystickButton g1Button3;
     public JoystickButton g1Button4;
-    public JoystickButton g1Button6;
     public JoystickButton g1Button7;
     public JoystickButton g1Button9;
     public Joystick gamepad1;
@@ -118,25 +117,23 @@ public class OI {
         g2Button9 = new JoystickButton(gamepad2, 9);
         g2Button9.whenPressed(new RunIndexWheels());
         g2Button7 = new JoystickButton(gamepad2, 7);
-        g2Button7.whileHeld(new OpenIndexWheels());
+        g2Button7.whenPressed(new armDropBin());
         g2Button6 = new JoystickButton(gamepad2, 6);
-        g2Button6.whenPressed(new CloseIndexWheels());
+        g2Button6.whenPressed(new armRest());
         g2Button5 = new JoystickButton(gamepad2, 5);
-        g2Button5.whenPressed(new CenterIndexWheels());
+        g2Button5.whenPressed(new armPickup());
         g2Button3 = new JoystickButton(gamepad2, 3);
-        g2Button3.whenPressed(new armDropBin());
+        g2Button3.whenPressed(new OpenIndexWheels());
         g2Button2 = new JoystickButton(gamepad2, 2);
-        g2Button2.whenPressed(new armRest());
+        g2Button2.whenPressed(new CenterIndexWheels());
         g2Button1 = new JoystickButton(gamepad2, 1);
-        g2Button1.whenPressed(new armPickup());
+        g2Button1.whenPressed(new OpenIndexWheels());
         gamepad1 = new Joystick(0);
         
         g1Button9 = new JoystickButton(gamepad1, 9);
         g1Button9.whenPressed(new toggleClawAngle());
         g1Button7 = new JoystickButton(gamepad1, 7);
         g1Button7.whileHeld(new goToScore());
-        g1Button6 = new JoystickButton(gamepad1, 6);
-        g1Button6.whileHeld(new toggleGentleMode());
         g1Button4 = new JoystickButton(gamepad1, 4);
         g1Button4.whenPressed(new sixTotesLIft());
         g1Button3 = new JoystickButton(gamepad1, 3);
@@ -161,8 +158,6 @@ public class OI {
         SmartDashboard.putData("sixTotesLIft", new sixTotesLIft());
 
         SmartDashboard.putData("goToScore", new goToScore());
-
-        SmartDashboard.putData("toggleGentleMode", new toggleGentleMode());
 
         SmartDashboard.putData("armPickup", new armPickup());
 
