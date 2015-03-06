@@ -23,6 +23,15 @@ import org.usfirst.frc4678.walle.Robot;
 public class  RobotDrive extends Command {
 	double MAX_DECCELERATION_SPEED = Robot.maxDecelerationSpeed();
 	double POWER_REDUCTION = Robot.driveMotorPowerReduction();
+	double AUTO_SPEED_ADJUSTMENT_SPEED = 0.003;
+	double AUTO_SPEED_TARGET = 15;
+	boolean checkedLast = false;
+	double autoSpeedLeftPower = 0.1;
+	double autoSpeedRightPower = 0.1;
+	double autoSpeedLastLeftPosition = 0;
+	double autoSpeedLastRightPosition = 0;
+	double leftSpeedChange;
+	double rightSpeedChange;
 	double joystickX;
 	double joystickY;
 	double leftPower;
@@ -31,6 +40,7 @@ public class  RobotDrive extends Command {
 	double lastRightPower = 0;
 	double averagePower = 0;
 	double current0;
+
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
     public RobotDrive() {
         // Use requires() here to declare subsystem dependencies
@@ -50,43 +60,44 @@ public class  RobotDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Get the joystick values
-    	joystickX = Robot.oi.getGamepad1().getX();
-        joystickY = -Robot.oi.getGamepad1().getY();
-        
-        //Determine the powers based on the joystick values, cubic for side to side
-        leftPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
-        rightPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
+    	if (Robot.oi.getGamepad1().getPOV() == -1) {
+	    	//Get the joystick values
+	    	joystickX = Robot.oi.getGamepad1().getX();
+	        joystickY = -Robot.oi.getGamepad1().getY();
+	        
+	        //Determine the powers based on the joystick values, cubic for side to side
+	        leftPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
+	        rightPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
         
 //--------------------------------------------------------------------------
 //-------------------------------Steering Snap------------------------------
 //--------------------------------------------------------------------------
         
-        SmartDashboard.putBoolean("Drivetrain Steering Snap", Robot.oi.getButton(Robot.oi.getGamepad1(), 8));
-        
-        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 8)) {
-        	//Average the powers so you make the motors go the same speed
-        	averagePower = ((Math.abs(leftPower) + Math.abs(rightPower)) / 2);
-        	System.out.println("------- average power = " + averagePower);
-        	//Flip the powers if necessary
-        	if (leftPower > 0) {
-        		leftPower = averagePower;
-        	} else {
-        		leftPower = -averagePower;
-        	}
-        	
-        	//Flip the powers if necessary
-        	if (rightPower > 0) {
-        		rightPower = averagePower;
-        	} else {
-        		rightPower = -averagePower;
-        	}
-        }
+	        SmartDashboard.putBoolean("Drivetrain Steering Snap", Robot.oi.getButton(Robot.oi.getGamepad1(), 8));
+	        
+	        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 8)) {
+	        	//Average the powers so you make the motors go the same speed
+	        	averagePower = ((Math.abs(leftPower) + Math.abs(rightPower)) / 2);
+	        	System.out.println("------- average power = " + averagePower);
+	        	//Flip the powers if necessary
+	        	if (leftPower > 0) {
+	        		leftPower = averagePower;
+	        	} else {
+	        		leftPower = -averagePower;
+	        	}
+	        	
+	        	//Flip the powers if necessary
+	        	if (rightPower > 0) {
+	        		rightPower = averagePower;
+	        	} else {
+	        		rightPower = -averagePower;
+	        	}
+	        }
         
 //--------------------------------------------------------------------------
 //--------------------------------Gentle Mode-------------------------------
 //--------------------------------------------------------------------------
-        
+        /*
         SmartDashboard.putBoolean("Drivetrain Gentle Mode", Robot.drivetrain.getGentleMode());
         
         if (Robot.drivetrain.getGentleMode()) {
@@ -118,36 +129,96 @@ public class  RobotDrive extends Command {
         	}
         	
         }
-        	
+        	*/
 //--------------------------------------------------------------------------
 //------------------------------Power Reduction-----------------------------
 //--------------------------------------------------------------------------
         
-        SmartDashboard.putBoolean("Drivetrain Power Reduction", Robot.oi.getButton(Robot.oi.getGamepad1(), 5));
-        
-        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 5)) {
-        	leftPower *= POWER_REDUCTION;
-        	rightPower*= POWER_REDUCTION;
-        }
+	        SmartDashboard.putBoolean("Drivetrain Power Reduction", Robot.oi.getButton(Robot.oi.getGamepad1(), 7));
+	        
+	        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 7)) {
+	        	leftPower *= POWER_REDUCTION;
+	        	rightPower*= POWER_REDUCTION;
+	        }
         
 //--------------------------------------------------------------------------
 //---------------------------------Set Powers-------------------------------
 //--------------------------------------------------------------------------
 
-        Robot.drivetrain.setMotor("left", -leftPower);
-        Robot.drivetrain.setMotor("right", -rightPower);
-        
-        lastLeftPower = leftPower;
-        lastRightPower = rightPower;
-        
-        SmartDashboard.putNumber("Right Motor Power", rightPower);
-        SmartDashboard.putNumber("Left Motor Power", leftPower);
-        SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
-        SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
-        SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
-        SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
-        SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
-        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
+	        Robot.drivetrain.setMotor("left", -leftPower);
+	        Robot.drivetrain.setMotor("right", -rightPower);
+	        
+	        lastLeftPower = leftPower;
+	        lastRightPower = rightPower;
+	        
+	        SmartDashboard.putNumber("Right Motor Power", rightPower);
+	        SmartDashboard.putNumber("Left Motor Power", leftPower);
+	        SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
+	        SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
+	        SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
+	        SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
+	        SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
+	        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
+    	} else {//Use the dpad if it is pressed
+    		
+    		
+    		
+    		if (!checkedLast) {//Only check every other time, to get a more accurate encoder reading
+    			rightSpeedChange = Math.abs(Math.abs(Robot.drivetrain.getRightEncoder()) - Math.abs(autoSpeedLastRightPosition));
+        		leftSpeedChange = Math.abs(Math.abs(Robot.drivetrain.getLeftEncoder()) - Math.abs(autoSpeedLastLeftPosition));
+        		
+	    		if (rightSpeedChange > AUTO_SPEED_TARGET + 1) {
+	    			autoSpeedRightPower -= AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		} else if (rightSpeedChange < AUTO_SPEED_TARGET - 1) {
+	    			autoSpeedRightPower += AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		}
+	    		
+	    		if (leftSpeedChange > AUTO_SPEED_TARGET + 1) {
+	    			autoSpeedLeftPower -= AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		} else if (leftSpeedChange < AUTO_SPEED_TARGET - 1) {
+	    			autoSpeedLeftPower += AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		}
+	    		
+	    		if (autoSpeedLeftPower > 0.4) {
+	    			autoSpeedLeftPower = 0.4;
+	    		}
+	    		
+	    		if (autoSpeedRightPower > 0.4) {
+	    			autoSpeedRightPower = 0.4;
+	    		}
+	    		
+	    		autoSpeedLastRightPosition = Robot.drivetrain.getRightEncoder();
+	    		autoSpeedLastLeftPosition = Robot.drivetrain.getLeftEncoder();
+    		}
+    		
+    		checkedLast = !checkedLast;
+    		
+    		leftPower = autoSpeedLeftPower;
+    		rightPower = autoSpeedRightPower;
+    		
+    		switch (Robot.oi.getGamepad1().getPOV()) {
+    		
+    		case 0:
+    		break;
+    		case 90:
+    			rightPower *= -1;
+    		break;
+    		case 180:
+    			rightPower *= -1;
+    			leftPower *= -1;
+    		break;
+    		case 270:
+    			leftPower *= -1;
+    		break;
+    		}
+    		
+    		
+    		Robot.logger.debug("RobotDrive", "Using DPad to control, current speed is " + rightSpeedChange + ", " + leftSpeedChange);
+    		Robot.logger.debug("RobotDrive", "Using DPad, setting powers to " + rightPower + ", " + leftPower);
+    		
+    		Robot.drivetrain.setMotor("left", -leftPower);
+    		Robot.drivetrain.setMotor("right", -rightPower);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
