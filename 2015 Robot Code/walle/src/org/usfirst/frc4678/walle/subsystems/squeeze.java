@@ -90,6 +90,13 @@ public class squeeze extends Subsystem {
 				openPower = -openMaxPower;
 			}
 		}
+    	
+    	if (Robot.squeeze.getOpenPosition() < 0.36 && Robot.squeeze.getOpenPosition() > 0.33) {
+    		if (openPower < 0) {
+    			openPower = -0.4;
+    		}
+    	}
+    	
 		openMotor.set(openPower);
 		System.out.println("Power: " + openPower);
     }

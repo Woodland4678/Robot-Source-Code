@@ -117,7 +117,7 @@ public class Drivetrain extends Subsystem {
     }
     
     //To use this method, you keep calling it until it returns true
-    public boolean goToDistance(double rightCentimeters, double leftCentimeters, double power, int rampUpDistance, int rampDownDistance) {
+    public boolean goToDistance(double rightCentimeters, double leftCentimeters, double power, int rampUpDistance, int rampDownDistance, double startingPower, double endingPower) {
 
 //--------------------------------------------------------------------------
 //-----------------------Reset variables if necessary-----------------------
@@ -212,16 +212,10 @@ public class Drivetrain extends Subsystem {
         
         double rampDownPercentage = 1;
         if (currentRightCentimeters < rampUpDistance) {
-        	rampDownPercentage = ((currentRightCentimeters / rampUpDistance) / 2) + 0.5;
-        	if (rampDownPercentage < 0.5) {
-        		rampDownPercentage = 0.5;
-        	}
+        	rampDownPercentage = ((currentRightCentimeters / rampUpDistance) * (1 - startingPower)) + startingPower;
         	Robot.logger.info("Drivetrain", "goToDistance ramping down " + (int)(rampDownPercentage * 100) + "%");
         } else if (currentRightCentimeters > Math.abs(rightCentimeters) - rampDownDistance) {
-        	rampDownPercentage = (((Math.abs(rightCentimeters) - currentRightCentimeters) / rampDownDistance) / 3);
-        	if (rampDownPercentage < 0.33) {
-        		rampDownPercentage = 0.33;
-        	}
+        	rampDownPercentage = (((Math.abs(rightCentimeters) - currentRightCentimeters) / rampDownDistance) * (1 - endingPower)) + endingPower;
         	Robot.logger.info("Drivetrain", "goToDistance ramping down " + (int)(rampDownPercentage * 100) + "%");
         }
         
@@ -308,8 +302,8 @@ public class Drivetrain extends Subsystem {
     		double reduction = (1 - ((percentThere - AUTO_TURN_REDUCTION_DISTANCE) * AUTO_TURN_REDUCTION_SPEED));
     		if (reduction > 1) {
     			reduction = 1;
-    		} else if (reduction < 0.3) {
-    			reduction = 0.3;
+    		} else if (reduction < 0.2) {
+    			reduction = 0.2;
     		}
     		
     		leftPower *= reduction;

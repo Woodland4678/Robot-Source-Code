@@ -83,11 +83,12 @@ public class Claw extends Subsystem {
 		else if (error < -50) {
 			power = -clawMaxPower;
 		}
+    	
 		else {
-			if (Robot.claw.getClawPosition() < 0.3) {
-				power = error * 0.02;
+			if (Robot.squeeze.getOpenPosition() < 0.36 && Robot.squeeze.getOpenPosition() > 0.33) {
+				power = Math.pow(error * 0.15, 2.5);
 			} else {
-				power = error * 0.05;
+				power = error * 0.03;
 			}
 			
 			if (power > clawMaxPower) {

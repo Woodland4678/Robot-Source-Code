@@ -58,7 +58,7 @@ public class  AutonomousCommand extends Command {
     		switch(autoState) {
     		case 0://Get the pickup ready for the match and move forwards
     			pickupState = 5;
-	    		if (Robot.drivetrain.goToDistance(200, 200, .7, 30, 20)) {
+	    		if (Robot.drivetrain.goToDistance(200, 200, .7, 30, 20, 0.5, 0.2)) {
 	    			autoState ++;
 	    		}
 	    	break;
@@ -90,7 +90,7 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 3://Move into the auto zone
-	    		if (Robot.drivetrain.goToDistance(200, 200, .85, 20, 60)) {
+	    		if (Robot.drivetrain.goToDistance(200, 200, .85, 20, 60, 0.5, 0.2)) {
 	    			autoState ++;
 	    			count = 0;
 	    		}
@@ -109,7 +109,7 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 11://Go forwards
-	    		if (Robot.drivetrain.goToDistance(120, 120, .6, 10, 10)) {
+	    		if (Robot.drivetrain.goToDistance(120, 120, .6, 10, 10, 0.5, 0.2)) {
 	    			autoState ++;
 	    		}
 	    	case 12://Get the pickup ready for the match
@@ -130,7 +130,7 @@ public class  AutonomousCommand extends Command {
 	    		autoState ++;
 	    	break;
 	    	case 1://Move to the last tote, slowly so that the robot can automatically pick up the other totes
-	    		if (Robot.drivetrain.goToDistance(520, 520, .4, 20, 80)) {
+	    		if (Robot.drivetrain.goToDistance(520, 520, .4, 20, 80, 0.5, 0.2)) {
 	    			autoState ++;
 	    			count = 0;
 	    		}
@@ -143,12 +143,12 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 3://Go back a bit
-	    		if (Robot.drivetrain.goToDistance(-300, -300, .4, 80, 0)) {
+	    		if (Robot.drivetrain.goToDistance(-300, -300, .4, 80, 0, 0.5, 0.2)) {
 	    			autoState ++;
 	    		}
 	    	break;
 	    	case 7://Curve around the scoring platform
-	    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30)) {
+	    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30, 0.5, 0.2)) {
 	    			autoState ++;
 	    		}
 	    	break;
@@ -164,7 +164,7 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 11://Go forwards a bit
-	    		if (Robot.drivetrain.goToDistance(60, 60, .6, 10, 10)) {
+	    		if (Robot.drivetrain.goToDistance(60, 60, .6, 10, 10, 0.5, 0.2)) {
 	    			autoState ++;
 	    		}
 	    	case 12://Get the pickup ready for the match
@@ -180,7 +180,7 @@ public class  AutonomousCommand extends Command {
 	    	switch(autoState) {
 	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
 	    		armCount = 0;
-	    		pickupState = 2;
+	    		pickupState = 3;
 	    		indexState = 0;
 	    		liftUpLess = false;
 	    		armState = 0;
@@ -190,12 +190,12 @@ public class  AutonomousCommand extends Command {
 	    	break;
 	    	case 1://Wait for the Robot to pick up the bin and tote
 	    		count ++;
-	    		if (count > 80) {
+	    		if (count > 60) {
 	    			autoState ++;
 	    		}
 	    	break;
 	    	case 2://Move forwards to the next bin
-	    		if (Robot.drivetrain.goToDistance(230, 230, .5, 30, 30)) {
+	    		if (Robot.drivetrain.goToDistance(220, 220, .5, 30, 40, 0.5, 0.15)) {
 	    			autoState ++;
 	    			armState = 0;
 	    			count = 0;
@@ -207,28 +207,28 @@ public class  AutonomousCommand extends Command {
 	    			armState = 5;
 	    		}
 	    		
-	    		if (count > 120) {
+	    		if (count > 70) {
 	    			autoState ++;
 	    		}
 	    	break;
 	    	case 4://Move forwards to the last tote
-	    		if (Robot.drivetrain.goToDistance(230, 230, .35, 10, 10)) {
+	    		if (Robot.drivetrain.goToDistance(220, 220, .35, 10, 10, 0.5, 0.1)) {
 	    			autoState ++;
 	    			armState = 5;
 	    			count = 0;
 	    		}
 	    	break;
-	    	case 5://Wait for the robot to stop pick up the tote
+	    	case 5://Wait for the robot to stop pick up the container
 	    		count ++;
-	    		if (count > 30) {
+	    		if (count > 10) {
 	    			autoState ++;
+	    			pickupState = 5;
 	    		}
 	    	break;
 	    	case 6://Turn to face the platform
-	    		if (Robot.drivetrain.turn(70, 0.3)) {
+	    		if (Robot.drivetrain.turn(70, 0.5)) {
 	    			autoState ++;
 	    			count = 0;
-	    			liftUpLess = true;
 	    		}
 	    	break;
 	    	case 7:
@@ -238,12 +238,12 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 8://Go over the platform
-	    		if (Robot.drivetrain.goToDistance(100, 100, .5, 60, 0)) {
+	    		if (Robot.drivetrain.goToDistance(100, 100, .6, 40, 0, .4, 0)) {
 	    			autoState ++;
 	    		}
 	    	break;
 	    	case 9://Turn 45 degrees
-	    		if (Robot.drivetrain.goToDistance(210, 140, .6, 30, 0)) {
+	    		if (Robot.drivetrain.goToDistance(210, 135, .8, 30, 0, 0, 0)) {
 	    			autoState ++;
 	    			pickupState = 6;
 	    			Robot.indexWheels.setIndexMotor(-1);
@@ -251,13 +251,14 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 10://Turn the last 45 degrees while dropping the totes
-	    		if (Robot.drivetrain.goToDistance(210, 140, .6, 0, 0)) {
+	    		Robot.logger.debug("Autonomous", "Dropping the totes, pickup at " + Robot.pickup.getLifterHeight());
+	    		if (Robot.drivetrain.goToDistance(210, 135, .8, 0, 0, 0, 0)) {
 	    			autoState ++;
 	    			pickupState = 6;
 	    		}
 	    	break;
 	    	case 11://Go back a bit to make sure the totes are clear
-	    		if (Robot.drivetrain.goToDistance(100, 100, .85, 0, 30)) {
+	    		if (Robot.drivetrain.goToDistance(100, 100, .85, 0, 0, 0, 0)) {
 	    			autoState ++;
 	    		}
 	    	break;
@@ -338,24 +339,24 @@ public class  AutonomousCommand extends Command {
     		}
     	break;
     	case 2://Go to set bin position
-    		if (Robot.armZeroDegreesValue() < Robot.arm.getArmPosition()) {
-    			Robot.claw.setClawTargetDegrees(0);
+    		if (Robot.armZeroDegreesValue() < Robot.arm.getArmPosition() && Robot.claw.getClawTargetDegrees() > 0) {//Gradually reduce the bin angle
+    			Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() - 1);
     		}
     		
     		Robot.arm.setCurrentArmPosition(Robot.armSetBinPosition());
     		Robot.squeeze.openArm(Robot.armClosePosition());
-    		if (Math.abs(Robot.armSetBinPosition() - Robot.arm.getArmPosition())  < 0.75) {
+    		if (Math.abs(Robot.armSetBinPosition() - Robot.arm.getArmPosition())  < 0.05) {
     			armCount = 0;
     			armState ++;
     		}
     	break;
     	case 3://Open the claw
     		armCount ++;
-    		if (armCount > 30) {//Wait for the claw to close
-    			Robot.squeeze.openArm(Robot.armOpenPosition());
-    			if (armCount > 60) {
-    				armState ++;
-    			}
+    		if (armCount > 15) {
+				Robot.squeeze.openArm(Robot.armOpenPosition());
+				if (armCount > 30) {
+					armState ++;
+				}
     		}
     	break;
     	case 4://Go to pickup position
@@ -382,6 +383,10 @@ public class  AutonomousCommand extends Command {
     		Robot.indexWheels.setIndexWheels(Robot.indexOpenPosition());
     		break;
     	}
+
+    	Robot.logger.debug("Autonomous", "Pickup state at " + pickupState + " Latch pressed is " + Robot.pickup.getDrivingOverTote());
+
+    	Robot.logger.debug("Autonomous", "Target claw degrees at " + Robot.claw.getClawTargetDegrees());
     	
     }
 
