@@ -35,7 +35,7 @@ public class  CenterIndexWheels extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.indexWheels.setIndexMotor(-1);
+    	Robot.indexWheels.setIndexMotor(1);
     	Robot.indexWheels.setIndexWheels(Robot.indexCenterPosition());
     }
 

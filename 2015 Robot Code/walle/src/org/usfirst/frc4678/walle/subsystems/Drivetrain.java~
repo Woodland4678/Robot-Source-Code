@@ -367,6 +367,10 @@ public class Drivetrain extends Subsystem {
     
     public void setIsDriving(boolean value) {robotDriving = value; }
     
+    public double getFrontDistanceSensor() { return frontDistanceSensor.getVoltage();}
+    
+    public double getBackDistanceSensor() { return backDistanceSensor.getVoltage();}
+    
     
 }
 

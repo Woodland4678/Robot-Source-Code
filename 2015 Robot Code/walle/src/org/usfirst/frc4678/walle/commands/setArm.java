@@ -45,9 +45,17 @@ public class  setArm extends Command {
     	Robot.arm.setArm(Robot.arm.getCurrentArmPosition());
     	
     	if (Robot.oi.getGamepad2().getPOV() == 0 && !dPadPressed) {
-    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.03);
+    		if (Robot.oi.getGamepad2().getRawButton(4)) {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.07);
+    		} else {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.03);
+    		}
     	} else if (Robot.oi.getGamepad2().getPOV() == 180 && !dPadPressed) {
-    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.01);
+    		if (Robot.oi.getGamepad2().getRawButton(4)) {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.03);
+    		} else {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.01);
+    		}
     	}
     }
 

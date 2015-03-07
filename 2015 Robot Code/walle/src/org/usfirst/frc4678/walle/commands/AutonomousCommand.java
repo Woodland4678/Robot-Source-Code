@@ -186,7 +186,7 @@ public class  AutonomousCommand extends Command {
 	    		armState = 0;
 	    		count = 0;
 	    		autoState ++;
-	    		Robot.indexWheels.setIndexMotor(-1);
+	    		Robot.indexWheels.setIndexMotor(1);
 	    	break;
 	    	case 1://Wait for the Robot to pick up the bin and tote
 	    		count ++;
@@ -246,7 +246,7 @@ public class  AutonomousCommand extends Command {
 	    		if (Robot.drivetrain.goToDistance(210, 140, .6, 30, 0)) {
 	    			autoState ++;
 	    			pickupState = 6;
-	    			Robot.indexWheels.setIndexMotor(1);
+	    			Robot.indexWheels.setIndexMotor(-1);
 	    			indexState = 2;
 	    		}
 	    	break;

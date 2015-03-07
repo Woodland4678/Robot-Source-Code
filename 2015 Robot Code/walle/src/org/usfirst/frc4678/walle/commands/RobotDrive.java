@@ -66,8 +66,8 @@ public class  RobotDrive extends Command {
 	        joystickY = -Robot.oi.getGamepad1().getY();
 	        
 	        //Determine the powers based on the joystick values, cubic for side to side
-	        leftPower = (Math.abs(joystickY) * joystickY) + (Math.abs(joystickX) * joystickX);
-	        rightPower = (Math.abs(joystickY) * joystickY) - (Math.abs(joystickX) * joystickX);
+	        leftPower = joystickY + joystickX;
+	        rightPower = joystickY - joystickX;
         
 //--------------------------------------------------------------------------
 //-------------------------------Steering Snap------------------------------
@@ -151,14 +151,16 @@ public class  RobotDrive extends Command {
 	        lastLeftPower = leftPower;
 	        lastRightPower = rightPower;
 	        
-	        SmartDashboard.putNumber("Right Motor Power", rightPower);
-	        SmartDashboard.putNumber("Left Motor Power", leftPower);
-	        SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
-	        SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
+	       // SmartDashboard.putNumber("Right Motor Power", rightPower);
+	        //SmartDashboard.putNumber("Left Motor Power", leftPower);
+	        //SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
+	        //SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
 	        SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
 	        SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
 	        SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
 	        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
+	        SmartDashboard.putNumber("Front Distance", Robot.drivetrain.getFrontDistanceSensor());
+	        SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
     	} else {//Use the dpad if it is pressed
     		
     		

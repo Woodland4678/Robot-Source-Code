@@ -23,7 +23,7 @@ public class  goToScore extends Command {
 	double leftCurrent;
 	double rightCurrent;
 	double power = 0.1;
-	double MAX_POWER_CHANGE = 0.005;
+	double MAX_POWER_CHANGE = 0.01;
 	double GOAL_SPEED = 4;//Target encoder clicks per turn
 	double lastEncoderValue = 0;
 	double currentEncoderValue = 0;

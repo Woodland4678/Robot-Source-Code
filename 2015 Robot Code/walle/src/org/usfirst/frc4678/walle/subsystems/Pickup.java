@@ -17,6 +17,7 @@ import org.usfirst.frc4678.walle.commands.*;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.Servo;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class Pickup extends Subsystem {
+	PowerDistributionPanel pdp = new PowerDistributionPanel();
 	double distanceFromTarget = 0;
 	double error = 0;
 	int lifterState = 0;
@@ -60,6 +62,7 @@ public class Pickup extends Subsystem {
     }
     
     public boolean lift(double target) {
+    	
     	double power = Robot.lifterPower();
     	double lifterMaxPower = Robot.lifterPower();
     	double lifterTarget = target;
@@ -118,7 +121,7 @@ public class Pickup extends Subsystem {
     				return true;
     			}
     		
-    	
+    	System.out.println("LIfter Current" + pdp.getCurrent(2));
     	System.out.println("lifter case is " + lifterState + " Trying to get to " + lifterTarget);
     	return false;
     	
