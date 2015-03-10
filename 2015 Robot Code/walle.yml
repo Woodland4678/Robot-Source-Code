@@ -208,7 +208,7 @@ Children:
       Name: ToteSensor2
     Properties:
       Default Command: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
-        name: Default Command, type: Command, validators: null, value: AutoPickTote}
+        name: Default Command, type: Command, validators: null, value: None}
     Base: Subsystem
     Name: Pickup
   - Children: []
@@ -533,6 +533,30 @@ Children:
           value: whileHeld
       Base: Joystick Button
       Name: G1 Button5
+    - Children: []
+      Properties:
+        Joystick: !!robotbuilder.data.properties.ParentProperty {default: parent,
+          name: Joystick, validators: null, value: Gamepad1}
+        Button: !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id018
+          default: '1'
+          name: Button
+          validators: null
+          value: '7'
+        Command: !!robotbuilder.data.properties.TypeSelectionProperty
+          default: None
+          name: Command
+          type: Command
+          validators: *id019
+          value: TogglePowerReduction
+        When to Run: !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id020
+          default: whileHeld
+          name: When to Run
+          validators: null
+          value: whenPressed
+      Base: Joystick Button
+      Name: G1 Button 7
     Properties:
       Number: !!robotbuilder.data.properties.ChoicesProperty
         choices: &id021 ['0', '1', '2', '3', '4', '5']
@@ -1001,6 +1025,14 @@ Children:
   - Children: []
     Properties:
       Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
+        name: Requires, type: Subsystem, validators: null, value: None}
+      Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
+        name: Button on SmartDashboard, validators: null, value: true}
+    Base: Command
+    Name: TogglePowerReduction
+  - Children: []
+    Properties:
+      Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
         name: Requires, type: Subsystem, validators: null, value: Drivetrain}
       Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
         name: Button on SmartDashboard, validators: null, value: false}
@@ -1198,14 +1230,6 @@ Children:
         name: Button on SmartDashboard, validators: null, value: false}
     Base: Command
     Name: keepClawLevel
-  - Children: []
-    Properties:
-      Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
-        name: Requires, type: Subsystem, validators: null, value: Pickup}
-      Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
-        name: Button on SmartDashboard, validators: null, value: false}
-    Base: Command
-    Name: AutoPickTote
   - Children: []
     Properties:
       Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,

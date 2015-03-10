@@ -104,14 +104,10 @@ public class  RobotDrive extends Command {
 //--------------------------------------------------------------------------
 //------------------------------Power Reduction-----------------------------
 //--------------------------------------------------------------------------
-        
-	        SmartDashboard.putBoolean("Drivetrain Power Reduction", Robot.oi.getButton(Robot.oi.getGamepad1(), 7));
 	        
-	        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 7)) {
-	        	leftPower *= POWER_REDUCTION;
-	        	rightPower*= POWER_REDUCTION;
-	        }
-        
+        	leftPower *= Robot.drivetrain.getPowerReduction();
+        	rightPower*= Robot.drivetrain.getPowerReduction();
+
 //--------------------------------------------------------------------------
 //---------------------------------Set Powers-------------------------------
 //--------------------------------------------------------------------------
@@ -133,6 +129,7 @@ public class  RobotDrive extends Command {
 	        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
 	        SmartDashboard.putNumber("Front Distance", Robot.drivetrain.getFrontDistanceSensor());
 	        SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
+	        SmartDashboard.putNumber("Power Reduction", Robot.drivetrain.getPowerReduction());
     	} else {//Use the dpad if it is pressed
     		
     		

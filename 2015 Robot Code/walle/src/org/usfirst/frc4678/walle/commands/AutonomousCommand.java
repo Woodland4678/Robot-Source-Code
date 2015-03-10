@@ -71,15 +71,19 @@ public class  AutonomousCommand extends Command {
     	
     	} else if (autoMode == 1) {
 	    	switch(autoState) {
-	    	case 0://Grab the first tote and bin(s)
-	    		pickupState = 7;
+	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
+	    		armCount = 0;
+	    		pickupState = 3;
+	    		indexState = 0;
+	    		liftUpLess = false;
 	    		armState = 0;
 	    		count = 0;
 	    		autoState ++;
+	    		Robot.indexWheels.setIndexMotor(1);
 	    	break;
-	    	case 1://Wait for the robot to pick everything up
+	    	case 1://Wait for the Robot to pick up the bin and tote
 	    		count ++;
-	    		if (count > 80) {
+	    		if (count > 60) {
 	    			autoState ++;
 	    		}
 	    	break;
@@ -110,61 +114,6 @@ public class  AutonomousCommand extends Command {
 	    	break;
 	    	case 11://Go forwards
 	    		if (Robot.drivetrain.goToDistance(120, 120, .6, 10, 10, 0.5, 0.2)) {
-	    			autoState ++;
-	    		}
-	    	case 12://Get the pickup ready for the match
-	    		pickupState = 5;
-	    	break;
-	    	}
-    	
-//--------------------------------------------------------------------------
-//------------------------------3 totes 1 bin-------------------------------
-//--------------------------------------------------------------------------
-    	
-    	} else if (autoMode == 2) {
-	    	switch(autoState) {
-	    	case 0://Grab the first tote and bin
-	    		pickupState = 2;
-	    		armState = 0;
-	    		count = 0;
-	    		autoState ++;
-	    	break;
-	    	case 1://Move to the last tote, slowly so that the robot can automatically pick up the other totes
-	    		if (Robot.drivetrain.goToDistance(520, 520, .4, 20, 80, 0.5, 0.2)) {
-	    			autoState ++;
-	    			count = 0;
-	    		}
-	    	break;
-	    	case 2://Wait for the robot to pick up the last tote
-	    		count ++;
-	    		if (count > 60) {
-	    			autoState ++;
-	    			pickupState = 7;
-	    		}
-	    	break;
-	    	case 3://Go back a bit
-	    		if (Robot.drivetrain.goToDistance(-300, -300, .4, 80, 0, 0.5, 0.2)) {
-	    			autoState ++;
-	    		}
-	    	break;
-	    	case 7://Curve around the scoring platform
-	    		if (Robot.drivetrain.goToDistance(-580, -325, .85, 0, 30, 0.5, 0.2)) {
-	    			autoState ++;
-	    		}
-	    	break;
-	    	case 9://Drop the totes
-	    		pickupState = 6;
-	    		count = 0;
-	    		autoState ++;
-	    	break;
-	    	case 10://Wait for the robot to drop the totes
-	    		count ++;
-	    		if (count > 100) {
-	    			autoState ++;
-	    		}
-	    	break;
-	    	case 11://Go forwards a bit
-	    		if (Robot.drivetrain.goToDistance(60, 60, .6, 10, 10, 0.5, 0.2)) {
 	    			autoState ++;
 	    		}
 	    	case 12://Get the pickup ready for the match
@@ -220,7 +169,7 @@ public class  AutonomousCommand extends Command {
 	    	break;
 	    	case 5://Wait for the robot to stop pick up the container
 	    		count ++;
-	    		if (count > 10) {
+	    		if (count > 25) {
 	    			autoState ++;
 	    			pickupState = 5;
 	    		}

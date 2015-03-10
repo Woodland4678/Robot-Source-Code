@@ -63,6 +63,7 @@ public class OI {
     public JoystickButton g1Button4;
     public JoystickButton g1Button6;
     public JoystickButton g1Button5;
+    public JoystickButton g1Button7;
     public Joystick gamepad1;
     public JoystickButton g2Button1;
     public JoystickButton g2Button2;
@@ -132,6 +133,8 @@ public class OI {
         g2Button1.whenPressed(new CloseIndexWheels());
         gamepad1 = new Joystick(0);
         
+        g1Button7 = new JoystickButton(gamepad1, 7);
+        g1Button7.whenPressed(new TogglePowerReduction());
         g1Button5 = new JoystickButton(gamepad1, 5);
         g1Button5.whileHeld(new GoToLoad());
         g1Button6 = new JoystickButton(gamepad1, 6);
@@ -147,6 +150,8 @@ public class OI {
 
 	    
         // SmartDashboard Buttons
+        SmartDashboard.putData("TogglePowerReduction", new TogglePowerReduction());
+
         SmartDashboard.putData("GoToLoad", new GoToLoad());
 
 

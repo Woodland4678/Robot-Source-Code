@@ -76,17 +76,17 @@ public class Claw extends Subsystem {
     	error = clawTarget - clawPosition.get();
     	
     	//if the difference is greater than 0.5 power should be full forward
-    	if (error > 50) {
+    	if (error > 30) {
 			power = clawMaxPower;
 		}
 		//if the difference is less than -0.5, power should be full in reverse
-		else if (error < -50) {
+		else if (error < -30) {
 			power = -clawMaxPower;
 		}
     	
 		else {
 			if (Robot.squeeze.getOpenPosition() < 0.36 && Robot.squeeze.getOpenPosition() > 0.33) {
-				power = Math.pow(error * 0.15, 2.5);
+				power = error * 0.1;
 			} else {
 				power = error * 0.03;
 			}

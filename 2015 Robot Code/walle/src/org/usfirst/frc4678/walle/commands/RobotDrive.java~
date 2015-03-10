@@ -21,11 +21,13 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  RobotDrive extends Command {
-	double MAX_DECCELERATION_SPEED = Robot.maxDecelerationSpeed();
+	int MAX_DECCELERATION_SPEED = 10;
 	double POWER_REDUCTION = Robot.driveMotorPowerReduction();
 	double AUTO_SPEED_ADJUSTMENT_SPEED = 0.003;
+	double ACCELERATION_LIMITING_ADJUSTMENT_SPEED = 0.005;
 	double AUTO_SPEED_TARGET = 15;
 	boolean checkedLast = false;
+	double maxPowerForAcceleration = 0.3;
 	double autoSpeedLeftPower = 0.1;
 	double autoSpeedRightPower = 0.1;
 	double autoSpeedLastLeftPosition = 0;
@@ -40,6 +42,10 @@ public class  RobotDrive extends Command {
 	double lastRightPower = 0;
 	double averagePower = 0;
 	double current0;
+	double lastLeftDistance = 0;
+	double lastRightDistance = 0;
+	double acccelerationLimitLeftPower = 0;
+	double accelerationLimitRightPower = 0;
 
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
     public RobotDrive() {
@@ -93,54 +99,15 @@ public class  RobotDrive extends Command {
 	        		rightPower = -averagePower;
 	        	}
 	        }
-        
-//--------------------------------------------------------------------------
-//--------------------------------Gentle Mode-------------------------------
-//--------------------------------------------------------------------------
-        /*
-        SmartDashboard.putBoolean("Drivetrain Gentle Mode", Robot.drivetrain.getGentleMode());
-        
-        if (Robot.drivetrain.getGentleMode()) {
-        	leftPower *= POWER_REDUCTION;
-        	rightPower *= POWER_REDUCTION;
+
         	
-        	//If the left power has changed by more than the max
-        	if (Math.abs(leftPower - lastLeftPower) > MAX_DECCELERATION_SPEED) {
-        		if (leftPower > lastLeftPower) {
-        			//Manually set the power so the power does not change so quickly
-        			leftPower = lastLeftPower + MAX_DECCELERATION_SPEED;
-        			
-        		} else {
-        			//Manually set the power so the power does not change so quickly
-        			leftPower = lastLeftPower - MAX_DECCELERATION_SPEED;
-        		}
-        	}
-        	
-        	//If the left power has changed by more than the max
-        	if (Math.abs(rightPower - lastRightPower) > MAX_DECCELERATION_SPEED) {
-        		if (rightPower > lastRightPower) {
-        			//Manually set the power so the power does not change so quickly
-        			rightPower = lastRightPower + MAX_DECCELERATION_SPEED;
-        			
-        		} else {
-        			//Manually set the power so the power does not change so quickly
-        			rightPower = lastRightPower - MAX_DECCELERATION_SPEED;
-        		}
-        	}
-        	
-        }
-        	*/
 //--------------------------------------------------------------------------
 //------------------------------Power Reduction-----------------------------
 //--------------------------------------------------------------------------
-        
-	        SmartDashboard.putBoolean("Drivetrain Power Reduction", Robot.oi.getButton(Robot.oi.getGamepad1(), 7));
 	        
-	        if (Robot.oi.getButton(Robot.oi.getGamepad1(), 7)) {
-	        	leftPower *= POWER_REDUCTION;
-	        	rightPower*= POWER_REDUCTION;
-	        }
-        
+        	leftPower *= Robot.drivetrain.getPowerReduction();
+        	rightPower*= Robot.drivetrain.getPowerReduction();
+
 //--------------------------------------------------------------------------
 //---------------------------------Set Powers-------------------------------
 //--------------------------------------------------------------------------
@@ -157,10 +124,12 @@ public class  RobotDrive extends Command {
 	        //SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
 	        SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
 	        SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
+	        SmartDashboard.putNumber("Squeeze Position", Robot.squeeze.getOpenPosition());
 	        SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
 	        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
 	        SmartDashboard.putNumber("Front Distance", Robot.drivetrain.getFrontDistanceSensor());
 	        SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
+	        SmartDashboard.putNumber("Power Reduction", Robot.drivetrain.getPowerReduction());
     	} else {//Use the dpad if it is pressed
     		
     		

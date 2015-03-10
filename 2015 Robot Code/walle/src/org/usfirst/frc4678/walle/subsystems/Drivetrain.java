@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Drivetrain extends Subsystem {
 	//start ramping down when you are this many centimeters from the target or from the start
+	double powerReduction = 1;
 	boolean robotDriving = false;
 	double GO_TO_DISTANCE_CORRECTION_SPEED = 50;
 	int AUTO_DRIVE_RAMP_DISTANCE = 30;
@@ -79,6 +80,10 @@ public class Drivetrain extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
+    
+    public double getPowerReduction() { return powerReduction; }
+    
+    public void setPowerReduction(double value) { powerReduction = value; }
     
     public void setMotor(String motor, double power) {
     	if (motor.equals("left") || motor.equals("Left")) {
