@@ -76,18 +76,19 @@ public class Claw extends Subsystem {
     	error = clawTarget - clawPosition.get();
     	
     	//if the difference is greater than 0.5 power should be full forward
-    	if (error > 50) {
+    	if (error > 30) {
 			power = clawMaxPower;
 		}
 		//if the difference is less than -0.5, power should be full in reverse
-		else if (error < -50) {
+		else if (error < -30) {
 			power = -clawMaxPower;
 		}
+    	
 		else {
-			if (Robot.claw.getClawPosition() < 0.3) {
-				power = error * 0.02;
+			if (Robot.squeeze.getOpenPosition() < 0.36 && Robot.squeeze.getOpenPosition() > 0.33) {
+				power = error * 0.1;
 			} else {
-				power = error * 0.05;
+				power = error * 0.03;
 			}
 			
 			if (power > clawMaxPower) {
@@ -99,6 +100,10 @@ public class Claw extends Subsystem {
 		}
     	clawMotor.set(-power);
     	
+    }
+    
+    public void resetClawPosition() {
+    	clawPosition.reset();
     }
 }
 

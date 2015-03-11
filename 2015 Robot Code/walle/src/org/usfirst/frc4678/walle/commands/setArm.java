@@ -36,34 +36,26 @@ public class  setArm extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	dPadPressed = false;
-    	Robot.arm.setCurrentArmPosition(Robot.armPickupPosition());
+    	Robot.arm.setCurrentArmPosition(Robot.armRestPosition());
     	startingClawTarget = Robot.claw.getClawTargetDegrees();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (Robot.arm.getCurrentArmPosition() == Robot.armSetBinPosition()) {
-    		placingBin = true;
-        	//Tilt the claw as the arm goes up
-        	distancePastNinety = (Robot.arm.getArmPosition() - Robot.armNinetyDegreesValue() - 0.1);
-        	if (distancePastNinety < 0) {
-        		distancePastNinety = 0;
-        	}
-        	
-        	Robot.claw.setClawTargetDegrees((startingClawTarget + (distancePastNinety * clawAngleIncreace)));
-    	} else {
-    		if (placingBin) {
-    			Robot.claw.setClawTargetDegrees(startingClawTarget);
-    			placingBin = false;
-    		}
-    	}
-    	
     	Robot.arm.setArm(Robot.arm.getCurrentArmPosition());
     	
     	if (Robot.oi.getGamepad2().getPOV() == 0 && !dPadPressed) {
-    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.03);
+    		if (Robot.oi.getGamepad2().getRawButton(4)) {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.07);
+    		} else {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.03);
+    		}
     	} else if (Robot.oi.getGamepad2().getPOV() == 180 && !dPadPressed) {
-    		Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.01);
+    		if (Robot.oi.getGamepad2().getRawButton(4)) {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.03);
+    		} else {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.01);
+    		}
     	}
     }
 

@@ -62,8 +62,8 @@ public class OI {
     public JoystickButton g1Button3;
     public JoystickButton g1Button4;
     public JoystickButton g1Button6;
+    public JoystickButton g1Button5;
     public JoystickButton g1Button7;
-    public JoystickButton g1Button9;
     public Joystick gamepad1;
     public JoystickButton g2Button1;
     public JoystickButton g2Button2;
@@ -73,9 +73,9 @@ public class OI {
     public JoystickButton g2Button7;
     public JoystickButton g2Button9;
     public JoystickButton g2Button10;
-    public JoystickButton g2Button8;
     public JoystickButton g2Button11;
     public JoystickButton g2Button12;
+    public JoystickButton g2Button8;
     public Joystick gamepad2;
     public JoystickButton g3Button4;
     public JoystickButton g3Button1;
@@ -109,36 +109,36 @@ public class OI {
         g3Button4.whileHeld(new ManualOverrideArm());
         gamepad2 = new Joystick(1);
         
+        g2Button8 = new JoystickButton(gamepad2, 8);
+        g2Button8.whenPressed(new toggleClawAngle());
         g2Button12 = new JoystickButton(gamepad2, 12);
         g2Button12.whileHeld(new CloseArm());
         g2Button11 = new JoystickButton(gamepad2, 11);
         g2Button11.whileHeld(new OpenArm2());
-        g2Button8 = new JoystickButton(gamepad2, 8);
-        g2Button8.whileHeld(new OpenArm());
         g2Button10 = new JoystickButton(gamepad2, 10);
         g2Button10.whenPressed(new ReverseIndexWheels());
         g2Button9 = new JoystickButton(gamepad2, 9);
         g2Button9.whenPressed(new RunIndexWheels());
         g2Button7 = new JoystickButton(gamepad2, 7);
-        g2Button7.whileHeld(new OpenIndexWheels());
+        g2Button7.whenPressed(new armDropBin());
         g2Button6 = new JoystickButton(gamepad2, 6);
-        g2Button6.whenPressed(new CloseIndexWheels());
+        g2Button6.whenPressed(new armRest());
         g2Button5 = new JoystickButton(gamepad2, 5);
-        g2Button5.whenPressed(new CenterIndexWheels());
+        g2Button5.whenPressed(new armPickup());
         g2Button3 = new JoystickButton(gamepad2, 3);
-        g2Button3.whenPressed(new armDropBin());
+        g2Button3.whenPressed(new OpenIndexWheels());
         g2Button2 = new JoystickButton(gamepad2, 2);
-        g2Button2.whenPressed(new armRest());
+        g2Button2.whenPressed(new CenterIndexWheels());
         g2Button1 = new JoystickButton(gamepad2, 1);
-        g2Button1.whenPressed(new armPickup());
+        g2Button1.whenPressed(new CloseIndexWheels());
         gamepad1 = new Joystick(0);
         
-        g1Button9 = new JoystickButton(gamepad1, 9);
-        g1Button9.whenPressed(new toggleClawAngle());
         g1Button7 = new JoystickButton(gamepad1, 7);
-        g1Button7.whileHeld(new goToScore());
+        g1Button7.whenPressed(new TogglePowerReduction());
+        g1Button5 = new JoystickButton(gamepad1, 5);
+        g1Button5.whileHeld(new GoToLoad());
         g1Button6 = new JoystickButton(gamepad1, 6);
-        g1Button6.whileHeld(new toggleGentleMode());
+        g1Button6.whileHeld(new goToScore());
         g1Button4 = new JoystickButton(gamepad1, 4);
         g1Button4.whenPressed(new sixTotesLIft());
         g1Button3 = new JoystickButton(gamepad1, 3);
@@ -150,61 +150,9 @@ public class OI {
 
 	    
         // SmartDashboard Buttons
-        SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
+        SmartDashboard.putData("TogglePowerReduction", new TogglePowerReduction());
 
-        SmartDashboard.putData("RobotDrive", new RobotDrive());
-
-        SmartDashboard.putData("Lift", new Lift());
-
-        SmartDashboard.putData("Lower", new Lower());
-
-        SmartDashboard.putData("PickTote", new PickTote());
-
-        SmartDashboard.putData("sixTotesLIft", new sixTotesLIft());
-
-        SmartDashboard.putData("goToScore", new goToScore());
-
-        SmartDashboard.putData("toggleGentleMode", new toggleGentleMode());
-
-        SmartDashboard.putData("armPickup", new armPickup());
-
-        SmartDashboard.putData("armDropBin", new armDropBin());
-
-        SmartDashboard.putData("armRest", new armRest());
-
-        SmartDashboard.putData("ManualOverrideArm", new ManualOverrideArm());
-
-        SmartDashboard.putData("RunIndexWheels", new RunIndexWheels());
-
-        SmartDashboard.putData("ReverseIndexWheels", new ReverseIndexWheels());
-
-        SmartDashboard.putData("ManuallyAdjustPotValues", new ManuallyAdjustPotValues());
-
-        SmartDashboard.putData("ManualOverridePickup", new ManualOverridePickup());
-
-        SmartDashboard.putData("OpenIndexWheels", new OpenIndexWheels());
-
-        SmartDashboard.putData("CloseIndexWheels", new CloseIndexWheels());
-
-        SmartDashboard.putData("CenterIndexWheels", new CenterIndexWheels());
-
-        SmartDashboard.putData("OpenArm2", new OpenArm2());
-
-        SmartDashboard.putData("CloseArm", new CloseArm());
-
-        SmartDashboard.putData("clawPickUpright", new clawPickUpright());
-
-        SmartDashboard.putData("ClawPickDown", new ClawPickDown());
-
-        SmartDashboard.putData("ClawDropBin", new ClawDropBin());
-
-        SmartDashboard.putData("toggleClawAngle", new toggleClawAngle());
-
-        SmartDashboard.putData("keepClawLevel", new keepClawLevel());
-
-        SmartDashboard.putData("AutoPickTote", new AutoPickTote());
-
-        SmartDashboard.putData("setArm", new setArm());
+        SmartDashboard.putData("GoToLoad", new GoToLoad());
 
 
     // END AUTOGENERATED CODE, SOURCE=ROBOTBUILDER ID=CONSTRUCTORS

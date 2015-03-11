@@ -18,6 +18,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  toggleClawAngle extends Command {
+	boolean switchDirection = false;
 
     public toggleClawAngle() {
         // Use requires() here to declare subsystem dependencies
@@ -30,20 +31,22 @@ public class  toggleClawAngle extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	if (Robot.claw.getClawTargetDegrees() == 0) {
-    		Robot.claw.setClawTargetDegrees(90);
-    	} else {
-    		Robot.claw.setClawTargetDegrees(0);
-    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (switchDirection) {
+    		Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() + 90);
+    	} else {
+    		Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() - 90);
+    	}
+    	
+    	switchDirection = !switchDirection;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true

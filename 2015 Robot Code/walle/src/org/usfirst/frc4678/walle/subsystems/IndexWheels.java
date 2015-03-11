@@ -47,17 +47,17 @@ public class IndexWheels extends Subsystem {
     
     public void setIndexMotor(int direction) {
     	if (direction == 1) {
-    		indexMotor.set(Relay.Value.kForward);
+    		indexMotor.set(Relay.Value.kReverse);
     	}
     	else if (direction == -1) {
-    		indexMotor.set(Relay.Value.kReverse);
+    		indexMotor.set(Relay.Value.kForward);
     	}
     	else {
     		indexMotor.set(Relay.Value.kOff);
     	}
     }
     public void setIndexWheels(double target) {
-    	
+    	System.out.println("index target is " + target);
     	indexTarget = target;
     	error = indexTarget - indexPosition.get();
     	if (error > 0.04) {

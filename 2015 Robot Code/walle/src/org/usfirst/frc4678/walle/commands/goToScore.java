@@ -23,7 +23,7 @@ public class  goToScore extends Command {
 	double leftCurrent;
 	double rightCurrent;
 	double power = 0.1;
-	double MAX_POWER_CHANGE = 0.005;
+	double MAX_POWER_CHANGE = 0.01;
 	double GOAL_SPEED = 4;//Target encoder clicks per turn
 	double lastEncoderValue = 0;
 	double currentEncoderValue = 0;
@@ -57,7 +57,7 @@ public class  goToScore extends Command {
     		power += MAX_POWER_CHANGE;
     	}
     	//Negative, because it is going backwards
-    	Robot.drivetrain.setMotor("both", -power);
+    	Robot.drivetrain.setMotor("both", power);
     	System.out.println("Going to score, setting powers to " + power + ", difference = " + difference);
     	
     	lastEncoderValue = Robot.drivetrain.getRightEncoder();
