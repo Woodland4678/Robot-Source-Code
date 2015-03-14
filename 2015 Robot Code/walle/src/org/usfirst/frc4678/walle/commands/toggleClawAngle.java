@@ -36,9 +36,9 @@ public class  toggleClawAngle extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	if (switchDirection) {
-    		Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() + 90);
-    	} else {
     		Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() - 90);
+    	} else {
+    		Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() + 90);
     	}
     	
     	switchDirection = !switchDirection;

@@ -111,7 +111,7 @@ public class Arm extends Subsystem {
 			if (getArmPosition() < Robot.armZeroDegreesValue() && power < 0) {
 				power *= armPowerReduction;
 			} else if (getArmPosition() > (Robot.armNinetyDegreesValue() - 1.5) && power > 0) {
-				double reduction = (Robot.armSetBinPosition() - getArmPosition()) / 4;
+				double reduction = (Robot.armSetBinPosition() - getArmPosition()) / 6;
 				if (reduction > 1) {
 					reduction = 1;
 				}

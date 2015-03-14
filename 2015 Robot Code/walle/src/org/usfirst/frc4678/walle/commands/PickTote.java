@@ -34,7 +34,6 @@ public class  PickTote extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.pickup.setLifterState(0);
     	Robot.logger.info("PickTote", "Initialized");
     	lift = false;
     	canPickup = Robot.pickup.toteInPlace();
@@ -47,6 +46,7 @@ public class  PickTote extends Command {
     	case 0:
     		canPickup = Robot.pickup.toteInPlace();
     		if (canPickup) {
+    			System.out.println("trying to lift");
     			pickupState ++;
     		}
     	case 1:

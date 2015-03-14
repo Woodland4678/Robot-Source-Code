@@ -816,7 +816,7 @@ Children:
           default: '1'
           name: Button
           validators: null
-          value: '8'
+          value: '4'
         Command: !!robotbuilder.data.properties.TypeSelectionProperty
           default: None
           name: Command
@@ -830,7 +830,7 @@ Children:
           validators: null
           value: whenPressed
       Base: Joystick Button
-      Name: G2 Button8
+      Name: G2 Button4
     Properties:
       Number: !!robotbuilder.data.properties.ChoicesProperty
         choices: *id021

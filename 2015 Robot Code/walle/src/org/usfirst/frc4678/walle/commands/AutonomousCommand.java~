@@ -175,7 +175,7 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 6://Turn to face the platform
-	    		if (Robot.drivetrain.turn(70, 0.5)) {
+	    		if (Robot.drivetrain.turn(50, 0.5)) {
 	    			autoState ++;
 	    			count = 0;
 	    		}
@@ -187,7 +187,7 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;
 	    	case 8://Go over the platform
-	    		if (Robot.drivetrain.goToDistance(100, 100, .6, 40, 0, .4, 0)) {
+	    		if (Robot.drivetrain.goToDistance(150, 150, .6, 40, 0, .4, 0)) {
 	    			autoState ++;
 	    		}
 	    	break;
@@ -201,13 +201,13 @@ public class  AutonomousCommand extends Command {
 	    	break;
 	    	case 10://Turn the last 45 degrees while dropping the totes
 	    		Robot.logger.debug("Autonomous", "Dropping the totes, pickup at " + Robot.pickup.getLifterHeight());
-	    		if (Robot.drivetrain.goToDistance(210, 135, .8, 0, 0, 0, 0)) {
+	    		if (Robot.drivetrain.goToDistance(240, 165, .8, 0, 0, 0, 0)) {
 	    			autoState ++;
 	    			pickupState = 6;
 	    		}
 	    	break;
 	    	case 11://Go back a bit to make sure the totes are clear
-	    		if (Robot.drivetrain.goToDistance(100, 100, .85, 0, 0, 0, 0)) {
+	    		if (Robot.drivetrain.goToDistance(50, 50, .85, 0, 0, 0, 0)) {
 	    			autoState ++;
 	    		}
 	    	break;

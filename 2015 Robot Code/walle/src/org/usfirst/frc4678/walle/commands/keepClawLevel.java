@@ -49,13 +49,13 @@ public class  keepClawLevel extends Command {
     	
     	//Adjust the angle of the claw when the dpad is held
     	if (Robot.oi.getGamepad2().getPOV() == 90) {
-    		if (Robot.oi.getGamepad2().getRawButton(4)) {
+    		if (Robot.oi.getGamepad2().getRawButton(8)) {
     			Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() + 1);
     		} else {
     			Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() + 0.3);
     		}
     	} else if (Robot.oi.getGamepad2().getPOV() == 270) {
-    		if (Robot.oi.getGamepad2().getRawButton(4)) {
+    		if (Robot.oi.getGamepad2().getRawButton(8)) {
     			Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() - 1);
     		} else {
     			Robot.claw.setClawTargetDegrees(Robot.claw.getClawTargetDegrees() - 0.3);
