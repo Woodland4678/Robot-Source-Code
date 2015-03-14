@@ -103,7 +103,7 @@ public class Pickup extends Subsystem {
     				power = -lifterMaxPower;
     			}
     			else {
-    				power = error * 1;
+    				power = error * 3;
     				if (power > lifterMaxPower){
     					power = lifterMaxPower;
     				}
@@ -116,8 +116,9 @@ public class Pickup extends Subsystem {
     			
     			if (Math.abs(error) < 0.1) {
     				cnt = 0;
-    				lifterState++;
+    				System.out.println("Lifter has reached the target!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     				return true;
+    				
     			}
     		
     	System.out.println("LIfter Current" + pdp.getCurrent(2));
@@ -127,7 +128,7 @@ public class Pickup extends Subsystem {
     }
     
     public boolean toteInPlace() {
-		if(toteSensor1.get() == true && toteSensor2.get() == false) {
+		if((toteSensor1.get() == true) && (toteSensor2.get() == false)) {
 			return true;
 		} else {
 			return false;

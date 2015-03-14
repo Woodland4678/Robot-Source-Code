@@ -19,7 +19,7 @@ import org.usfirst.frc4678.walle.Robot;
  */
 public class  GoToLoad extends Command {
 	double GO_TO_LOAD_POWER = 0.17;
-	double GO_TO_LOAD_DISTANCE = 0.73;
+	double GO_TO_LOAD_DISTANCE = 0.28;
 	double power = 0.2;
 
     public GoToLoad() {
@@ -40,7 +40,7 @@ public class  GoToLoad extends Command {
     protected void execute() {
     	power = GO_TO_LOAD_POWER;
     	
-    	power *= Math.abs(Robot.drivetrain.getBackDistanceSensor() - GO_TO_LOAD_DISTANCE) * 5;
+    	power *= Math.abs(Robot.drivetrain.getBackDistanceSensor() - GO_TO_LOAD_DISTANCE) * 15;
     	
     	if (Robot.drivetrain.getBackDistanceSensor() > GO_TO_LOAD_DISTANCE) {
     		power *= -1;
@@ -54,7 +54,7 @@ public class  GoToLoad extends Command {
     		power = -1;
     	}
     	
-    	Robot.drivetrain.setMotor("both", power);
+    	Robot.drivetrain.setMotor("both", -power);
     }
 
     // Make this return true when this Command no longer needs to run execute()

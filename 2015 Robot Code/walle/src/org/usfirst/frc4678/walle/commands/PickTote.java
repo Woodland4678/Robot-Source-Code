@@ -55,9 +55,13 @@ public class  PickTote extends Command {
     		}
     	break;
     	case 2:
-    		Robot.pickup.lift(Robot.lifterUpperTarget());
+    		if (Robot.pickup.lift(Robot.lifterUpperTarget())) {
+    			canPickup = false;
+    			pickupState++;
+    		}
     	break;
     	}
+    	System.out.println("PickTote state: " + pickupState + " canPickup: " + canPickup);
     }
 
     // Make this return true when this Command no longer needs to run execute()

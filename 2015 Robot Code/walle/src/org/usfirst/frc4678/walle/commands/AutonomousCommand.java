@@ -58,7 +58,7 @@ public class  AutonomousCommand extends Command {
     		switch(autoState) {
     		case 0://Get the pickup ready for the match and move forwards
     			pickupState = 5;
-	    		if (Robot.drivetrain.goToDistance(200, 200, .7, 30, 20, 0.5, 0.2)) {
+	    		if (Robot.drivetrain.goToDistance(180, 180, .7, 30, 20, 0.5, 0.2)) {
 	    			autoState ++;
 	    		}
 	    	break;
@@ -80,6 +80,7 @@ public class  AutonomousCommand extends Command {
 	    		count = 0;
 	    		autoState ++;
 	    		Robot.indexWheels.setIndexMotor(1);
+	    		pickupState = 2;
 	    	break;
 	    	case 1://Wait for the Robot to pick up the bin and tote
 	    		count ++;
@@ -136,6 +137,7 @@ public class  AutonomousCommand extends Command {
 	    		count = 0;
 	    		autoState ++;
 	    		Robot.indexWheels.setIndexMotor(1);
+	    		
 	    	break;
 	    	case 1://Wait for the Robot to pick up the bin and tote
 	    		count ++;

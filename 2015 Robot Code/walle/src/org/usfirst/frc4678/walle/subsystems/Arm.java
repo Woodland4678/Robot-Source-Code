@@ -107,25 +107,25 @@ public class Arm extends Subsystem {
 					power = -armMaxPower;
 				}
 			}
-			
-			if (getArmPosition() < Robot.armZeroDegreesValue() && power < 0) {
-				power *= armPowerReduction;
-			} else if (getArmPosition() > (Robot.armNinetyDegreesValue() - 1.5) && power > 0) {
-				double reduction = (Robot.armSetBinPosition() - getArmPosition()) / 6;
-				if (reduction > 1) {
-					reduction = 1;
+			if (Robot.oi.getGamepad2().getPOV() == -1) {
+				if (getArmPosition() < Robot.armZeroDegreesValue() && power < 0) {
+					power *= armPowerReduction;
+				} else if (getArmPosition() > (Robot.armNinetyDegreesValue() - 1.5) && power > 0) {
+					double reduction = (Robot.armSetBinPosition() - getArmPosition()) / 6;
+					if (reduction > 1) {
+						reduction = 1;
+					}
+					power *= reduction;
+				} else if (getArmPosition() < Robot.armZeroDegreesValue() && power > 0) {
+					timedPowerReduction += 0.01;
+					if (timedPowerReduction > 1) {
+						timedPowerReduction = 1;
+					}
+					power *= timedPowerReduction;
+				} else {
+					timedPowerReduction = 0.2;
 				}
-				power *= reduction;
-			} else if (getArmPosition() < Robot.armZeroDegreesValue() && power > 0) {
-				timedPowerReduction += 0.01;
-				if (timedPowerReduction > 1) {
-					timedPowerReduction = 1;
-				}
-				power *= timedPowerReduction;
-			} else {
-				timedPowerReduction = 0.2;
 			}
-			
 			
 			
 			armMotor.set(power);

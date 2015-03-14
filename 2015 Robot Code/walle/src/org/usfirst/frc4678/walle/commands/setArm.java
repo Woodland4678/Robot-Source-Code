@@ -44,19 +44,26 @@ public class  setArm extends Command {
     protected void execute() {
     	Robot.arm.setArm(Robot.arm.getCurrentArmPosition());
     	
-    	if (Robot.oi.getGamepad2().getPOV() == 0 && !dPadPressed) {
-    		if (Robot.oi.getGamepad2().getRawButton(4)) {
+    	if (Robot.oi.getGamepad2().getPOV() == 0) {
+    		if (Robot.oi.getGamepad2().getRawButton(8)) {
     			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.07);
+    			if (Robot.arm.getCurrentArmPosition() > 11) {
+    				Robot.arm.setCurrentArmPosition(11);
+    			}
     		} else {
     			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() + 0.03);
+    			if (Robot.arm.getCurrentArmPosition() > 11) {
+    				Robot.arm.setCurrentArmPosition(11);
+    			}
     		}
-    	} else if (Robot.oi.getGamepad2().getPOV() == 180 && !dPadPressed) {
-    		if (Robot.oi.getGamepad2().getRawButton(4)) {
-    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.03);
+    	} else if (Robot.oi.getGamepad2().getPOV() == 180) {
+    		if (Robot.oi.getGamepad2().getRawButton(8)) {
+    			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.04);
     		} else {
     			Robot.arm.setCurrentArmPosition(Robot.arm.getCurrentArmPosition() - 0.01);
     		}
     	}
+    	System.out.println("Arm Manual Target:" + Robot.arm.getCurrentArmPosition());
     }
 
     // Make this return true when this Command no longer needs to run execute()
