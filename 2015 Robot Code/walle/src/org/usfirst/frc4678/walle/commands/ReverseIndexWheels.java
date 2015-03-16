@@ -12,6 +12,7 @@
 package org.usfirst.frc4678.walle.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+
 import org.usfirst.frc4678.walle.Robot;
 
 /**
@@ -36,6 +37,7 @@ public class  ReverseIndexWheels extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println("SETTING WHEELS TO PULL IN TOTES DIRECTION!!!!!!!!!!!!!!");
     	if (wheelsRunning) {
     		Robot.indexWheels.setIndexMotor(1);
     		wheelsRunning = false;

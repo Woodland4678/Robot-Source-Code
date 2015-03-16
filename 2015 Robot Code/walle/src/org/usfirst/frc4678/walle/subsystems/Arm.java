@@ -150,6 +150,12 @@ public class Arm extends Subsystem {
     public void setClawArm() {
     	
     }
+    public double getArmTarget() {
+    	return armTarget;
+    }
+    public double getArmPower() {
+    	return power;
+    }
    
     public void setOpenPower(double power) {
     	//set the power

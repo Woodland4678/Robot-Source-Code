@@ -135,7 +135,7 @@ public class OI {
         gamepad1 = new Joystick(0);
         
         g1Button8 = new JoystickButton(gamepad1, 8);
-        g1Button8.whileHeld(new liftFrontForks());
+        g1Button8.whenPressed(new liftFrontForks());
         g1Button7 = new JoystickButton(gamepad1, 7);
         g1Button7.whenPressed(new TogglePowerReduction());
         g1Button5 = new JoystickButton(gamepad1, 5);

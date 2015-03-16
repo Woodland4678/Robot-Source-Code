@@ -36,6 +36,7 @@ public class  RunIndexWheels extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+
     	if (wheelsRunning) {
     		Robot.indexWheels.setIndexMotor(-1);
     		wheelsRunning = false;

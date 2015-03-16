@@ -31,17 +31,16 @@ public class  sixTotesLIft extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	finished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	finished = Robot.pickup.lift(Robot.lifterSixToteTarget());
+    	Robot.pickup.lift(Robot.lifterSixToteTarget());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return finished;
+        return false;
     }
 
     // Called once after isFinished returns true

@@ -22,7 +22,7 @@ public class  AutonomousCommand extends Command {
 	boolean finished = false;
 	boolean pickingUpTote = false;
 	int autoState = 0;
-	int pickupState = 0;
+	int pickupState = 0; // was 0
 	int armState = 0;
 	int armCount = 0;
 	int indexState = 0;
@@ -43,7 +43,7 @@ public class  AutonomousCommand extends Command {
     	autoState = 0;
     	autoMode = Robot.autoMode();
     	count = 0;
-    	pickupState = 5;
+    	pickupState = 5; //was 5
     	armState = 5;
     }
 
@@ -130,7 +130,7 @@ public class  AutonomousCommand extends Command {
 	    	switch(autoState) {
 	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
 	    		armCount = 0;
-	    		pickupState = 3;
+	    		pickupState = 8;
 	    		indexState = 0;
 	    		liftUpLess = false;
 	    		armState = 0;
@@ -225,10 +225,14 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;*/
 	    	case 12: 
+	    		Robot.frontforks.setForkMotor(1);
 	    		count++;
 	    		if (count > 25) {
 	    			Robot.drivetrain.setMotor("both", 0);
 	    			autoState++;
+	    		}
+	    		if (count > 230) {
+	    			Robot.frontforks.stopForkMotor();
 	    		}
 	    		
 	    	}
@@ -253,7 +257,7 @@ public class  AutonomousCommand extends Command {
     		}
     	break;
     	case 1://Wait for the tote to pass under the robot
-    		if (!Robot.pickup.getDrivingOverTote()) {
+    		if (!Robot.pickup.getDrivingOverTote() && Robot.pickup.toteInPlace()) {
     			pickupState ++;
     		}
     	break;
@@ -266,6 +270,7 @@ public class  AutonomousCommand extends Command {
     		}
     	break;
     	case 3://Lift the pickup up, and then go back to state 0
+    		
     		if (Robot.pickup.lift(Robot.lifterUpperTarget())) {
     			pickupState = 0;
     		}
@@ -281,6 +286,11 @@ public class  AutonomousCommand extends Command {
     	break;
     	case 7://Go as low as the pickup can go without scoring
     		Robot.pickup.lift(Robot.lifterSixToteTarget());
+    	break;
+    	case 8:
+    		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
+    			pickupState = 3;
+    		}
     	break;
     	}
     	

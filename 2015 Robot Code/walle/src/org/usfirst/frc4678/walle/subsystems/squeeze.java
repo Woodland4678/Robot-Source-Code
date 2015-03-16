@@ -65,6 +65,12 @@ public class squeeze extends Subsystem {
     public void setOpenMotor(double power) {
     	openMotor.set(power);
     }
+    public double getArmTarget() {
+    	return openTarget;
+    }
+    public double getArmPower() {
+    	return openPower;
+    }
     public void openArm(double target) {
     	current2 = pdp.getCurrent(2);
     	openPower = Robot.armMaxOpenPower();

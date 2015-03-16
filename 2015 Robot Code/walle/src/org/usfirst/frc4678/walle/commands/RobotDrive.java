@@ -130,6 +130,8 @@ public class  RobotDrive extends Command {
 	        SmartDashboard.putNumber("Front Distance", Robot.drivetrain.getFrontDistanceSensor());
 	        SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
 	        SmartDashboard.putNumber("Power Reduction", Robot.drivetrain.getPowerReduction());
+	        SmartDashboard.putBoolean("Tote sensor 1: ", Robot.pickup.getToteSensor1());
+	        System.out.println("Arm squeeze Target: " + Robot.squeeze.getArmTarget() + " arm Squeeze Power " + Robot.squeeze.getArmPower());
     	} else {//Use the dpad if it is pressed
     		
     		
