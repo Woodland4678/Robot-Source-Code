@@ -29,11 +29,9 @@ public class RobotMap {
     public static SpeedController drivetrainRightMotor;
     public static Encoder drivetrainLeftEncoder;
     public static Encoder drivetrainRightEncoder;
-    public static AnalogInput drivetrainFrontDistanceSensor;
     public static AnalogInput drivetrainBackDistanceSensor;
     public static AnalogPotentiometer pickupLifterHeight;
     public static SpeedController pickupLifterMotor;
-    public static Servo pickupLifterServo;
     public static DigitalInput pickupdrivingOverTote;
     public static DigitalInput pickupToteSensor1;
     public static DigitalInput pickupToteSensor2;
@@ -66,9 +64,6 @@ public class RobotMap {
         LiveWindow.addSensor("Drivetrain", "RightEncoder", drivetrainRightEncoder);
         drivetrainRightEncoder.setDistancePerPulse(1.0);
         drivetrainRightEncoder.setPIDSourceParameter(PIDSourceParameter.kRate);
-        drivetrainFrontDistanceSensor = new AnalogInput(6);
-        LiveWindow.addSensor("Drivetrain", "FrontDistanceSensor", drivetrainFrontDistanceSensor);
-        
         drivetrainBackDistanceSensor = new AnalogInput(7);
         LiveWindow.addSensor("Drivetrain", "BackDistanceSensor", drivetrainBackDistanceSensor);
         
@@ -77,9 +72,6 @@ public class RobotMap {
         
         pickupLifterMotor = new Victor(6);
         LiveWindow.addActuator("Pickup", "LifterMotor", (Victor) pickupLifterMotor);
-        
-        pickupLifterServo = new Servo(7);
-        LiveWindow.addActuator("Pickup", "LifterServo", pickupLifterServo);
         
         pickupdrivingOverTote = new DigitalInput(9);
         LiveWindow.addSensor("Pickup", "drivingOverTote", pickupdrivingOverTote);

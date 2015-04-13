@@ -44,7 +44,9 @@ public class IndexWheels extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
-    
+    public void stopOpenMotor() {
+    	openIndexWheels.set(Relay.Value.kOff);
+    }
     public void setIndexMotor(int direction) {
     	if (direction == 1) {
     		indexMotor.set(Relay.Value.kReverse);
@@ -56,6 +58,7 @@ public class IndexWheels extends Subsystem {
     		indexMotor.set(Relay.Value.kOff);
     	}
     }
+    
     public void setIndexWheels(double target) {
     	System.out.println("index target is " + target);
     	indexTarget = target;

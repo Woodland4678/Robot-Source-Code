@@ -12,6 +12,8 @@
 package org.usfirst.frc4678.walle.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc4678.walle.Robot;
 
 /**
@@ -41,21 +43,23 @@ public class  GoToLoad extends Command {
     	double currentReading = (Robot.drivetrain.getBackDistanceSensor());
     	power = GO_TO_LOAD_POWER;
     	
-    	power *= Math.abs(currentReading - GO_TO_LOAD_DISTANCE) * 30;
+    	power *= Math.abs(currentReading - GO_TO_LOAD_DISTANCE) * 20;
+    	
+    	if (power > 0.3) {
+    		power = 0.3;
+    	} else if (power < 0.15) {
+    		power = 0.15;
+    	}
     	
     	if (Robot.drivetrain.getBackDistanceSensor() > GO_TO_LOAD_DISTANCE) {
     		power *= -1;
     	}
     	
-    	if (power > 0.3) {
-    		power = 0.3;
-    	} else if (power < -0.3) {
-    		power = -0.3;
-    	}
     	if (currentReading > (previousReading - .05)) {
     	Robot.drivetrain.setMotor("both", -power);
     	}
     	previousReading = currentReading;
+    	SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
     }
 
     // Make this return true when this Command no longer needs to run execute()

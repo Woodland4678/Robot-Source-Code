@@ -66,6 +66,9 @@ public class  keepClawLevel extends Command {
     	goalClawDegrees = armDegrees + Robot.claw.getClawTargetDegrees() + clawOffset;
     	goalClawPosition = (goalClawDegrees * Robot.clawTicsPerDegree());
     	Robot.claw.setClaw(goalClawPosition);
+    	
+    	System.out.println("goalClawDegrees = " + goalClawDegrees + " tics per degree = " + Robot.clawTicsPerDegree());
+    	System.out.println("armDegrees = " + armDegrees + " Claw target = " + Robot.claw.getClawTargetDegrees());
     }
 
     // Make this return true when this Command no longer needs to run execute()

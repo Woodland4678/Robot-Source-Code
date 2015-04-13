@@ -118,21 +118,20 @@ public class  RobotDrive extends Command {
 	        lastLeftPower = leftPower;
 	        lastRightPower = rightPower;
 	        
-	       // SmartDashboard.putNumber("Right Motor Power", rightPower);
+	        //SmartDashboard.putNumber("Right Motor Power", rightPower);
 	        //SmartDashboard.putNumber("Left Motor Power", leftPower);
-	        //SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
-	        //SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
+	        SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
+	        SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
 	        SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
 	        SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
 	        SmartDashboard.putNumber("Squeeze Position", Robot.squeeze.getOpenPosition());
 	        SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
 	        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
-	        SmartDashboard.putNumber("Front Distance", Robot.drivetrain.getFrontDistanceSensor());
 	        SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
 	        SmartDashboard.putNumber("Power Reduction", Robot.drivetrain.getPowerReduction());
+	        SmartDashboard.putBoolean("Tote sensor 1: ", Robot.pickup.getToteSensor1());
+
     	} else {//Use the dpad if it is pressed
-    		
-    		
     		
     		if (!checkedLast) {//Only check every other time, to get a more accurate encoder reading
     			rightSpeedChange = Math.abs(Math.abs(Robot.drivetrain.getRightEncoder()) - Math.abs(autoSpeedLastRightPosition));

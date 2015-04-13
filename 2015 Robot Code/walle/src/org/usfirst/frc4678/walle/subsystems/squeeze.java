@@ -103,7 +103,7 @@ public class squeeze extends Subsystem {
     		}
     	}
     	
-		openMotor.set(openPower);
+		openMotor.set(-openPower);
 		System.out.println("Power: " + openPower);
     }
    /* public void openArmControl(double target) {

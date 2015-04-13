@@ -37,27 +37,22 @@ public class  PickTote extends Command {
     	Robot.logger.info("PickTote", "Initialized");
     	lift = false;
     	canPickup = Robot.pickup.toteInPlace();
-    	pickupState = 0;
+    	pickupState = 1;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	switch (pickupState) {
     	case 0:
-    		canPickup = Robot.pickup.toteInPlace();
-    		if (canPickup) {
-    			System.out.println("trying to lift");
-    			pickupState ++;
-    		}
-    	case 1:
     		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
     			pickupState ++;
     		}
     	break;
-    	case 2:
+    	case 1:
     		if (Robot.pickup.lift(Robot.lifterUpperTarget())) {
-    			canPickup = false;
-    			pickupState++;
+    			if (Robot.pickup.toteInPlace()) {
+    				pickupState = 0;
+    			}
     		}
     	break;
     	}
@@ -66,7 +61,7 @@ public class  PickTote extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return !canPickup;
+       return false;
     }
 
     // Called once after isFinished returns true

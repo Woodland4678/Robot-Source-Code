@@ -67,6 +67,9 @@ public class  RobotDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	if (Robot.oi.getGamepad1().getPOV() == -1) {
+    		//Make sure the dpad control powers start at 0.1, so it accelerates smoothly
+        	autoSpeedRightPower = 0.1;
+        	autoSpeedLeftPower = 0.1;
 	    	//Get the joystick values
 	    	joystickX = Robot.oi.getGamepad1().getX();
 	        joystickY = -Robot.oi.getGamepad1().getY();
@@ -118,23 +121,20 @@ public class  RobotDrive extends Command {
 	        lastLeftPower = leftPower;
 	        lastRightPower = rightPower;
 	        
-	       // SmartDashboard.putNumber("Right Motor Power", rightPower);
+	        //SmartDashboard.putNumber("Right Motor Power", rightPower);
 	        //SmartDashboard.putNumber("Left Motor Power", leftPower);
-	        //SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
-	        //SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
+	        SmartDashboard.putNumber("Right Encoder", Robot.drivetrain.getRightEncoder());
+	        SmartDashboard.putNumber("Left Encoder", Robot.drivetrain.getLeftEncoder());
 	        SmartDashboard.putNumber("Lifter Height", Robot.pickup.getLifterHeight());
 	        SmartDashboard.putNumber("Arm Position", Robot.arm.getArmPosition());
 	        SmartDashboard.putNumber("Squeeze Position", Robot.squeeze.getOpenPosition());
 	        SmartDashboard.putNumber("Claw Position", Robot.claw.getClawPosition());
 	        SmartDashboard.putNumber("Index Position", Robot.indexWheels.getIndexPosition());
-	        SmartDashboard.putNumber("Front Distance", Robot.drivetrain.getFrontDistanceSensor());
 	        SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
 	        SmartDashboard.putNumber("Power Reduction", Robot.drivetrain.getPowerReduction());
 	        SmartDashboard.putBoolean("Tote sensor 1: ", Robot.pickup.getToteSensor1());
-	        System.out.println("Arm squeeze Target: " + Robot.squeeze.getArmTarget() + " arm Squeeze Power " + Robot.squeeze.getArmPower());
+
     	} else {//Use the dpad if it is pressed
-    		
-    		
     		
     		if (!checkedLast) {//Only check every other time, to get a more accurate encoder reading
     			rightSpeedChange = Math.abs(Math.abs(Robot.drivetrain.getRightEncoder()) - Math.abs(autoSpeedLastRightPosition));

@@ -28,7 +28,7 @@ public class Claw extends Subsystem {
 	double power;
 	double error;
 	double clawMaxPower;
-	double clawTarget;
+	double clawTarget = 0;
 	boolean getStopped;
 	double clawTargetDegreesToFloor = 0;
 	int clawStartingValue = 0;
@@ -54,7 +54,7 @@ public class Claw extends Subsystem {
     }
     public void setClawMotor(double power) {
     	clawMotor.set(power);
-    	System.out.println("Power: " + power);
+    	System.out.println("Claw Power: " + power);
     }
     
     public void resetClawEncoder(int value) { clawStartingValue = value; }
@@ -98,7 +98,7 @@ public class Claw extends Subsystem {
 				power = -clawMaxPower;
 			}
 		}
-    	clawMotor.set(-power);
+    	setClawMotor(-power);
     	
     }
     
