@@ -18,7 +18,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  RunIndexWheels extends Command {
-	boolean wheelsRunning = true;
+	double wheels = Robot.indexWheels.getWheelDirection();
     public RunIndexWheels() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -36,15 +36,16 @@ public class  RunIndexWheels extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-
-    	if (wheelsRunning) {
+    	
+    	if (wheels == 1 || (wheels == 0)) {
     		Robot.indexWheels.setIndexMotor(-1);
-    		wheelsRunning = false;
     	}
     	else {
     		Robot.indexWheels.setIndexMotor(0);
-    		wheelsRunning = true;
+    		
     	}
+    	if (Robot.oi.getGamepad1().getRawButton(9) && Robot.oi.getGamepad1().getRawButton(10))
+    		Robot.indexWheels.setIndexMotor(0);
     	
     }
 

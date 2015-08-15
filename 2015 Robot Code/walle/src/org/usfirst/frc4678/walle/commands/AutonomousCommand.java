@@ -12,6 +12,8 @@
 package org.usfirst.frc4678.walle.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc4678.walle.Robot;
 
 /**
@@ -28,6 +30,7 @@ public class  AutonomousCommand extends Command {
 	int indexState = 0;
 	int count = 0;
 	int autoMode = Robot.autoMode();
+	int trashMagnetState = 0;
     public AutonomousCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -40,11 +43,13 @@ public class  AutonomousCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.drivetrain.resetGyro();
     	autoState = 0;
     	autoMode = Robot.autoMode();
     	count = 0;
     	pickupState = 5; //was 5
     	armState = 5;
+    	Robot.drivetrain.setAuton(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -128,31 +133,47 @@ public class  AutonomousCommand extends Command {
 //--------------------------3 totes and containers--------------------------
 //--------------------------------------------------------------------------
 	    	
+	    	
+	    	//April 22 Changes:
+	    	//Increaced wait for second tote
+	    	//made pickup state only go to 0 when auto state 3 ends
+	    	//Last tote pickup decellerates and accelerates for 30 cm not 10 cm, and decellerates to 0.2 instead of 0.1
     	} else if (autoMode == 3) {
-	    	switch(autoState) {
-	    	case 0://Pick up the first bin(s) and tote (after this, the pickup will automatically check for totes and pick them up)
+    		SmartDashboard.putNumber("gyro", Robot.drivetrain.getGyro());
+    		switch(autoState) {
+	    	case 0://Pick up the first bin(s) and tote
 	    		armCount = 0;
 	    		pickupState = 8;
 	    		indexState = 0;
 	    		liftUpLess = false;
-	    		armState = 0;
+	    		armState = 1;
 	    		count = 0;
+	    		trashMagnetState = 0;
 	    		autoState ++;
 	    		Robot.indexWheels.setIndexMotor(1);
 	    		
 	    	break;
 	    	case 1://Wait for the Robot to pick up the bin and tote
 	    		count ++;
-	    		if (count > 60) {
+	    		if (count > 10) {
+	    			trashMagnetState = 1;
+	    		}
+	    		if (count > 60 || Robot.arm.getArmPosition() > 4) {
 	    			autoState ++;
-	    			pickupState = 3;
+	    			pickupState = 5; // 19-Apr This will go to lifter fully up
+	    			// Once the fully up position is reached, the pickupState is
+	    			// set to 0 in the pickupState code.  Recommend staying in 
+	    			// pickupState = 3 till autoState gets to at least 4
 	    		}
 	    	break;
-	    	case 2://Move forwards to the next bin
+	    	case 2://Move forwards to the next bin.  This puts the robot almost in position
+	    		// to pick up the second tote but we're usually just a wee bit short
+	    		// of the pickup position.
 	    		if (Robot.drivetrain.goToDistance(215, 215, .5, 30, 40, 0.5, 0.15)) {
 	    			autoState ++;
 	    			armState = 0;
 	    			count = 0;
+	    			pickupState = 0;
 	    		}
 	    	break;
 	    	case 3://Wait for the robot to pick up the container
@@ -161,12 +182,13 @@ public class  AutonomousCommand extends Command {
 	    			armState = 5;
 	    		}
 	    		
-	    		if (count > 70) {
+	    		if (Robot.arm.getArmPosition() > 3 && armState == 5) { //was 70 //count > 80 && 
+	    			//pickupState = 0;
 	    			autoState ++;
 	    		}
 	    	break;
 	    	case 4://Move forwards to the last tote //was 220 not 175
-	    		if (Robot.drivetrain.goToDistance(180, 180, .40, 10, 10, 0.5, 0.1)) {
+	    		if (Robot.drivetrain.goToDistance(175, 175, .4, 10, 30, 0.5, 0.25)) {
 	    			autoState ++;
 	    			armState = 5;
 	    			count = 0;
@@ -174,46 +196,81 @@ public class  AutonomousCommand extends Command {
 	    	break;
 	    	case 5://Wait for the robot to stop pick up the second tote
 	    		count ++;
-	    		if (count > 35) {
+	    		if (count > 2) {
 	    			autoState ++;
+	    			 // 19-Apr Lifter will go fully up in State 5
+	    			// This might not let the lifter go low enough. If sensors
+	    			// are slightly delayed in detecting a tote, it is possible
+	    			// That we will set the pickupState to 5 before it reaches
+	    			// the lifterPickupTarget() because this is purely based on
+	    			// a timer and is ignoring the sensors.  Recommend a somewhat
+	    			// longer timer but change to (count > 50)||(lifterPickupTarget has been reached)
+	    			// Do we run into time issues if this takes a bit longer?  Is there
+	    			// anywhere we can save ourselves a little bit of time in auto?
+	    			// Do we need to? Most matches, it looks like we are done in 13 seconds.
+	    		}
+	    		if (Robot.pickup.getLifterHeight() < Robot.lifterPickupTarget() + 0.05) {
 	    			pickupState = 5;
 	    		}
+	    		Robot.drivetrain.resetGyro();
 	    	break;
-	    	case 6://Turn to face the platform
-	    		if (Robot.drivetrain.turn(50, 0.5)) {
+	    	case 6://Turn to face the platform.  19-Apr - The last tote is just
+	    		// going to be dragged along by the wheels.  There is no
+	    		// attempt to try to pick it up.  The 2 totes we already
+	    		// have need to be kept lifted as we go over the platform
+	    		if (Robot.pickup.getLifterHeight() < Robot.lifterPickupTarget() + 0.05) {
+	    			pickupState = 5;
+	    		}
+	    		if (Robot.drivetrain.gyroTurn(-100)) {
 	    			autoState ++;
 	    			count = 0;
 	    		}
 	    	break;
 	    	case 7:
 	    		count ++;
-	    		if (count > 20) {
+	    		if (count > 10) {
 	    			autoState ++;
 	    		}
 	    	break;
-	    	case 8://Go over the platform
-	    		if (Robot.drivetrain.goToDistance(225, 225, .50, 40, 0, .4, 0)) {
-	    			autoState ++;
+	    	case 8://Go over the platform //was about 200
+	    		pickupState = 5;
+	    		if (Robot.drivetrain.goToDistance(300, 300, .50, 40, 0, .4, 0)) {
+	    			autoState++;
+	    			count = 0;
+	    			Robot.drivetrain.resetGyro();
 	    		}
 	    	break;
 	    	case 9://Turn 90 degrees
-	    		if (Robot.drivetrain.goToDistance(220, 85, .45, 30, 0, 0, 0)) {
-	    			autoState ++;
+	    		//Robot.drivetrain.goToDistance(220, 110, .45, 30, 0, 0, 0
+	    		if (count > 32) {
+	    			trashMagnetState = 2;
+	    		}
+	    		count++;
+	    		if (Robot.drivetrain.gyroTurn(-85)) { //was 78
+	    			Robot.frontforks.liftForks();
+	    			trashMagnetState = 2;
+	    			autoState++;
 	    			count = 0;
 	    			Robot.indexWheels.setIndexMotor(-1);
 	    			Robot.indexWheels.setIndexWheels(Robot.indexOpenPosition());
 	    			indexState = 2;
 	    		}
 	    	break;
-	    	case 10: //stop then drop
+	    	case 10: //stop then drop.  19-Apr The drop will be initiated right away
+	    		// But the forward movement will be delayed by 0.5 seconds, allowing
+	    		// the lifter to be pretty much down by the time the forward 
+	    		// movement takes place.  This also allows the wheels to be moved
+	    		// fully open before we start moving forward.
 	    		count++;
-	    		if(count > 25) {
+	    		if(count > 35) {
 	    			autoState++;
 	    		}
 	    		pickupState = 6;
+	    		trashMagnetState = 2;
 	    		
 	    	break;
 	    	case 11://Turn the last 45 degrees while dropping the totes (increased right from 165 to 185)
+	    		trashMagnetState = 3;
 	    		if (Robot.drivetrain.goToDistance(100, 100, .6, 0, 0, 0, 0)) {
 	    			autoState ++;
 	    			pickupState = 6;
@@ -227,7 +284,7 @@ public class  AutonomousCommand extends Command {
 	    		}
 	    	break;*/
 	    	case 12: 
-	    		Robot.frontforks.liftForks();
+	    		
 	    		count++;
 	    		if (count > 25) {
 	    			Robot.drivetrain.setMotor("both", 0);
@@ -249,9 +306,14 @@ public class  AutonomousCommand extends Command {
     	//State 5 lifts the pickup to the max height
     	//State 6 lowers the pickup to the minimum height
     	//State 7 lowers the pickup to the minimum height without scoring the totes
+    	System.out.println("tote sensor is " + Robot.pickup.getToteSensor1() + " picku pstate is " + pickupState);
     	switch(pickupState) {
     	
     	case 0://Wait for a tote to be sensed
+    		// 19-Apr If we get to State 0 and something gives us a glitch input on the
+    		// spring-loaded tote arm, lifter could easily go back down
+    		// Best to ensure we don't go to state 0 till we are sure we are
+    		// over the tote (autoState >= 4)
     		if (Robot.pickup.getDrivingOverTote()) {
     			pickupState ++;
     		}
@@ -264,13 +326,13 @@ public class  AutonomousCommand extends Command {
     	case 2://Drop the pickup down
     		if (Robot.pickup.lift(Robot.lifterPickupTarget())) {
     			pickupState ++;
-    			if (liftUpLess) {
-    				pickupState = 7;
-    			}
+    			pickupState = 7;
     		}
     	break;
     	case 3://Lift the pickup up, and then go back to state 0
-    		
+    		// 19-Apr - add a change to ensure we can only go to state 0 after autoState >= 4
+    		// That way we can be sure we are over the next tote before lifter is allowed to
+    		// go back down due to some sort of sensor glitch
     		if (Robot.pickup.lift(Robot.lifterUpperTarget())) {
     			pickupState = 0;
     		}
@@ -328,19 +390,19 @@ public class  AutonomousCommand extends Command {
     		
     		Robot.arm.setCurrentArmPosition(Robot.armSetBinPosition());
     		Robot.squeeze.openArm(Robot.armClosePosition());
-    		if (Math.abs(Robot.armSetBinPosition() - Robot.arm.getArmPosition())  < 0.05) {
+    		if (Math.abs(Robot.armSetBinPosition() - Robot.arm.getArmPosition())  < 0.05) { //was 0.05
     			armCount = 0;
     			armState ++;
     		}
     	break;
     	case 3://Open the claw
     		armCount ++;
-    		if (armCount > 15) {
+    		//if (armCount > 10) { //was 15
 				Robot.squeeze.openArm(Robot.armOpenPosition());
-				if (armCount > 30) {
+				if (armCount > 40) {
 					armState ++;
 				}
-    		}
+    		//}
     	break;
     	case 4://Go to pickup position
     		Robot.squeeze.openArm(Robot.armOpenPosition());
@@ -367,6 +429,21 @@ public class  AutonomousCommand extends Command {
     		Robot.indexWheels.setIndexWheels(Robot.indexOpenPosition());
     		break;
     	}
+    //Trash Magnet setter
+    	switch(trashMagnetState) {
+    	case 0:
+    		Robot.trashMagnet.setLatchServo(Robot.latchOpenPosition());
+    		break;
+    	case 1:
+    		Robot.trashMagnet.setGarbageWinch(Robot.garbageMagnetlowerTarget());
+    		break;
+    	case 2:
+    		Robot.trashMagnet.setLatchServo(Robot.latchClosedPosition());
+    		break;
+    	case 3:
+    		Robot.trashMagnet.setGarbageWinch(Robot.garbageMagnetUpperTarget());
+    		break;
+    	}
 
     	Robot.logger.debug("Autonomous", "Auto state at " + autoState);
     	
@@ -387,6 +464,10 @@ public class  AutonomousCommand extends Command {
     	Robot.pickup.setLifterPower(0);
     	Robot.indexWheels.stopOpenMotor();
     	Robot.drivetrain.setMotor("both", 0);
+    	Robot.trashMagnet.stopTrashMagnetMotor();
+    	Robot.drivetrain.setAuton(false);
+    	Robot.trashMagnet.setGarbageWinch(Robot.garbageMagnetUpperTarget());
+    	Robot.frontforks.liftForks();
     }
 
     // Called when another command which requires one or more of the same

@@ -19,7 +19,7 @@ import org.usfirst.frc4678.walle.Robot;
  *
  */
 public class  ReverseIndexWheels extends Command {
-	boolean wheelsRunning = true;
+	double wheels = Robot.indexWheels.getWheelDirection();
     public ReverseIndexWheels() {
 
         // Use requires() here to declare subsystem dependencies
@@ -37,15 +37,14 @@ public class  ReverseIndexWheels extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("SETTING WHEELS TO PULL IN TOTES DIRECTION!!!!!!!!!!!!!!");
-    	if (wheelsRunning) {
+    	if (wheels == -1 || (wheels == 0)) {
     		Robot.indexWheels.setIndexMotor(1);
-    		wheelsRunning = false;
     	}
     	else {
     		Robot.indexWheels.setIndexMotor(0);
-    		wheelsRunning = true;
     	}
+    	if (Robot.oi.getGamepad1().getRawButton(9) && Robot.oi.getGamepad1().getRawButton(10))
+    		Robot.indexWheels.setIndexMotor(0);
     }
 
     // Make this return true when this Command no longer needs to run execute()

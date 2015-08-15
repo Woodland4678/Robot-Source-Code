@@ -54,7 +54,7 @@ public class Claw extends Subsystem {
     }
     public void setClawMotor(double power) {
     	clawMotor.set(power);
-    	System.out.println("Claw Power: " + power);
+    	//System.out.println("Claw Power: " + power);
     }
     
     public void resetClawEncoder(int value) { clawStartingValue = value; }

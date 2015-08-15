@@ -66,6 +66,7 @@ public class  RobotDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println(" Latch pressed is " + Robot.pickup.getDrivingOverTote() + " tote sensors are " + Robot.pickup.getToteSensor1() + "  " + Robot.pickup.getToteSensor2());
     	if (Robot.oi.getGamepad1().getPOV() == -1) {
     		//Make sure the dpad control powers start at 0.1, so it accelerates smoothly
         	autoSpeedRightPower = 0.1;
@@ -133,6 +134,8 @@ public class  RobotDrive extends Command {
 	        SmartDashboard.putNumber("Back Distance", Robot.drivetrain.getBackDistanceSensor());
 	        SmartDashboard.putNumber("Power Reduction", Robot.drivetrain.getPowerReduction());
 	        SmartDashboard.putBoolean("Tote sensor 1: ", Robot.pickup.getToteSensor1());
+	        SmartDashboard.putNumber("gyro", Robot.drivetrain.getGyro());
+	        SmartDashboard.putNumber("garbagePosition", Robot.trashMagnet.getGarbagePosition());
 
     	} else {//Use the dpad if it is pressed
     		

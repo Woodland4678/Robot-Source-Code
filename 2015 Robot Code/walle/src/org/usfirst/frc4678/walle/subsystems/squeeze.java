@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.RobotBase;
 
 
 /**
@@ -77,8 +78,8 @@ public class squeeze extends Subsystem {
     	openMaxPower = Robot.armMaxOpenPower();
     	openTarget = target;
     	openError = openTarget - armOpenPosition.get();
-    	System.out.println("Error: " + openError);
-    	System.out.println("Target: " + openTarget);
+    	//System.out.println("Error: " + openError);
+    	//System.out.println("Target: " + openTarget);
     	if (openError > 0.3) {
 			openPower = openMaxPower;
 		}
@@ -97,14 +98,21 @@ public class squeeze extends Subsystem {
 			}
 		}
     	
-    	if (Robot.squeeze.getOpenPosition() < 0.36 && Robot.squeeze.getOpenPosition() > 0.33) {
+    	if (Robot.squeeze.getOpenPosition() < 0.36 && Robot.squeeze.getOpenPosition() > 0.33 && Robot.drivetrain.getAuton() == true && target < 0.35) {
     		if (openPower < 0) {
-    			openPower = -0.4;
+    			openPower = -0.7;
+    			
     		}
     	}
-    	
+    	if (Robot.squeeze.getOpenPosition() < 0.36 && Robot.squeeze.getOpenPosition() > 0.33 && Robot.drivetrain.getAuton() == false && target < 0.35) {
+    		if (openPower < 0) {
+    			openPower = -0.45;
+    		}
+    	}
+    	//System.out.println("Auton is!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: " + Robot.drivetrain.getAuton());
+    	//System.out.println("Power of the squeeze motor!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: " + openPower);
 		openMotor.set(-openPower);
-		System.out.println("Power: " + openPower);
+		
     }
    /* public void openArmControl(double target) {
     	current2 = pdp.getCurrent(2);

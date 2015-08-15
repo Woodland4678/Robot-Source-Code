@@ -12,6 +12,8 @@
 package org.usfirst.frc4678.walle.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc4678.walle.Robot;
 
 /**
@@ -31,6 +33,7 @@ public class  sixTotesLIft extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.drivetrain.resetGyro();
     }
 
     // Called repeatedly when this Command is scheduled to run
